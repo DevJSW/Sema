@@ -209,8 +209,8 @@ public class HashChatroomActivity extends AppCompatActivity {
             //pushing chats into chat's tab
 
             //sender chat screen
-            final DatabaseReference newPost = mDatabaseChatroom.child(mPostKey).push();
-            final DatabaseReference newPost2 = mDatabaseChatroom.child(mPostKey);
+            final DatabaseReference newPost = mDatabaseHashtag.child(mPostKey).push();
+            final DatabaseReference newPost2 = mDatabaseHashtag.child(mPostKey);
 
             //post message to unread child
             final DatabaseReference newPost2Unread = mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).push();
