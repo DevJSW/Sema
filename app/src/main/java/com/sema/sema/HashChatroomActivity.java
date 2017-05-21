@@ -141,7 +141,7 @@ public class HashChatroomActivity extends AppCompatActivity {
         mDatabaseUser.keepSynced(true);
         mDatabaseUnread.keepSynced(true);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(mPostKey).child(mAuth.getCurrentUser().getUid());
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Hashtag").child(mPostKey).child("Chats");
         mQueryInAscending = mDatabase.orderByChild("date").startAt(-1 * new Date().getTime());
         mSendBtn = (ImageView) findViewById(R.id.sendBtn);
         mSendBtn.setOnClickListener(new View.OnClickListener() {
@@ -209,8 +209,11 @@ public class HashChatroomActivity extends AppCompatActivity {
             //pushing chats into chat's tab
 
             //sender chat screen
-            final DatabaseReference newPost = mDatabaseHashtag.child(mPostKey).push();
+            final DatabaseReference newPost = mDatabaseHashtag.child(mPostKey).child("Chats").push();
             final DatabaseReference newPost2 = mDatabaseHashtag.child(mPostKey);
+
+            // add uid to participants child
+            final DatabaseReference newPost3 = mDatabaseHashtag.child(mPostKey).child("Participants");
 
             //post message to unread child
             final DatabaseReference newPost2Unread = mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).push();
@@ -259,8 +262,9 @@ public class HashChatroomActivity extends AppCompatActivity {
 
                                 //update messege showing on tab1 chats activity
                                 newPost2.child("message").setValue(message_val);
-                                //newPost4.child("last_active_date").setValue(stringDate);
 
+                                // add user to participant child
+                                newPost3.child(mAuth.getCurrentUser().getUid()).child("uid").setValue(mAuth.getCurrentUser().getUid());
 
                                 //clear edit text after message has been sent
                                 EditText edit = (EditText) findViewById(R.id.emojicon_edit_text);
