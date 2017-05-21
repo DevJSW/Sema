@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:id="@+id/relly"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:id="@+id/hash"
+            android:textSize="22dp"
+            android:text="#"/>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_toRightOf="@id/hash"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="center_horizontal">
+
+            <EditText
+                android:id="@+id/hashtagInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter subject"
+                android:inputType="textEmailAddress"
+                android:maxLength="21"
+                android:layout_marginBottom="7dp"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColorHint="#121111"
+                android:textColor="#121111" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
+    </RelativeLayout>
+
+
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relly"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <!-- Link to Login Screen -->
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:text="Cancel"
+            android:textAllCaps="false"
+            android:textColor="#121111"
+            android:textSize="14dp"
+            android:layout_weight="1"
+            android:layout_gravity="left" />
+
+        <Button
+            android:id="@+id/create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:text="Create hashtag!"
+            android:textAllCaps="false"
+            android:textColor="@color/colorPrimary"
+            android:layout_weight="1"
+            android:layout_gravity="right" />
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+</RelativeLayout>

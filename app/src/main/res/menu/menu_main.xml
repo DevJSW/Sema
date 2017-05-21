@@ -1,0 +1,43 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.sema.sema.MainActivity">
+    <item
+        android:id="@+id/action_settings"
+        android:orderInCategory="100"
+        android:title="@string/action_settings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_status"
+        android:orderInCategory="100"
+        android:title="Status"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_add_group"
+        android:orderInCategory="100"
+        android:title="New group"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_add_hashtag"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_add_white"
+        android:title="hashtag"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_friends"
+        android:orderInCategory="100"
+        android:icon="@drawable/ic_group_white"
+        android:title="friends"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_search"
+        android:orderInCategory="100"
+        android:icon="@drawable/search_icon"
+        android:title="search"
+        app:showAsAction="always" />
+
+</menu>

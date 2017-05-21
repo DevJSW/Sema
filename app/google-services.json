@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "809343209269",
+    "firebase_url": "https://sema-4da5f.firebaseio.com",
+    "project_id": "sema-4da5f",
+    "storage_bucket": "sema-4da5f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:809343209269:android:da5f932a9ac18236",
+        "android_client_info": {
+          "package_name": "com.sema.sema"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "809343209269-j4cp23kj13oas0i48j6bs5keicr3a5p5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiLjbhYVGLlY09DtyEKyKSQxWEP_ui8uw"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
