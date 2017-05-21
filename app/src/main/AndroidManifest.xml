@@ -31,7 +31,9 @@
         <activity
             android:name=".SignupActivity"
             android:label="Signup" />
-        <activity android:name=".EditProfileActivity" />
+        <activity
+            android:name=".EditProfileActivity"
+            android:label="Edit"/>
         <activity android:name=".SettingsActivity" />
         <activity
             android:name=".ChatroomActivity"

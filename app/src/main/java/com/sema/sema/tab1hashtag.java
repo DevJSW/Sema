@@ -53,7 +53,7 @@ public class tab1hashtag extends Fragment {
     private ProgressBar mProgressBar;
     private Boolean mProcessLike = false;
     private DatabaseReference mDatabaseLike;
-    private Query mQueryUnread;
+    private Query mQueryParticipants;
 
     private ViewPager mViewPager;
 
@@ -79,6 +79,7 @@ public class tab1hashtag extends Fragment {
         mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
         mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
         mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
+        mQueryParticipants = mDatabaseHashtag.orderByChild("Participants").equalTo(mAuth.getCurrentUser().getUid());
         mNoPostImg = (ImageView) v.findViewById(R.id.noPostChat);
         mNoPostTxt = (TextView) v.findViewById(R.id.noPostTxt);
         mDatabaseChatroom = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
@@ -130,7 +131,7 @@ public class tab1hashtag extends Fragment {
                 People.class,
                 R.layout.hashtag_row,
                 LetterViewHolder.class,
-                mDatabaseHashtag
+                mQueryParticipants
 
 
         ) {

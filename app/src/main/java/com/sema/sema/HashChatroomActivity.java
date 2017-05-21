@@ -321,29 +321,7 @@ public class HashChatroomActivity extends AppCompatActivity {
                 viewHolder.setName(model.getName());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
-                //check if message is read then show double ticks
-                mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if (dataSnapshot.getValue() == post_key) {
-
-                            // IF MESSSAGE IS UNREAD SHOW SINGLE TICK
-                            // viewHolder.mSingleTick.setVisibility(View.VISIBLE);
-                            // viewHolder.mDoubleTick.setVisibility(View.GONE);
-                        } else {
-
-                            // IF MESSAGE IS READ SHOW DOUBLE TICKS
-                            //  viewHolder.mDoubleTick.setVisibility(View.VISIBLE);
-                            // viewHolder.mSingleTick.setVisibility(View.GONE);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
 
                 //DELETE UNREAD MESSAGES WHILE SCROLLING
                 mCommentList.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -390,7 +368,7 @@ public class HashChatroomActivity extends AppCompatActivity {
 
                                 }
 
-                                if (chat_icon == null) {
+                                if (chat_icon != null) {
 
                                     viewHolder.rely.setVisibility(View.VISIBLE);
                                     viewHolder.liny.setVisibility(View.GONE);
