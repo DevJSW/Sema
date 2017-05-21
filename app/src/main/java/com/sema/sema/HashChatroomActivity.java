@@ -212,8 +212,6 @@ public class HashChatroomActivity extends AppCompatActivity {
             final DatabaseReference newPost = mDatabaseHashtag.child(mPostKey).child("Chats").push();
             final DatabaseReference newPost2 = mDatabaseHashtag.child(mPostKey);
 
-            // add uid to participants child
-            final DatabaseReference newPost3 = mDatabaseHashtag.child(mPostKey).child("Participants");
 
             //post message to unread child
             final DatabaseReference newPost2Unread = mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).push();
@@ -259,12 +257,11 @@ public class HashChatroomActivity extends AppCompatActivity {
                                 newPost.child("sender_uid").setValue(mCurrentUser.getUid());
                                 newPost.child("date").setValue(stringDate);
                                 newPost.child("post_key").setValue(mPostKey);
+                                newPost.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
 
                                 //update messege showing on tab1 chats activity
                                 newPost2.child("message").setValue(message_val);
 
-                                // add user to participant child
-                                newPost3.child(mAuth.getCurrentUser().getUid()).child("uid").setValue(mAuth.getCurrentUser().getUid());
 
                                 //clear edit text after message has been sent
                                 EditText edit = (EditText) findViewById(R.id.emojicon_edit_text);

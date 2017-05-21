@@ -46,7 +46,7 @@ public class tab1hashtag extends Fragment {
     private ImageView mNoPostImg;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private DatabaseReference mDatabaseUsers, mDatabaseBlockThisUser, mDatabaseUnread;
-    private DatabaseReference mDatabaseChatroom, mDatabaseHashtag;
+    private DatabaseReference mDatabaseChatroom, mDatabaseHashtag, mDatabase;
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
     private Query mQueryPostChats;
@@ -79,14 +79,14 @@ public class tab1hashtag extends Fragment {
         mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
         mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
         mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
-        mQueryParticipants = mDatabaseHashtag.orderByChild("Participants").equalTo(mAuth.getCurrentUser().getUid());
+       // mQueryParticipants =mDatabaseChatroom.orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
         mNoPostImg = (ImageView) v.findViewById(R.id.noPostChat);
         mNoPostTxt = (TextView) v.findViewById(R.id.noPostTxt);
         mDatabaseChatroom = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        mQueryPostChats = mDatabaseChatroom.orderByChild("sender_uid").equalTo(mAuth.getCurrentUser().getUid());
+        mQueryPostChats = mDatabaseHashtag.orderByChild(mAuth.getCurrentUser().getUid()).equalTo(mAuth.getCurrentUser().getUid());
         mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMembersList.setHasFixedSize(true);
@@ -116,7 +116,7 @@ public class tab1hashtag extends Fragment {
             }
         });
 
-       // mDatabaseChatroomsShot = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(mAuth.getCurrentUser().getUid());
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Hashtag").child("Participants").child(mAuth.getCurrentUser().getUid());
 
         return v;
     }
@@ -131,7 +131,8 @@ public class tab1hashtag extends Fragment {
                 People.class,
                 R.layout.hashtag_row,
                 LetterViewHolder.class,
-                mQueryParticipants
+                mQueryPostChats
+               // mDatabase
 
 
         ) {
