@@ -249,8 +249,8 @@ public class ChatroomActivity extends AppCompatActivity {
                                 // reciever chat
                                 newPostTap.child("message").setValue(message_val);
                                 newPostTap.child("uid").setValue(mCurrentUser.getUid());
-                                newPostTap.child("name").setValue(username);
-                                newPostTap.child("image").setValue(userimg);
+                                newPostTap.child("name").setValue(dataSnapshot.child("name").getValue());
+                                newPostTap.child("image").setValue(dataSnapshot.child("image").getValue());
                                 newPostTap.child("sender_uid").setValue(mCurrentUser.getUid());
                                 newPostTap.child("date").setValue(dataSnapshot.child("date").getValue());
                                 newPostTap.child("post_key").setValue(mPostKey);
@@ -261,8 +261,8 @@ public class ChatroomActivity extends AppCompatActivity {
 
                                 newPostTab2.child("message").setValue(message_val);
                                 newPostTab2.child("uid").setValue(mCurrentUser.getUid());
-                                newPostTab2.child("name").setValue(username);
-                                newPostTab2.child("image").setValue(userimg);
+                                newPostTab2.child("name").setValue(dataSnapshot.child("name"));
+                                newPostTab2.child("image").setValue(dataSnapshot.child("image").getValue());
                                 newPostTab2.child("sender_uid").setValue(mPostKey);
                                 newPostTab2.child("date").setValue(dataSnapshot.child("date").getValue());
                                 newPostTab2.child("post_key").setValue(mPostKey);
