@@ -30,7 +30,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="12dp"
                 android:textSize="16dp"
-                android:text="Delete chat."/>
+                android:text="Remove hashtag."/>
         </LinearLayout>
         <View
             android:layout_width="match_parent"

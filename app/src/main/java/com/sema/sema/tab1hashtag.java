@@ -97,7 +97,7 @@ public class tab1hashtag extends Fragment {
         mDatabaseHashtag.keepSynced(true);
 
 
-        mDatabaseHashtag.addValueEventListener(new ValueEventListener() {
+        mQueryPostChats.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() == null){
@@ -132,7 +132,6 @@ public class tab1hashtag extends Fragment {
                 R.layout.hashtag_row,
                 LetterViewHolder.class,
                 mQueryPostChats
-               // mDatabase
 
 
         ) {
@@ -290,7 +289,7 @@ public class tab1hashtag extends Fragment {
                         // custom dialog
                         final Dialog dialog = new Dialog(context);
                         dialog.setContentView(R.layout.popup_dialog_new);
-                        dialog.setTitle("Chat options");
+                        dialog.setTitle("Hashtag options");
 
                         // set the custom dialog components - text, image and button
                         // send current user uid to block user child
@@ -331,14 +330,14 @@ public class tab1hashtag extends Fragment {
                             AlertDialog myQuittingDialogBox =new AlertDialog.Builder(getActivity())
                                     //set message, title, and icon
                                     .setTitle("Delete Alert!")
-                                    .setMessage("Are you sure you want to remove this chat!")
+                                    .setMessage("Are you sure you want to remove this hashtag!")
 
                                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 
                                         public void onClick(DialogInterface dialog, int whichButton) {
                                             //your deleting code
 
-                                            mDatabaseChatroom.child(post_key).removeValue();
+                                            mDatabaseHashtag.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
                                             dialog.dismiss();
                                         }
 

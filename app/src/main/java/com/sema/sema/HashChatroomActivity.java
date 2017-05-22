@@ -302,7 +302,7 @@ public class HashChatroomActivity extends AppCompatActivity {
         final FirebaseRecyclerAdapter<Chat, CommentViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Chat, CommentViewHolder>(
 
                 Chat.class,
-                R.layout.chat_row,
+                R.layout.hash_row,
                 CommentViewHolder.class,
                 mDatabase
 
