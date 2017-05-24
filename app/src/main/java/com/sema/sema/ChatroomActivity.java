@@ -1,12 +1,8 @@
 package com.sema.sema;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -60,7 +56,7 @@ public class ChatroomActivity extends AppCompatActivity {
     private ProgressDialog mProgress;
     private RecyclerView mCommentList;
     private DatabaseReference mDatabase;
-    private DatabaseReference mDatabaseComment, mDatabaseChatroom, mDatabaseUnread;
+    private DatabaseReference mDatabaseComment, mDatabaseChatroom, mDatabaseUnread, mDatabaseNotification;
     private DatabaseReference mDatabaseUser;
     private DatabaseReference mDatabaseUser2;
     private DatabaseReference mDatabasePostChats;
@@ -124,6 +120,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
+        mDatabaseNotification = FirebaseDatabase.getInstance().getReference().child("Notifications");
         mQueryPostChats = mDatabasePostChats.orderByChild("post_key").equalTo(mPostKey);
         mQueryChats = mDatabasePostChats.orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
 
@@ -142,6 +139,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mDatabaseChatroom.keepSynced(true);
         mDatabaseUser.keepSynced(true);
         mDatabaseUnread.keepSynced(true);
+        mDatabaseNotification.keepSynced(true);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(mPostKey).child(mAuth.getCurrentUser().getUid());
         mQueryInAscending = mDatabase.orderByChild("date").startAt(-1 * new Date().getTime());
@@ -221,6 +219,9 @@ public class ChatroomActivity extends AppCompatActivity {
             //post message to unread child
             final DatabaseReference newPost2Unread = mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).push();
 
+            // SEND MESSAGE DETAILS TO NOTIFICATIONS DATABASE
+            final DatabaseReference newPost2Notification = mDatabaseNotification.child(mPostKey).push();
+
             // post last active date to user data
             final DatabaseReference newPost4 = mDatabaseUser;
 
@@ -260,8 +261,19 @@ public class ChatroomActivity extends AppCompatActivity {
                                 newPostTap.child("post_key").setValue(mPostKey);
 
 
-                                // unread
+                                // unread MESSAGES
                                 newPost2Unread.child("message").setValue(message_val);
+                                newPost2Unread.child("name").setValue(dataSnapshot.child("name").getValue());
+                                newPost2Unread.child("image").setValue(dataSnapshot.child("name").getValue());
+                                newPost2Unread.child("date").setValue(dataSnapshot.child("date").getValue());
+                                newPost2Unread.child("sender_uid").setValue(mCurrentUser.getUid());
+
+                                // Notification message
+                                newPost2Notification.child("message").setValue(message_val);
+                                newPost2Notification.child("name").setValue(dataSnapshot.child("name").getValue());
+                                newPost2Notification.child("image").setValue(dataSnapshot.child("name").getValue());
+                                newPost2Notification.child("date").setValue(dataSnapshot.child("date").getValue());
+                                newPost2Notification.child("sender_uid").setValue(mCurrentUser.getUid());
 
                                 newPostTab2.child("message").setValue(message_val);
                                 newPostTab2.child("uid").setValue(mCurrentUser.getUid());
@@ -293,20 +305,6 @@ public class ChatroomActivity extends AppCompatActivity {
                                 newPost3.child("post_key").setValue(mPostKey);
                                 newPost3.child("change_chat_icon").setValue(mPostKey);
 
-                                // send notification to reviever
-                                Intent intent = new Intent();
-                                PendingIntent pIntent = PendingIntent.getActivity(ChatroomActivity.this,0,intent,0);
-                                Notification noty = new Notification.Builder(ChatroomActivity.this)
-                                        .setContentTitle("Sema")
-                                        .setTicker("Sema")
-                                        .setContentText(username2+": "+message_val)
-                                        .setSmallIcon(R.drawable.ic_noty)
-                                        .setContentIntent(pIntent).getNotification();
-
-                                Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                                new Notification.Builder(getApplicationContext()).setSound(uri);
-                                NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-                                nm.notify(0,noty);
 
                                 //clear edit text after message has been sent
                                 EditText edit = (EditText) findViewById(R.id.emojicon_edit_text);

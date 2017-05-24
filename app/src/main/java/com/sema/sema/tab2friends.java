@@ -45,7 +45,7 @@ public class tab2friends extends Fragment {
     private TextView mNoPostTxt;
     private ImageView mNoPostImg;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private DatabaseReference mDatabaseUsers, mDatabaseBlockThisUser, mDatabaseUnread;
+    private DatabaseReference mDatabaseUsers, mDatabaseBlockThisUser, mDatabaseUnread,  mDatabaseNotification;
     private DatabaseReference mDatabaseChatroom, mDatabaseChatroomsShot;
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
@@ -76,6 +76,7 @@ public class tab2friends extends Fragment {
 
 
         mDatabaseBlockThisUser = FirebaseDatabase.getInstance().getReference().child("BlockThisUser");
+        mDatabaseNotification = FirebaseDatabase.getInstance().getReference().child("Notifications");
         mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
         mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
         mNoPostImg = (ImageView) v.findViewById(R.id.noPostChat);
@@ -92,7 +93,7 @@ public class tab2friends extends Fragment {
         mDatabaseUsers.keepSynced(true);
         mDatabaseLike.keepSynced(true);
         mDatabaseUnread.keepSynced(true);
-
+        mDatabaseNotification.keepSynced(true);
 
         mQueryPostChats.addValueEventListener(new ValueEventListener() {
             @Override
@@ -191,6 +192,7 @@ public class tab2friends extends Fragment {
 
 
                                     mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                    mDatabaseNotification.child(mAuth.getCurrentUser().getUid()).removeValue();
                                     Intent cardonClick2 = new Intent(getActivity(), ChatroomActivity.class);
                                     cardonClick2.putExtra("heartraise_id", post_key );
                                     startActivity(cardonClick2);
@@ -212,6 +214,7 @@ public class tab2friends extends Fragment {
                     public void onClick(View v) {
 
                         mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                        mDatabaseNotification.child(mAuth.getCurrentUser().getUid()).removeValue();
                     }
                 });
 
@@ -227,6 +230,7 @@ public class tab2friends extends Fragment {
                             public void onClick(View v) {
 
                                 mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                mDatabaseNotification.child(mAuth.getCurrentUser().getUid()).removeValue();
                                 Intent cardonClick = new Intent(getActivity(), ChatroomActivity.class);
                                 cardonClick.putExtra("heartraise_id", post_key );
                                 startActivity(cardonClick);

@@ -1,8 +1,13 @@
 package com.sema.sema;
 
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -22,6 +27,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    private DatabaseReference mDatabaseUsers, mDatabaseHashtag;
+    private DatabaseReference mDatabaseUsers, mDatabaseHashtag, mDatabaseNotification;
     private FirebaseAuth auth;
 
 
@@ -51,11 +57,11 @@ public class MainActivity extends AppCompatActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
+        mDatabaseNotification = FirebaseDatabase.getInstance().getReference().child("Notifications");
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
         auth = FirebaseAuth.getInstance();
-
+        mDatabaseNotification.keepSynced(true);
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -63,9 +69,64 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+        checkForNotifications();
 
     }
 
+    private void checkForNotifications() {
+
+        mDatabaseNotification.child(auth.getCurrentUser().getUid()).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                    final String name = dataSnapshot.child("name").getValue().toString().trim();
+                    String image = (String) dataSnapshot.child("image").getValue();
+                    String date = (String) dataSnapshot.child("date").getValue();
+                    String sender_uid = (String) dataSnapshot.child("uid").getValue();
+                    final String message = dataSnapshot.child("message").getValue().toString().trim();
+
+                    // send notification to reciever
+
+
+                    Context context = getApplicationContext();
+                    Intent intent = new Intent(context, MainActivity.class);
+                    PendingIntent pIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, 0);
+                    Notification noty = new Notification.Builder(MainActivity.this)
+                            .setContentTitle("Sema")
+                            .setTicker("Sema")
+                            .setContentText(name + ": " + message)
+                            .setSmallIcon(R.drawable.ic_noty)
+                            .setContentIntent(pIntent).getNotification();
+
+                    noty.flags = Notification.FLAG_AUTO_CANCEL;
+                    Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    new Notification.Builder(getApplicationContext()).setSound(uri);
+                    NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    nm.notify(0, noty);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+          }
 
 
     @Override

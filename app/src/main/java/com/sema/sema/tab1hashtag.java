@@ -45,7 +45,7 @@ public class tab1hashtag extends Fragment {
     private TextView mNoPostTxt;
     private ImageView mNoPostImg;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private DatabaseReference mDatabaseUsers, mDatabaseBlockThisUser, mDatabaseUnread;
+    private DatabaseReference mDatabaseUsers, mDatabaseBlockThisUser, mDatabaseUnread, mDatabaseNotification;
     private DatabaseReference mDatabaseChatroom, mDatabaseHashtag, mDatabase;
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
@@ -76,6 +76,7 @@ public class tab1hashtag extends Fragment {
 
 
         mDatabaseBlockThisUser = FirebaseDatabase.getInstance().getReference().child("BlockThisUser");
+        mDatabaseNotification = FirebaseDatabase.getInstance().getReference().child("Notifications");
         mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
         mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
         mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
@@ -95,7 +96,7 @@ public class tab1hashtag extends Fragment {
         mDatabaseLike.keepSynced(true);
         mDatabaseUnread.keepSynced(true);
         mDatabaseHashtag.keepSynced(true);
-
+        mDatabaseNotification.keepSynced(true);
 
         mQueryPostChats.addValueEventListener(new ValueEventListener() {
             @Override
@@ -192,6 +193,7 @@ public class tab1hashtag extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                mDatabaseNotification.child(mAuth.getCurrentUser().getUid()).removeValue();
                                 Intent cardonClick = new Intent(getActivity(), HashChatroomActivity.class);
                                 cardonClick.putExtra("heartraise_id", post_key );
                                 startActivity(cardonClick);
@@ -212,6 +214,7 @@ public class tab1hashtag extends Fragment {
                     public void onClick(View v) {
 
                         mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                        mDatabaseNotification.child(mAuth.getCurrentUser().getUid()).removeValue();
                     }
                 });
 
@@ -226,6 +229,7 @@ public class tab1hashtag extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                mDatabaseNotification.child(mAuth.getCurrentUser().getUid()).removeValue();
                                 Intent cardonClick = new Intent(getActivity(), HashChatroomActivity.class);
                                 cardonClick.putExtra("heartraise_id", post_key );
                                 startActivity(cardonClick);
