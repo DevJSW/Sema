@@ -1,8 +1,12 @@
 package com.sema.sema;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -249,8 +253,8 @@ public class ChatroomActivity extends AppCompatActivity {
                                 // reciever chat
                                 newPostTap.child("message").setValue(message_val);
                                 newPostTap.child("uid").setValue(mCurrentUser.getUid());
-                                newPostTap.child("name").setValue(dataSnapshot.child("name").getValue());
-                                newPostTap.child("image").setValue(dataSnapshot.child("image").getValue());
+                                newPostTap.child("name").setValue(username);
+                                newPostTap.child("image").setValue(userimg);
                                 newPostTap.child("sender_uid").setValue(mCurrentUser.getUid());
                                 newPostTap.child("date").setValue(dataSnapshot.child("date").getValue());
                                 newPostTap.child("post_key").setValue(mPostKey);
@@ -261,8 +265,8 @@ public class ChatroomActivity extends AppCompatActivity {
 
                                 newPostTab2.child("message").setValue(message_val);
                                 newPostTab2.child("uid").setValue(mCurrentUser.getUid());
-                                newPostTab2.child("name").setValue(username);
-                                newPostTab2.child("image").setValue(userimg);
+                                newPostTab2.child("name").setValue(dataSnapshot.child("name").getValue());
+                                newPostTab2.child("image").setValue(dataSnapshot.child("image").getValue());
                                 newPostTab2.child("sender_uid").setValue(mPostKey);
                                 newPostTab2.child("date").setValue(dataSnapshot.child("date").getValue());
                                 newPostTab2.child("post_key").setValue(mPostKey);
@@ -289,6 +293,20 @@ public class ChatroomActivity extends AppCompatActivity {
                                 newPost3.child("post_key").setValue(mPostKey);
                                 newPost3.child("change_chat_icon").setValue(mPostKey);
 
+                                // send notification to reviever
+                                Intent intent = new Intent();
+                                PendingIntent pIntent = PendingIntent.getActivity(ChatroomActivity.this,0,intent,0);
+                                Notification noty = new Notification.Builder(ChatroomActivity.this)
+                                        .setContentTitle("Sema")
+                                        .setTicker("Sema")
+                                        .setContentText(username2+": "+message_val)
+                                        .setSmallIcon(R.drawable.ic_noty)
+                                        .setContentIntent(pIntent).getNotification();
+
+                                Uri uri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                                new Notification.Builder(getApplicationContext()).setSound(uri);
+                                NotificationManager nm = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+                                nm.notify(0,noty);
 
                                 //clear edit text after message has been sent
                                 EditText edit = (EditText) findViewById(R.id.emojicon_edit_text);
