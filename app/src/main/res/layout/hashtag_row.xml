@@ -97,6 +97,7 @@
                 android:layout_marginTop="1dp"
                 android:layout_toRightOf="@+id/rely_img"
                 android:layout_below="@+id/post_name"
+                android:layout_marginRight="10dp"
                 android:layout_marginLeft="2dp"
                 android:singleLine="true"
                 android:id="@+id/post_message"
