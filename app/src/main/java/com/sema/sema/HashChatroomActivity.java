@@ -69,6 +69,8 @@ public class HashChatroomActivity extends AppCompatActivity {
     private Uri mImageUri = null;
     private static int GALLERY_REQUEST =1;
     private Boolean mProcessStopChat = false;
+    private Boolean mProcessLike = false;
+    private DatabaseReference mDatabaseLike;
     private Menu menu;
     Context context = this;
 
@@ -117,6 +119,7 @@ public class HashChatroomActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mPostKey = getIntent().getExtras().getString("heartraise_id");
+        mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
@@ -140,6 +143,7 @@ public class HashChatroomActivity extends AppCompatActivity {
         mDatabaseHashtag.keepSynced(true);
         mDatabaseUser.keepSynced(true);
         mDatabaseUnread.keepSynced(true);
+        mDatabaseLike.keepSynced(true);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Hashtag").child(mPostKey).child("Chats");
         mQueryInAscending = mDatabase.orderByChild("date").startAt(-1 * new Date().getTime());
@@ -317,9 +321,59 @@ public class HashChatroomActivity extends AppCompatActivity {
                 viewHolder.setDate(model.getDate());
                 viewHolder.setName(model.getName());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
+              //  viewHolder.setLikeBtn(post_key);
+/*
+                mDatabaseLike.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        viewHolder.mLikeCount.setText(dataSnapshot.getChildrenCount() + "");
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                */
+/*
+                viewHolder.ReyLikeBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        mProcessLike = true;
+
+                        mDatabaseLike.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                if(mProcessLike) {
+
+                                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
 
 
+                                        mDatabaseLike.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                        mProcessLike = false;
+                                    }else {
 
+                                        mDatabaseLike.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                        mProcessLike = false;
+
+                                    }
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+                    }
+                });
+
+*/
                 //DELETE UNREAD MESSAGES WHILE SCROLLING
                 mCommentList.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     @Override
@@ -624,26 +678,33 @@ public class HashChatroomActivity extends AppCompatActivity {
 
     }
 
-    public static class CommentViewHolder extends RecyclerView.ViewHolder {
+    public class CommentViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
 
         DatabaseReference mDatabaseUnread;
+        DatabaseReference mDatabaseLike;
+        TextView  mLikeCount;
         FirebaseAuth mAuth;
-        ImageView mCardPhoto, mImage, mCardPhoto2, mImage2, groupIcon, mSingleTick, mDoubleTick;
+        ImageView mCardPhoto, mImage, mCardPhoto2, mImage2;
         RelativeLayout rely;
         LinearLayout liny;
         ProgressBar mProgressBar;
+        RelativeLayout ReyLikeBtn;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
 
+            mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
+            mDatabaseLike.keepSynced(true);
+            mLikeCount = (TextView) mView.findViewById(R.id.likeCount);
             mCardPhoto = (ImageView) mView.findViewById(R.id.post_photo);
             mImage = (ImageView) mView.findViewById(R.id.post_image);
             mCardPhoto2 = (ImageView) mView.findViewById(R.id.post_photo2);
             mImage2 = (ImageView) mView.findViewById(R.id.post_image2);
             //  groupIcon = (ImageView) mView.findViewById(R.id.group_icon);
+            ReyLikeBtn = (RelativeLayout) mView.findViewById(R.id.counter);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
             rely = (RelativeLayout) mView.findViewById(R.id.rely);
             //mSingleTick = (ImageView)mView.findViewById(R.id.singleTick);
@@ -652,6 +713,35 @@ public class HashChatroomActivity extends AppCompatActivity {
 
 
         }
+/*
+        public void setLikeBtn(final String post_key) {
+
+            mDatabaseLike.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                       // Resources res = getResources(); //resource handle
+                       // Drawable drawable = res.getDrawable(R.drawable.heart_red);
+                       // ReyLikeBtn.setBackground(drawable);
+                    } else {
+
+                      //  Resources res = getResources(); //resource handle
+                    //    Drawable drawable2 = res.getDrawable(R.drawable.heart_grey);
+                    //    ReyLikeBtn.setBackground(drawable2);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+*/
 
         public void setMessage(String message) {
 

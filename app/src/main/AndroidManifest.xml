@@ -33,7 +33,7 @@
             android:label="Signup" />
         <activity
             android:name=".EditProfileActivity"
-            android:label="Edit"/>
+            android:label="Edit" />
         <activity android:name=".SettingsActivity" />
         <activity
             android:name=".ChatroomActivity"
@@ -53,6 +53,9 @@
         <activity
             android:name=".HashChatroomActivity"
             android:label=""
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".WelcomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

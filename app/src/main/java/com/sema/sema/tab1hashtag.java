@@ -192,7 +192,7 @@ public class tab1hashtag extends Fragment {
                             @Override
                             public void onClick(View v) {
                                 mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                                Intent cardonClick = new Intent(getActivity(), ChatroomActivity.class);
+                                Intent cardonClick = new Intent(getActivity(), HashChatroomActivity.class);
                                 cardonClick.putExtra("heartraise_id", post_key );
                                 startActivity(cardonClick);
                             }

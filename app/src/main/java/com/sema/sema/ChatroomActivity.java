@@ -342,8 +342,8 @@ public class ChatroomActivity extends AppCompatActivity {
 
                 viewHolder.setMessage(model.getMessage());
                 viewHolder.setDate(model.getDate());
-                viewHolder.setName(model.getName());
-                viewHolder.setImage(getApplicationContext(), model.getImage());
+               // viewHolder.setName(model.getName());
+               // viewHolder.setImage(getApplicationContext(), model.getImage());
 
                 //check if message is read then show double ticks
                 mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).addValueEventListener(new ValueEventListener() {
@@ -711,7 +711,7 @@ public class ChatroomActivity extends AppCompatActivity {
             post_message2.setText(message);
 
         }
-
+/*
         public void setName(String name) {
 
             TextView post_name = (TextView) mView.findViewById(R.id.post_name);
@@ -719,7 +719,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
 
         }
-
+*/
 
         public void setDate(String date) {
 
@@ -729,7 +729,7 @@ public class ChatroomActivity extends AppCompatActivity {
             TextView post_date2 = (TextView) mView.findViewById(R.id.post_date2);
             post_date2.setText(date);
         }
-
+/*
         public void setImage(final Context ctx, final String image) {
             final ImageView post_image = (ImageView) mView.findViewById(R.id.post_image);
 
@@ -768,7 +768,7 @@ public class ChatroomActivity extends AppCompatActivity {
                         }
                     });
         }
-
+*/
         public void setPhoto(final Context ctx, final String photo) {
             final ImageView post_photo = (ImageView) mView.findViewById(R.id.post_photo);
 
