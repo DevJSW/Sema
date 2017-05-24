@@ -42,7 +42,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:padding="6dp"
-                android:src="@drawable/ic_tag_faces" />
+                android:src="@drawable/smiley" />
 
             <ImageView
                 android:id="@+id/sendBtn"
