@@ -79,11 +79,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                    final String name = dataSnapshot.child("name").getValue().toString().trim();
+                    String name = (String) dataSnapshot.child("name").getValue();
                     String image = (String) dataSnapshot.child("image").getValue();
                     String date = (String) dataSnapshot.child("date").getValue();
                     String sender_uid = (String) dataSnapshot.child("uid").getValue();
-                    final String message = dataSnapshot.child("message").getValue().toString().trim();
+                    String message = (String) dataSnapshot.child("message").getValue();
 
                     // send notification to reciever
 

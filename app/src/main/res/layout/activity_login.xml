@@ -14,15 +14,7 @@
         android:layout_gravity="center"
         android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:id="@+id/topImg"
-            android:layout_marginTop="50dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/splash"
-            android:layout_marginBottom="10dp"
-            android:scaleType="fitXY" />
+
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -30,6 +22,14 @@
             android:gravity="center"
             android:orientation="vertical"
             android:padding="@dimen/activity_horizontal_margin">
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:id="@+id/topImg"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/splash"
+                android:layout_marginBottom="90dp"
+                android:scaleType="fitXY" />
 
 
             <android.support.design.widget.TextInputLayout

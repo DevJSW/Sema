@@ -321,8 +321,8 @@ public class HashChatroomActivity extends AppCompatActivity {
                 viewHolder.setDate(model.getDate());
                 viewHolder.setName(model.getName());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
-              //  viewHolder.setLikeBtn(post_key);
-/*
+                viewHolder.setLikeBtn(post_key);
+
                 mDatabaseLike.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -334,8 +334,8 @@ public class HashChatroomActivity extends AppCompatActivity {
 
                     }
                 });
-                */
-/*
+
+
                 viewHolder.ReyLikeBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -352,10 +352,37 @@ public class HashChatroomActivity extends AppCompatActivity {
 
 
                                         mDatabaseLike.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+
+                                        mDatabaseLike.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                viewHolder.mLikeCount.setText(dataSnapshot.getChildrenCount() + "");
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
+
                                         mProcessLike = false;
+
                                     }else {
 
                                         mDatabaseLike.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+
+                                        mDatabaseLike.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                viewHolder.mLikeCount.setText(dataSnapshot.getChildrenCount() + "");
+                                            }
+
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
+
                                         mProcessLike = false;
 
                                     }
@@ -373,7 +400,7 @@ public class HashChatroomActivity extends AppCompatActivity {
                     }
                 });
 
-*/
+
                 //DELETE UNREAD MESSAGES WHILE SCROLLING
                 mCommentList.addOnScrollListener(new RecyclerView.OnScrollListener() {
                     @Override
@@ -678,7 +705,7 @@ public class HashChatroomActivity extends AppCompatActivity {
 
     }
 
-    public class CommentViewHolder extends RecyclerView.ViewHolder {
+    public static class CommentViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
 
@@ -698,6 +725,7 @@ public class HashChatroomActivity extends AppCompatActivity {
 
             mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
             mDatabaseLike.keepSynced(true);
+            mAuth = FirebaseAuth.getInstance();
             mLikeCount = (TextView) mView.findViewById(R.id.likeCount);
             mCardPhoto = (ImageView) mView.findViewById(R.id.post_photo);
             mImage = (ImageView) mView.findViewById(R.id.post_image);
@@ -713,7 +741,7 @@ public class HashChatroomActivity extends AppCompatActivity {
 
 
         }
-/*
+
         public void setLikeBtn(final String post_key) {
 
             mDatabaseLike.addValueEventListener(new ValueEventListener() {
@@ -722,14 +750,12 @@ public class HashChatroomActivity extends AppCompatActivity {
 
                     if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
 
-                       // Resources res = getResources(); //resource handle
-                       // Drawable drawable = res.getDrawable(R.drawable.heart_red);
-                       // ReyLikeBtn.setBackground(drawable);
+                        ReyLikeBtn.setBackgroundResource(R.drawable.heart_red);
+
+
                     } else {
 
-                      //  Resources res = getResources(); //resource handle
-                    //    Drawable drawable2 = res.getDrawable(R.drawable.heart_grey);
-                    //    ReyLikeBtn.setBackground(drawable2);
+                        ReyLikeBtn.setBackgroundResource(R.drawable.heart_grey);
                     }
 
                 }
@@ -741,7 +767,7 @@ public class HashChatroomActivity extends AppCompatActivity {
             });
 
         }
-*/
+
 
         public void setMessage(String message) {
 

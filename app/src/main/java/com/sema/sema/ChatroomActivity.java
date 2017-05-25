@@ -421,9 +421,11 @@ public class ChatroomActivity extends AppCompatActivity {
 
                                     viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
                                     viewHolder.mCardPhoto.setVisibility(View.VISIBLE);
+                                    viewHolder.min_lay.setVisibility(View.GONE);
 
                                     viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
                                     viewHolder.mCardPhoto2.setVisibility(View.VISIBLE);
+                                    viewHolder.min_lay2.setVisibility(View.GONE);
 
                                     // if card has my uid, then change chat balloon shape
                                 } else {
@@ -473,6 +475,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
                             viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
                             viewHolder.mCardPhoto.setVisibility(View.VISIBLE);
+                            viewHolder.min_lay.setVisibility(View.GONE);
 
                             // if card has my uid, then change chat balloon shape
                         } else {
@@ -695,18 +698,20 @@ public class ChatroomActivity extends AppCompatActivity {
 
         DatabaseReference mDatabaseUnread;
         FirebaseAuth mAuth;
-        ImageView mCardPhoto, mImage, mCardPhoto2, mImage2, groupIcon, mSingleTick, mDoubleTick;
-        RelativeLayout rely;
-        LinearLayout liny;
+        ImageView mImage,  mImage2, groupIcon, mSingleTick, mDoubleTick;
+        RelativeLayout rely, min_lay2;
+        LinearLayout liny,  mCardPhoto, mCardPhoto2, min_lay;
         ProgressBar mProgressBar;
 
         public CommentViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
 
-            mCardPhoto = (ImageView) mView.findViewById(R.id.post_photo);
+            mCardPhoto = (LinearLayout) mView.findViewById(R.id.chat_image);
+            min_lay = (LinearLayout) mView.findViewById(R.id.main_lay);
             mImage = (ImageView) mView.findViewById(R.id.post_image);
-            mCardPhoto2 = (ImageView) mView.findViewById(R.id.post_photo2);
+            mCardPhoto2 = (LinearLayout) mView.findViewById(R.id.chat_image2);
+            min_lay2 = (RelativeLayout) mView.findViewById(R.id.chat_balloon);
             mImage2 = (ImageView) mView.findViewById(R.id.post_image2);
           //  groupIcon = (ImageView) mView.findViewById(R.id.group_icon);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
@@ -725,6 +730,12 @@ public class ChatroomActivity extends AppCompatActivity {
 
             TextView post_message2 = (TextView) mView.findViewById(R.id.post_message2);
             post_message2.setText(message);
+
+            TextView post_caption = (TextView) mView.findViewById(R.id.captionInput);
+            post_caption.setText(message);
+
+            TextView post_caption2 = (TextView) mView.findViewById(R.id.captionInput2);
+            post_caption2.setText(message);
 
         }
 /*
