@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    private DatabaseReference mDatabaseUsers, mDatabaseHashtag, mDatabaseNotification;
+    private DatabaseReference mDatabaseUsers, mDatabaseHashtag, mDatabaseNotification, mDatabaseLastSeen;
     private FirebaseAuth auth;
 
 
@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mDatabaseNotification = FirebaseDatabase.getInstance().getReference().child("Notifications");
+        mDatabaseLastSeen = FirebaseDatabase.getInstance().getReference().child("Last_Seen");
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
         auth = FirebaseAuth.getInstance();
@@ -70,7 +71,16 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
 
         checkForNotifications();
+        addToLastSeen();
 
+    }
+
+    private void addToLastSeen() {
+
+        Date date = new Date();
+        final String stringDate = DateFormat.getDateTimeInstance().format(date);
+
+        mDatabaseLastSeen.child(auth.getCurrentUser().getUid()).child("last_seen").setValue(stringDate);
     }
 
     private void checkForNotifications() {

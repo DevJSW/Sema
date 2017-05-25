@@ -56,7 +56,7 @@ public class ChatroomActivity extends AppCompatActivity {
     private ProgressDialog mProgress;
     private RecyclerView mCommentList;
     private DatabaseReference mDatabase;
-    private DatabaseReference mDatabaseComment, mDatabaseChatroom, mDatabaseUnread, mDatabaseNotification;
+    private DatabaseReference mDatabaseComment, mDatabaseChatroom, mDatabaseUnread, mDatabaseNotification,  mDatabaseLastSeen;
     private DatabaseReference mDatabaseUser;
     private DatabaseReference mDatabaseUser2;
     private DatabaseReference mDatabasePostChats;
@@ -142,6 +142,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mDatabaseNotification.keepSynced(true);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(mPostKey).child(mAuth.getCurrentUser().getUid());
+        mDatabaseLastSeen = FirebaseDatabase.getInstance().getReference().child("Last_Seen");
         mQueryInAscending = mDatabase.orderByChild("date").startAt(-1 * new Date().getTime());
         mSendBtn = (ImageView) findViewById(R.id.sendBtn);
         mSendBtn.setOnClickListener(new View.OnClickListener() {
@@ -178,9 +179,22 @@ public class ChatroomActivity extends AppCompatActivity {
                 TextView toolbar_username = (TextView) findViewById(R.id.toolbar_username);
                 toolbar_username.setText(username);
 
-                TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
-                toolbar_last_seen.setText(last_seen_date);
 
+                mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String date = (String) dataSnapshot.child("last_seen").getValue();
+
+                        TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
+                        toolbar_last_seen.setText(date);
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
 
             @Override
