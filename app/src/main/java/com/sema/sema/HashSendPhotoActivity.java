@@ -29,7 +29,7 @@ import com.google.firebase.storage.UploadTask;
 import java.text.DateFormat;
 import java.util.Date;
 
-public class SendPhotoActivity extends AppCompatActivity {
+public class HashSendPhotoActivity extends AppCompatActivity {
 
     private String mPostKey = null;
 
@@ -37,7 +37,7 @@ public class SendPhotoActivity extends AppCompatActivity {
     private EditText mCaption;
     private RecyclerView mCommentList;
     private DatabaseReference mDatabase;
-    private DatabaseReference mDatabasePostUser;
+    private DatabaseReference mDatabasePostUser, mDatabaseHashtag;
     private DatabaseReference mDatabaseComment;
     private DatabaseReference mDatabaseUser;
     private DatabaseReference mDatabasePostComments;
@@ -74,6 +74,7 @@ public class SendPhotoActivity extends AppCompatActivity {
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
         mDatabasePostComments = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
+        mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
         mQueryPostComment = mDatabasePostComments.orderByChild("post_key").equalTo(mPostKey);
 
         mCurrentUser = mAuth.getCurrentUser();
@@ -127,11 +128,8 @@ public class SendPhotoActivity extends AppCompatActivity {
 
                     final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                    final DatabaseReference newPostTap = mDatabaseComment.child(mPostKey);
-                    final DatabaseReference newPostTab2 = mDatabaseComment.child(mAuth.getCurrentUser().getUid());
-
-                    final DatabaseReference newPost = mDatabaseComment.child(mPostKey).child(mCurrentUser.getUid()).push();
-                    final DatabaseReference newPost2 =mDatabaseComment.child(mCurrentUser.getUid()).child(mPostKey).push();
+                    final DatabaseReference newPost = mDatabaseHashtag.child(mPostKey).child("Chats").push();
+                    //final DatabaseReference newPost = mDatabaseHashtag.child(mPostKey);
 
                     mDatabasePostUser.child(mPostKey).addValueEventListener(new ValueEventListener() {
                         @Override
@@ -149,46 +147,15 @@ public class SendPhotoActivity extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                                    // reciever chat
-                                    newPostTap.child("message").setValue(caption_val);
-                                    newPostTap.child("uid").setValue(mCurrentUser.getUid());
-                                    newPostTap.child("name").setValue(reciever_name);
-                                    newPostTap.child("image").setValue(reciever_image);
-                                    newPostTap.child("sender_uid").setValue(mCurrentUser.getUid());
-                                    newPostTap.child("date").setValue(stringDate);
-                                    newPostTap.child("post_key").setValue(mPostKey);
-
-                                    // unread
-                                    // newPost2Unread.child("message").setValue(message_val);
-
-                                    newPostTab2.child("message").setValue(caption_val);
-                                    newPostTab2.child("uid").setValue(mCurrentUser.getUid());
-                                    newPostTab2.child("name").setValue(dataSnapshot.child("name").getValue());
-                                    newPostTab2.child("image").setValue(dataSnapshot.child("image").getValue());
-                                    newPostTab2.child("sender_uid").setValue(mPostKey);
-                                    newPostTab2.child("date").setValue(stringDate);
-                                    newPostTab2.child("post_key").setValue(mPostKey);
-
 
                                     newPost.child("message").setValue(caption_val);
-                                    newPost.child("photo").setValue(downloadUrl.toString());
-                                    newPost.child("uid").setValue(mAuth.getCurrentUser().getUid());
+                                    newPost.child("uid").setValue(mCurrentUser.getUid());
                                     newPost.child("name").setValue(dataSnapshot.child("name").getValue());
                                     newPost.child("image").setValue(dataSnapshot.child("image").getValue());
                                     newPost.child("sender_uid").setValue(mCurrentUser.getUid());
                                     newPost.child("date").setValue(stringDate);
                                     newPost.child("post_key").setValue(mPostKey);
-
-
-                                    newPost2.child("message").setValue(caption_val);
-                                    newPost2.child("photo").setValue(downloadUrl.toString());
-                                    newPost2.child("uid").setValue(mAuth.getCurrentUser().getUid());
-                                    newPost2.child("name").setValue(dataSnapshot.child("name").getValue());
-                                    newPost2.child("image").setValue(dataSnapshot.child("image").getValue());
-                                    newPost2.child("sender_uid").setValue(mCurrentUser.getUid());
-                                    newPost2.child("date").setValue(stringDate);
-                                    newPost2.child("post_key").setValue(mPostKey);
-                                    newPost2.child("change_chat_icon").setValue(mPostKey);
+                                    newPost.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
 
 
                                 }
@@ -206,7 +173,7 @@ public class SendPhotoActivity extends AppCompatActivity {
 
                         }
                     });
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SendPhotoActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(HashSendPhotoActivity.this);
                     builder.setTitle("Post Alert!");
                     builder.setMessage("Your comment has been posted SUCCESSFULLY!")
                             .setCancelable(true)

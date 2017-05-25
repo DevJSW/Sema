@@ -57,6 +57,7 @@
         <activity
             android:name=".WelcomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".HashSendPhotoActivity"></activity>
     </application>
 
 </manifest>
