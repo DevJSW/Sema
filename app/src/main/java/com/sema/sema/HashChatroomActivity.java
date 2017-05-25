@@ -437,6 +437,7 @@ public class HashChatroomActivity extends AppCompatActivity {
 
                                     viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
                                     viewHolder.mCardPhoto.setVisibility(View.VISIBLE);
+                                    viewHolder.min_lay.setVisibility(View.GONE);
 
                                     viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
                                     viewHolder.mCardPhoto2.setVisibility(View.VISIBLE);
@@ -715,7 +716,7 @@ public class HashChatroomActivity extends AppCompatActivity {
         FirebaseAuth mAuth;
         ImageView mCardPhoto, mImage, mCardPhoto2, mImage2;
         RelativeLayout rely;
-        LinearLayout liny;
+        LinearLayout liny,  min_lay;
         ProgressBar mProgressBar;
         RelativeLayout ReyLikeBtn;
 
@@ -724,6 +725,7 @@ public class HashChatroomActivity extends AppCompatActivity {
             mView = itemView;
 
             mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
+            min_lay = (LinearLayout) mView.findViewById(R.id.main_lay);
             mDatabaseLike.keepSynced(true);
             mAuth = FirebaseAuth.getInstance();
             mLikeCount = (TextView) mView.findViewById(R.id.likeCount);
