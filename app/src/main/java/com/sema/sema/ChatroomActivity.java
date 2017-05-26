@@ -119,6 +119,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
+        mDatabaseLastSeen = FirebaseDatabase.getInstance().getReference().child("Last_Seen");
         mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
         mDatabaseNotification = FirebaseDatabase.getInstance().getReference().child("Notifications");
         mQueryPostChats = mDatabasePostChats.orderByChild("post_key").equalTo(mPostKey);
@@ -180,7 +181,7 @@ public class ChatroomActivity extends AppCompatActivity {
                 toolbar_username.setText(username);
 
 
-                mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                mDatabaseLastSeen.child(mPostKey).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String date = (String) dataSnapshot.child("last_seen").getValue();
@@ -206,8 +207,16 @@ public class ChatroomActivity extends AppCompatActivity {
 
 
         mDatabaseComment.keepSynced(true);
+        addToLastSeen();
 
+    }
 
+    private void addToLastSeen() {
+
+        Date date = new Date();
+        final String stringDate = DateFormat.getDateTimeInstance().format(date);
+
+        mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).child("last_seen").setValue(stringDate);
     }
 
     private void startPosting() {

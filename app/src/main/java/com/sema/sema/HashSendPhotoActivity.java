@@ -149,6 +149,7 @@ public class HashSendPhotoActivity extends AppCompatActivity {
 
 
                                     newPost.child("message").setValue(caption_val);
+                                    newPost.child("photo").setValue(downloadUrl.toString());
                                     newPost.child("uid").setValue(mCurrentUser.getUid());
                                     newPost.child("name").setValue(dataSnapshot.child("name").getValue());
                                     newPost.child("image").setValue(dataSnapshot.child("image").getValue());

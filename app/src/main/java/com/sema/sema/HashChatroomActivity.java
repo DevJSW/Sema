@@ -56,7 +56,7 @@ public class HashChatroomActivity extends AppCompatActivity {
     private ProgressDialog mProgress;
     private RecyclerView mCommentList;
     private DatabaseReference mDatabase;
-    private DatabaseReference mDatabaseComment, mDatabaseChatroom, mDatabaseUnread, mDatabaseHashtag;
+    private DatabaseReference mDatabaseComment, mDatabaseChatroom, mDatabaseUnread, mDatabaseHashtag,  mDatabaseLastSeen;
     private DatabaseReference mDatabaseUser;
     private DatabaseReference mDatabaseUser2;
     private DatabaseReference mDatabasePostChats;
@@ -122,6 +122,7 @@ public class HashChatroomActivity extends AppCompatActivity {
         mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
+        mDatabaseLastSeen = FirebaseDatabase.getInstance().getReference().child("Last_Seen");
         mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
         mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
         mQueryPostChats = mDatabasePostChats.orderByChild("post_key").equalTo(mPostKey);
@@ -196,9 +197,18 @@ public class HashChatroomActivity extends AppCompatActivity {
 
 
         mDatabaseComment.keepSynced(true);
-
+        addToLastSeen();
 
     }
+
+    private void addToLastSeen() {
+
+        Date date = new Date();
+        final String stringDate = DateFormat.getDateTimeInstance().format(date);
+
+        mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).child("last_seen").setValue(stringDate);
+    }
+
 
     private void startPosting() {
         // mProgress.setMessage("Posting...");
@@ -425,7 +435,7 @@ public class HashChatroomActivity extends AppCompatActivity {
 
                         final String group_uid = (String) dataSnapshot.child("this_is_a_group").getValue();
 
-                        mDatabaseComment.child(mPostKey).child(mCurrentUser.getUid()).child(post_key).addValueEventListener(new ValueEventListener() {
+                        mDatabaseHashtag.child(mPostKey).child("Chats").child(post_key).addValueEventListener(new ValueEventListener() {
 
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -439,25 +449,12 @@ public class HashChatroomActivity extends AppCompatActivity {
                                     viewHolder.mCardPhoto.setVisibility(View.VISIBLE);
                                     viewHolder.min_lay.setVisibility(View.GONE);
 
-                                    viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
-                                    viewHolder.mCardPhoto2.setVisibility(View.VISIBLE);
 
                                     // if card has my uid, then change chat balloon shape
                                 } else {
 
                                 }
 
-                                if (chat_icon != null) {
-
-                                    viewHolder.rely.setVisibility(View.VISIBLE);
-                                    viewHolder.liny.setVisibility(View.GONE);
-
-                                    // if card has my uid, then change chat balloon shape
-                                } else {
-
-                                    viewHolder.rely.setVisibility(View.GONE);
-                                    viewHolder.liny.setVisibility(View.VISIBLE);
-                                }
 
 
 
@@ -494,18 +491,6 @@ public class HashChatroomActivity extends AppCompatActivity {
                             // if card has my uid, then change chat balloon shape
                         } else {
 
-                        }
-
-                        if (chat_icon == null) {
-
-                            viewHolder.rely.setVisibility(View.VISIBLE);
-                            viewHolder.liny.setVisibility(View.GONE);
-
-                            // if card has my uid, then change chat balloon shape
-                        } else {
-
-                            viewHolder.rely.setVisibility(View.GONE);
-                            viewHolder.liny.setVisibility(View.VISIBLE);
                         }
 
 
@@ -714,9 +699,9 @@ public class HashChatroomActivity extends AppCompatActivity {
         DatabaseReference mDatabaseLike;
         TextView  mLikeCount;
         FirebaseAuth mAuth;
-        ImageView mCardPhoto, mImage, mCardPhoto2, mImage2;
+        ImageView mImage, mCardPhoto2, mImage2;
         RelativeLayout rely;
-        LinearLayout liny,  min_lay;
+        LinearLayout liny,  min_lay,  mCardPhoto;
         ProgressBar mProgressBar;
         RelativeLayout ReyLikeBtn;
 
@@ -729,10 +714,8 @@ public class HashChatroomActivity extends AppCompatActivity {
             mDatabaseLike.keepSynced(true);
             mAuth = FirebaseAuth.getInstance();
             mLikeCount = (TextView) mView.findViewById(R.id.likeCount);
-            mCardPhoto = (ImageView) mView.findViewById(R.id.post_photo);
+            mCardPhoto = (LinearLayout) mView.findViewById(R.id.chat_image);
             mImage = (ImageView) mView.findViewById(R.id.post_image);
-            mCardPhoto2 = (ImageView) mView.findViewById(R.id.post_photo2);
-            mImage2 = (ImageView) mView.findViewById(R.id.post_image2);
             //  groupIcon = (ImageView) mView.findViewById(R.id.group_icon);
             ReyLikeBtn = (RelativeLayout) mView.findViewById(R.id.counter);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
@@ -778,6 +761,9 @@ public class HashChatroomActivity extends AppCompatActivity {
 
             TextView post_message2 = (TextView) mView.findViewById(R.id.post_message2);
             post_message2.setText(message);
+
+            TextView post_caption = (TextView) mView.findViewById(R.id.captionInput);
+            post_caption.setText(message);
 
         }
 
@@ -900,7 +886,7 @@ public class HashChatroomActivity extends AppCompatActivity {
             default:
                 if (id == R.id.action_settings) {
 
-                    Intent cardonClick = new Intent(HashChatroomActivity.this, SendPhotoActivity.class);
+                    Intent cardonClick = new Intent(HashChatroomActivity.this, HashSendPhotoActivity.class);
                     cardonClick.putExtra("heartraise_id", mPostKey );
                     startActivity(cardonClick);
                 }

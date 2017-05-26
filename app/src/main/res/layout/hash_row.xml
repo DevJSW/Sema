@@ -123,45 +123,49 @@
 
                     </RelativeLayout>
 
-                </RelativeLayout>
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/chat_balloon"
-                    android:layout_marginBottom="10dp"
-                    android:id="@+id/chat_image"
-                    android:visibility="gone"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:background="@drawable/shape_bg_incoming_bubble"
-                    android:paddingTop="5dp"
-                    android:layout_marginTop="2dp"
-                    android:paddingBottom="8dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_alignParentRight="true"
-                    android:orientation="vertical">
-
-                    <TextView
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:textSize="14dp"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="35dp"
-                        android:paddingBottom="5dp"
-                        android:id="@+id/captionInput"
-                        android:text="caption"/>
+                        android:layout_below="@+id/chat_balloon"
+                        android:layout_marginBottom="10dp"
+                        android:id="@+id/chat_image"
+                        android:visibility="gone"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:background="@drawable/shape_bg_incoming_bubble"
+                        android:paddingTop="5dp"
+                        android:layout_marginTop="2dp"
+                        android:paddingBottom="8dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_toLeftOf="@+id/counter"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="2dp"
+                        android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="250dp"
-                        android:layout_height="200dp"
-                        android:id="@+id/post_photo"
-                        android:layout_marginLeft="10dp"
-                        android:scaleType="fitXY"
-                        android:background="@drawable/bg_send_bubble"
-                        android:src="@drawable/placeholder_image"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:textSize="14dp"
+                            android:paddingLeft="12dp"
+                            android:paddingRight="35dp"
+                            android:paddingBottom="5dp"
+                            android:id="@+id/captionInput"
+                            android:text="caption"/>
 
-                </LinearLayout>
+                        <ImageView
+                            android:layout_width="250dp"
+                            android:layout_height="200dp"
+                            android:id="@+id/post_photo"
+                            android:layout_marginLeft="10dp"
+                            android:scaleType="fitXY"
+                            android:background="@drawable/bg_send_bubble"
+                            android:src="@drawable/placeholder_image"/>
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
 
 
 
@@ -170,90 +174,5 @@
         </RelativeLayout>
 
     </LinearLayout>
-
-   <RelativeLayout
-       android:layout_width="match_parent"
-       android:layout_height="wrap_content"
-       android:id="@+id/rely"
-       android:layout_marginBottom="15dp"
-       android:visibility="gone"
-       android:layout_margin="5dp">
-
-       <de.hdodenhof.circleimageview.CircleImageView
-           android:layout_width="35dp"
-           android:layout_height="35dp"
-           app:civ_border_width="1dp"
-           android:layout_margin="10dp"
-           android:layout_alignParentRight="true"
-           app:civ_border_color="#fff"
-           android:id="@+id/post_image2"
-           android:src="@drawable/placeholder_image"/>
-
-
-
-       <RelativeLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:id="@+id/chat_balloon"
-           android:layout_marginLeft="15dp"
-           android:layout_marginTop="20dp"
-           android:layout_toLeftOf="@+id/post_image2"
-           android:background="@drawable/bg_send_bubble"
-           android:layout_below="@+id/post_name2">
-
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:textAppearance="?android:attr/textAppearanceMedium"
-               android:text="Message"
-               android:layout_marginLeft="17dp"
-               android:id="@+id/post_message2"
-               android:textSize="14dp"
-               android:padding="4dp"
-               android:paddingTop="2dp"
-               android:layout_marginRight="9dp"
-               android:textStyle="bold" />
-
-           <LinearLayout
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_below="@+id/post_message2"
-               android:layout_marginBottom="3dp"
-               android:layout_alignParentRight="true"
-               android:layout_marginRight="25dp"
-               android:orientation="horizontal">
-               <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:layout_marginLeft="10dp"
-                   android:text="date"
-                   android:paddingTop="1dp"
-                   android:layout_marginRight="5dp"
-                   android:layout_gravity="right"
-                   android:id="@+id/post_date2" />
-
-           </LinearLayout>
-       </RelativeLayout>
-
-       <ImageView
-           android:layout_width="250dp"
-           android:layout_height="150dp"
-           android:id="@+id/post_photo2"
-           android:scaleType="fitXY"
-           android:background="@drawable/bg_send_bubble"
-           android:visibility="gone"
-           android:layout_below="@+id/chat_balloon"
-           android:layout_marginRight="50dp"
-           android:paddingLeft="5dp"
-           android:paddingRight="17dp"
-           android:paddingTop="10dp"
-           android:layout_marginTop="2dp"
-           android:paddingBottom="8dp"
-           android:layout_marginLeft="15dp"
-           android:layout_alignParentRight="true"
-           android:src="@drawable/placeholder_image"/>
-
-
-   </RelativeLayout>
 
 </LinearLayout>
