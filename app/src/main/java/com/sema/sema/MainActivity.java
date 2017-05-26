@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -43,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DatabaseReference mDatabaseUsers, mDatabaseHashtag, mDatabaseNotification, mDatabaseLastSeen;
     private FirebaseAuth auth;
-
+    private FloatingActionButton fabHash, fabPerson;
 
     private ViewPager mViewPager;
 
@@ -54,6 +55,25 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        fabHash = (FloatingActionButton) findViewById(R.id.fabChat);
+        fabHash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cardonClick = new Intent(MainActivity.this, AddFriendsActivity.class);
+                startActivity(cardonClick);
+            }
+        });
+
+        fabPerson = (FloatingActionButton) findViewById(R.id.fabPerson);
+        fabPerson.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cardonClick = new Intent(MainActivity.this, FriendsActivity.class);
+                startActivity(cardonClick);
+            }
+        });
+
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -70,10 +90,46 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
+
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                switch (position) {
+                    case 0:
+                        fabHash.show();
+                        fabPerson.hide();
+                        break;
+                    case 1:
+                        fabPerson.show();
+                        fabHash.hide();
+                        break;
+
+                    default:
+                        fabHash.hide();
+                        fabPerson.hide();
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
         checkForNotifications();
         addToLastSeen();
 
     }
+
 
     private void addToLastSeen() {
 
@@ -155,6 +211,9 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+
+            Intent cardonClick = new Intent(MainActivity.this, SelectInterestActivity.class);
+            startActivity(cardonClick);
             return true;
         } else if (id == R.id.action_add_hashtag) {
 
@@ -233,12 +292,7 @@ public class MainActivity extends AppCompatActivity {
             });
 
             return true;
-        }if (id == R.id.action_settings) {
-
-            Intent cardonClick = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(cardonClick);
-            return true;
-        } else if (id == R.id.action_friends){
+        } else if (id == R.id.action_add_friends){
 
             Intent cardonClick = new Intent(MainActivity.this, FriendsActivity.class);
             startActivity(cardonClick);
@@ -334,6 +388,29 @@ public class MainActivity extends AppCompatActivity {
             }
             return null;
         }
+
+
     }
+
+
+
+    private void animateFab(int position) {
+        switch (position) {
+            case 0:
+                fabHash.show();
+                fabPerson.hide();
+                break;
+            case 1:
+                fabPerson.show();
+                fabHash.hide();
+                break;
+
+            default:
+                fabHash.show();
+                fabPerson.hide();
+                break;
+        }
+    }
+
 
 }

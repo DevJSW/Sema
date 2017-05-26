@@ -1,13 +1,15 @@
 package com.sema.sema;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +28,7 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FriendsActivity extends AppCompatActivity {
+public class AddFriendsActivity extends AppCompatActivity  implements SearchView.OnQueryTextListener{
 
     private String mPostKey = null;
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -37,21 +39,12 @@ public class FriendsActivity extends AppCompatActivity {
     private Query mQueryMembers;
     private RecyclerView mMembersList;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friends);
+        setContentView(R.layout.activity_discover_hashtag);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent cardonClick = new Intent(FriendsActivity.this, AddFriendsActivity.class);
-                startActivity(cardonClick);
-            }
-        });
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -61,44 +54,16 @@ public class FriendsActivity extends AppCompatActivity {
             }
         });
 
-        backBtn = (ImageView) findViewById(R.id.backBtn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FriendsActivity.this.finish();
-
-            }
-        });
-
-        searchInput = (EditText) findViewById(R.id.searchInput);
-        searchBtn = (ImageView) findViewById(R.id.searchBtn);
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                String question = searchInput.getText().toString().trim();
-
-                Intent cardonClick = new Intent(FriendsActivity.this, FriendsActivity.class);
-                cardonClick.putExtra("heartraise_id", question );
-                startActivity(cardonClick);
-
-            }
-
-        });
-
-        String question = searchInput.getText().toString().trim();
-
-
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+        mQueryMembers = mDatabaseUsers.orderByChild("hashtag").startAt(mPostKey);
         mMembersList = (RecyclerView) findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(this));
         mMembersList.setHasFixedSize(true);
 
         mDatabaseUsers.keepSynced(true);
-    }
 
+    }
     void refreshItems() {
         // Load items
         // ...
@@ -125,7 +90,7 @@ public class FriendsActivity extends AppCompatActivity {
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
 
                 People.class,
-                R.layout.member2_row,
+                R.layout.member4_row,
                 LetterViewHolder.class,
                 mDatabaseUsers
 
@@ -144,9 +109,7 @@ public class FriendsActivity extends AppCompatActivity {
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent cardonClick = new Intent(FriendsActivity.this, ChatroomActivity.class);
-                        cardonClick.putExtra("heartraise_id", PostKey );
-                        startActivity(cardonClick);
+
                     }
                 });
 
@@ -157,7 +120,6 @@ public class FriendsActivity extends AppCompatActivity {
         mMembersList.setAdapter(firebaseRecyclerAdapter);
 
     }
-
 
 
     public static class LetterViewHolder extends RecyclerView.ViewHolder {
@@ -173,9 +135,15 @@ public class FriendsActivity extends AppCompatActivity {
 
             mView = itemView;
 
-          //  mChatBtn = (Button) mView.findViewById(R.id.chatBtn);
+            //  mChatBtn = (Button) mView.findViewById(R.id.chatBtn);
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
 
+        }
+
+        public void setStatus(String status) {
+
+            TextView post_status = (TextView) mView.findViewById(R.id.status);
+            post_status.setText(status);
         }
 
         public void setName(String name) {
@@ -184,11 +152,6 @@ public class FriendsActivity extends AppCompatActivity {
             post_name.setText(name);
         }
 
-        public void setStatus(String status) {
-
-            TextView post_status = (TextView) mView.findViewById(R.id.status);
-            post_status.setText(status);
-        }
 
         public void setImage(final Context ctx, final String image) {
 
@@ -211,5 +174,43 @@ public class FriendsActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setOnQueryTextListener(this);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+
+
+    }
+
 
 }
+
+

@@ -6,6 +6,14 @@
     tools:context="com.sema.sema.SelectInterestActivity">
 
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -15,13 +23,20 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:src="@drawable/interest_img"/>
     </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/nextBtn"
+        android:background="#ababab"/>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:id="@+id/nextBtn"
         android:background="#00ffffff"
         android:textColor="@color/colorPrimary"
         android:layout_alignParentBottom="true"

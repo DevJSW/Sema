@@ -69,6 +69,9 @@
             android:name=".SelectInterestActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AddFriendsActivity"
+            android:label="Add friends"/>
     </application>
 
 </manifest>

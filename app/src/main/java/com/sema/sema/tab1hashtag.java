@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -53,6 +54,7 @@ public class tab1hashtag extends Fragment {
     private ProgressBar mProgressBar;
     private Boolean mProcessLike = false;
     private DatabaseReference mDatabaseLike;
+    private FloatingActionButton fabHash, fabPerson;
     private Query mQueryParticipants;
 
     private ViewPager mViewPager;
