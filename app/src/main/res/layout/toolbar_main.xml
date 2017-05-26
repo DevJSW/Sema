@@ -4,57 +4,13 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary"
+    app:layout_scrollFlags="scroll|enterAlways"
+    app:popupTheme="@style/AppTheme.PopupOverlay"
     app:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:id="@+id/toolbar_back"
-        android:src="@drawable/ic_arrow_back"/>
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:id="@+id/toolbarImg"
-        android:src="@drawable/placeholder_image" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="15dp"
-            android:id="@+id/toolbar_username"
-            android:paddingLeft="10dp"
-            android:text="name"/>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:orientation="horizontal">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="date"
-                android:textSize="11dp"
-                android:id="@+id/toolbar_last_seen_date"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:text="Typing..."
-                android:textSize="11dp"
-                android:id="@+id/typing_watcher"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
+   <ImageView
+       android:layout_width="40dp"
+       android:layout_height="40dp"
+       android:scaleType="fitXY"
+       android:src="@drawable/splash2"/>
 </android.support.v7.widget.Toolbar>

@@ -100,7 +100,6 @@
                     android:id="@+id/post_photo"
                     android:layout_marginLeft="10dp"
                     android:scaleType="fitXY"
-                    android:background="@drawable/bg_send_bubble"
                     android:src="@drawable/placeholder_image"/>
 
             </LinearLayout>
@@ -202,7 +201,6 @@
                android:layout_height="200dp"
                android:id="@+id/post_photo2"
                android:scaleType="fitXY"
-               android:background="@drawable/bg_send_bubble"
                android:src="@drawable/placeholder_image"/>
 
        </LinearLayout>

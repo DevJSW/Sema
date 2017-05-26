@@ -9,7 +9,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.sema.sema.ChatroomActivity">
 
-    <include layout="@layout/toolbar_chatroom"
+    <include
+        layout="@layout/toolbar_chatroom"
         android:id="@+id/mCustomToolbarChat"/>
 
 

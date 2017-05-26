@@ -12,16 +12,11 @@
         android:id="@+id/toolbar_back"
         android:src="@drawable/ic_arrow_back"/>
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:id="@+id/toolbarImg"
-        android:src="@drawable/placeholder_image" />
 
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="wrap_content">
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,11 +24,13 @@
             android:textSize="15dp"
             android:id="@+id/toolbar_username"
             android:paddingLeft="10dp"
-            android:text="name"/>
+            android:textStyle="bold"
+            android:text="Discover Hashtags"/>
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/toolbar_username"
             android:layout_marginLeft="10dp"
             android:orientation="horizontal">
 
@@ -41,20 +38,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="date"
+                android:text="Join a hashtag by writing a message"
+                android:layout_below="@+id/toolbar_username"
                 android:textSize="11dp"
                 android:id="@+id/toolbar_last_seen_date"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:text="Typing..."
-                android:textSize="11dp"
-                android:id="@+id/typing_watcher"/>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </android.support.v7.widget.Toolbar>

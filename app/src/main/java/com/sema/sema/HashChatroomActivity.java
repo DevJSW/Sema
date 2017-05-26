@@ -491,6 +491,7 @@ public class HashChatroomActivity extends AppCompatActivity {
                             // if card has my uid, then change chat balloon shape
                         } else {
 
+                            viewHolder.mCardPhoto.setVisibility(View.GONE);
                         }
 
 
@@ -778,8 +779,7 @@ public class HashChatroomActivity extends AppCompatActivity {
             TextView post_date = (TextView) mView.findViewById(R.id.post_date);
             post_date.setText(date);
 
-            TextView post_date2 = (TextView) mView.findViewById(R.id.post_date2);
-            post_date2.setText(date);
+
         }
 
         public void setImage(final Context ctx, final String image) {
@@ -801,26 +801,8 @@ public class HashChatroomActivity extends AppCompatActivity {
                             Picasso.with(ctx).load(image).into(post_image);
                         }
                     });
-            final ImageView post_image2 = (ImageView) mView.findViewById(R.id.post_image2);
 
-            Picasso.with(ctx)
-                    .load(image)
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(post_image2, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-
-
-                            Picasso.with(ctx).load(image).into(post_image2);
-                        }
-                    });
         }
-
         public void setPhoto(final Context ctx, final String photo) {
             final ImageView post_photo = (ImageView) mView.findViewById(R.id.post_photo);
 
@@ -837,25 +819,6 @@ public class HashChatroomActivity extends AppCompatActivity {
                         public void onError() {
 
                             Picasso.with(ctx).load(photo).into(post_photo);
-                        }
-                    });
-
-            final ImageView post_photo2 = (ImageView) mView.findViewById(R.id.post_photo2);
-
-            Picasso.with(ctx)
-                    .load(photo)
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(post_photo2, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-
-
-                            Picasso.with(ctx).load(photo).into(post_photo2);
                         }
                     });
         }

@@ -142,6 +142,15 @@
                         android:layout_marginLeft="2dp"
                         android:orientation="vertical">
 
+
+                        <ImageView
+                            android:layout_width="250dp"
+                            android:layout_height="150dp"
+                            android:id="@+id/post_photo"
+                            android:layout_marginLeft="10dp"
+                            android:scaleType="fitXY"
+                            android:src="@drawable/placeholder_image"/>
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -152,15 +161,6 @@
                             android:paddingBottom="5dp"
                             android:id="@+id/captionInput"
                             android:text="caption"/>
-
-                        <ImageView
-                            android:layout_width="250dp"
-                            android:layout_height="200dp"
-                            android:id="@+id/post_photo"
-                            android:layout_marginLeft="10dp"
-                            android:scaleType="fitXY"
-                            android:background="@drawable/bg_send_bubble"
-                            android:src="@drawable/placeholder_image"/>
 
                     </LinearLayout>
 

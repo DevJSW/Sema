@@ -453,6 +453,14 @@ public class ChatroomActivity extends AppCompatActivity {
                                     // if card has my uid, then change chat balloon shape
                                 } else {
 
+                                    viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
+                                    viewHolder.mCardPhoto.setVisibility(View.GONE);
+                                    viewHolder.min_lay.setVisibility(View.VISIBLE);
+
+                                    viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
+                                    viewHolder.mCardPhoto2.setVisibility(View.GONE);
+                                    viewHolder.min_lay2.setVisibility(View.VISIBLE);
+
                                 }
 
                                 if (chat_icon == null) {
@@ -502,6 +510,10 @@ public class ChatroomActivity extends AppCompatActivity {
 
                             // if card has my uid, then change chat balloon shape
                         } else {
+
+                            viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
+                            viewHolder.mCardPhoto.setVisibility(View.GONE);
+                            viewHolder.min_lay.setVisibility(View.VISIBLE);
 
                         }
 

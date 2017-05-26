@@ -10,7 +10,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name"
+            android:label="Sema"
+            android:icon="@drawable/splash2"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -60,7 +61,8 @@
         <activity
             android:name=".HashSendPhotoActivity"
             android:label="Send photo"
-            android:theme="@style/AppTheme.ActionBar.Transparent"/>
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity android:name=".DiscoverHashtagActivity"></activity>
     </application>
 
 </manifest>
