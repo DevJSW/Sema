@@ -56,7 +56,7 @@ public class ChatroomActivity extends AppCompatActivity {
     private ProgressDialog mProgress;
     private RecyclerView mCommentList;
     private DatabaseReference mDatabase;
-    private DatabaseReference mDatabaseComment, mDatabaseChatroom, mDatabaseUnread, mDatabaseNotification,  mDatabaseLastSeen;
+    private DatabaseReference mDatabaseComment, mDatabaseChatroom, mDatabaseUnread, mDatabaseNotification,  mDatabaseLastSeen, mDatabaseTyping;
     private DatabaseReference mDatabaseUser;
     private DatabaseReference mDatabaseUser2;
     private DatabaseReference mDatabasePostChats;
@@ -119,6 +119,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
+        mDatabaseTyping = FirebaseDatabase.getInstance().getReference().child("Typing");
         mDatabaseLastSeen = FirebaseDatabase.getInstance().getReference().child("Last_Seen");
         mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
         mDatabaseNotification = FirebaseDatabase.getInstance().getReference().child("Notifications");
@@ -196,6 +197,24 @@ public class ChatroomActivity extends AppCompatActivity {
 
                     }
                 });
+
+                // CHECKING IF OTHER USER IS TYPING
+                mDatabaseTyping.child(mPostKey).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String Show_typing = (String) dataSnapshot.child("typing").getValue();
+
+                        TextView typing = (TextView) findViewById(R.id.typing_watcher);
+                        typing.setText(Show_typing);
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
             }
 
             @Override
@@ -580,17 +599,6 @@ public class ChatroomActivity extends AppCompatActivity {
                     }
                 });
 
-                viewHolder.mCardPhoto.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                      //  Intent cardonClick = new Intent(Chatroom2Activity.this, OpenPhotoActivity.class);
-                       // cardonClick.putExtra("heartraise_id", post_key );
-                       // startActivity(cardonClick);
-
-                    }
-                });
-
 
             }
         };
@@ -637,10 +645,12 @@ public class ChatroomActivity extends AppCompatActivity {
                 if (System.currentTimeMillis() > (last_text_edit[0] + delay - 500)) {
                     // ............
                     // ............
-                    TextView typing = (TextView) findViewById(R.id.typing_watcher);
-                    TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
-                    typing.setVisibility(View.VISIBLE);
-                    toolbar_last_seen.setVisibility(View.GONE);
+
+                    //show typing
+                    mDatabaseTyping.child(mAuth.getCurrentUser().getUid()).child("typing").setValue("Typing...");
+
+                    // remove date
+                    mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).removeValue();
                 }
             }
         };
@@ -671,13 +681,16 @@ public class ChatroomActivity extends AppCompatActivity {
                                                             if (s.length() > 0) {
                                                                 last_text_edit[0] = System.currentTimeMillis();
                                                                 handler.postDelayed(input_finish_checker, delay);
+
                                                             } else {
 
-                                                                TextView typing = (TextView) findViewById(R.id.typing_watcher);
-                                                                TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
-                                                                typing.setVisibility(View.GONE);
-                                                                toolbar_last_seen.setVisibility(View.VISIBLE);
+                                                                Date date = new Date();
+                                                                final String stringDate = DateFormat.getDateTimeInstance().format(date);
 
+                                                                //hide/ remove typing
+                                                                mDatabaseTyping.child(mAuth.getCurrentUser().getUid()).removeValue();
+                                                                // show last seen
+                                                                mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).child("last_seen").setValue(stringDate);
                                                             }
                                                         }
                                                     }

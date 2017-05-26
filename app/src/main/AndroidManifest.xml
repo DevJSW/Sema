@@ -10,8 +10,8 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="Sema"
             android:icon="@drawable/splash2"
+            android:label="Sema"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -64,7 +64,11 @@
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".DiscoverHashtagActivity"
-            android:label="Hashtags"/>
+            android:label="Hashtags" />
+        <activity
+            android:name=".SelectInterestActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

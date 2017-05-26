@@ -230,6 +230,8 @@ public class DiscoverHashtagActivity extends AppCompatActivity implements Search
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
+
+
     }
 
 
