@@ -759,9 +759,6 @@ public class HashChatroomActivity extends AppCompatActivity {
             TextView post_message = (TextView) mView.findViewById(R.id.post_message);
             post_message.setText(message);
 
-            TextView post_message2 = (TextView) mView.findViewById(R.id.post_message2);
-            post_message2.setText(message);
-
             TextView post_caption = (TextView) mView.findViewById(R.id.captionInput);
             post_caption.setText(message);
 
