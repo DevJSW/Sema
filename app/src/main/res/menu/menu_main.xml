@@ -27,20 +27,5 @@
         app:showAsAction="always" />
 
 
-    <item
-        android:id="@+id/action_add_hashtag"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_add_white"
-        android:title="hashtag"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/action_friends"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_group_white"
-        android:title="friends"
-        app:showAsAction="always" />
-
-
 
 </menu>

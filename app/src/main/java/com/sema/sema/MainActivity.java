@@ -60,8 +60,80 @@ public class MainActivity extends AppCompatActivity {
         fabHash.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent cardonClick = new Intent(MainActivity.this, AddFriendsActivity.class);
-                startActivity(cardonClick);
+
+                final Context context = MainActivity.this;
+
+                // custom dialog
+                final Dialog dialog = new Dialog(context);
+                dialog.setContentView(R.layout.hashtag_dialog);
+                dialog.setTitle("Create hashtag");
+                dialog.show();
+
+
+                final EditText hashInput = (EditText) dialog.findViewById(R.id.hashtagInput);
+                Button cancel = (Button) dialog.findViewById(R.id.cancel);
+                cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                Button create = (Button) dialog.findViewById(R.id.create);
+                create.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        startPosting();
+                        dialog.dismiss();
+                    }
+
+                    private void startPosting() {
+
+                        Date date = new Date();
+                        final String stringDate = DateFormat.getDateTimeInstance().format(date);
+                        final String stringDate2 = DateFormat.getDateInstance().format(date);
+
+                        final String hashTag = hashInput.getText().toString().trim();
+                        if (TextUtils.isEmpty(hashTag)) {
+
+
+                        } else {
+
+                            final DatabaseReference newPost = mDatabaseHashtag.push();
+
+                            // adding my user uid to hashtag chatroom
+                            final DatabaseReference newPost2 = mDatabaseHashtag.child("hashtag_chatroom").child(auth.getCurrentUser().getUid());
+
+                            mDatabaseUsers.child(auth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    // getting user uid
+                                    newPost.child("hashtag").setValue(hashTag);
+                                    newPost.child("uid").setValue(dataSnapshot.child("uid").getValue());
+                                    newPost.child("name").setValue(dataSnapshot.child("name").getValue());
+                                    newPost.child("image").setValue(dataSnapshot.child("image").getValue());
+                                    newPost.child("date").setValue(stringDate);
+
+                                    //newPost2.child(auth.getCurrentUser().getUid()).child("uid").setValue(dataSnapshot.getValue());
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                        }
+
+                    }
+                });
+
+
+
             }
         });
 
@@ -215,84 +287,7 @@ public class MainActivity extends AppCompatActivity {
             Intent cardonClick = new Intent(MainActivity.this, SelectInterestActivity.class);
             startActivity(cardonClick);
             return true;
-        } else if (id == R.id.action_add_hashtag) {
-
-            //Intent cardonClick = new Intent(MainActivity.this, CreateHashtagActivity.class);
-            //startActivity(cardonClick);
-
-            final Context context = MainActivity.this;
-
-            // custom dialog
-            final Dialog dialog = new Dialog(context);
-            dialog.setContentView(R.layout.hashtag_dialog);
-            dialog.setTitle("Create hashtag");
-            dialog.show();
-
-
-            final EditText hashInput = (EditText) dialog.findViewById(R.id.hashtagInput);
-            Button cancel = (Button) dialog.findViewById(R.id.cancel);
-            cancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    dialog.dismiss();
-                }
-            });
-
-            Button create = (Button) dialog.findViewById(R.id.create);
-            create.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    startPosting();
-                    dialog.dismiss();
-                }
-
-                private void startPosting() {
-
-                    Date date = new Date();
-                    final String stringDate = DateFormat.getDateTimeInstance().format(date);
-                    final String stringDate2 = DateFormat.getDateInstance().format(date);
-
-                    final String hashTag = hashInput.getText().toString().trim();
-                    if (TextUtils.isEmpty(hashTag)) {
-
-
-                    } else {
-
-                        final DatabaseReference newPost = mDatabaseHashtag.push();
-
-                        // adding my user uid to hashtag chatroom
-                        final DatabaseReference newPost2 = mDatabaseHashtag.child("hashtag_chatroom").child(auth.getCurrentUser().getUid());
-
-                        mDatabaseUsers.child(auth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                // getting user uid
-                                newPost.child("hashtag").setValue(hashTag);
-                                newPost.child("uid").setValue(dataSnapshot.child("uid").getValue());
-                                newPost.child("name").setValue(dataSnapshot.child("name").getValue());
-                                newPost.child("image").setValue(dataSnapshot.child("image").getValue());
-                                newPost.child("date").setValue(stringDate);
-
-                                //newPost2.child(auth.getCurrentUser().getUid()).child("uid").setValue(dataSnapshot.getValue());
-
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
-                    }
-
-                }
-            });
-
-            return true;
-        } else if (id == R.id.action_add_friends){
+        }  else if (id == R.id.action_add_friends){
 
             Intent cardonClick = new Intent(MainActivity.this, FriendsActivity.class);
             startActivity(cardonClick);
