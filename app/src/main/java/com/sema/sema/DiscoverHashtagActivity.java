@@ -2,13 +2,15 @@ package com.sema.sema;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,7 +29,7 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DiscoverHashtagActivity extends AppCompatActivity {
+public class DiscoverHashtagActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private String mPostKey = null;
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -42,15 +44,8 @@ public class DiscoverHashtagActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_discover_hashtag);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -59,7 +54,7 @@ public class DiscoverHashtagActivity extends AppCompatActivity {
                 refreshItems();
             }
         });
-
+/*
         backBtn = (ImageView) findViewById(R.id.backBtn);
         backBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,9 +63,10 @@ public class DiscoverHashtagActivity extends AppCompatActivity {
 
             }
         });
-
+*/
         mAuth = FirebaseAuth.getInstance();
-        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Hashtags");
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Hashtag");
+        mQueryMembers = mDatabaseUsers.orderByChild("hashtag").startAt(mPostKey);
         mMembersList = (RecyclerView) findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(this));
         mMembersList.setHasFixedSize(true);
@@ -106,7 +102,7 @@ public class DiscoverHashtagActivity extends AppCompatActivity {
                 People.class,
                 R.layout.hashtag_row,
                 LetterViewHolder.class,
-                mDatabaseUsers
+                mQueryMembers
 
 
         ) {
@@ -138,7 +134,6 @@ public class DiscoverHashtagActivity extends AppCompatActivity {
         mMembersList.setAdapter(firebaseRecyclerAdapter);
 
     }
-
 
 
     public static class LetterViewHolder extends RecyclerView.ViewHolder {
@@ -201,6 +196,40 @@ public class DiscoverHashtagActivity extends AppCompatActivity {
             });
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.search_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_search);
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setOnQueryTextListener(this);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 
 

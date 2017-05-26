@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
 
             Intent cardonClick = new Intent(MainActivity.this, FriendsActivity.class);
             startActivity(cardonClick);
-        } else if (id == R.id.action_add_hashtag){
+        } else if (id == R.id.action_add_group){
 
             Intent cardonClick = new Intent(MainActivity.this, DiscoverHashtagActivity.class);
             startActivity(cardonClick);

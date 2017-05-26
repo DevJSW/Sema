@@ -144,11 +144,12 @@
 
 
                         <ImageView
-                            android:layout_width="250dp"
-                            android:layout_height="150dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="160dp"
                             android:id="@+id/post_photo"
                             android:layout_marginLeft="10dp"
                             android:scaleType="fitXY"
+                            android:layout_marginBottom="2dp"
                             android:src="@drawable/placeholder_image"/>
 
                         <TextView
@@ -158,7 +159,7 @@
                             android:textSize="14dp"
                             android:paddingLeft="12dp"
                             android:paddingRight="35dp"
-                            android:paddingBottom="5dp"
+                            android:paddingBottom="3dp"
                             android:id="@+id/captionInput"
                             android:text="caption"/>
 

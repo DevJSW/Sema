@@ -62,7 +62,9 @@
             android:name=".HashSendPhotoActivity"
             android:label="Send photo"
             android:theme="@style/AppTheme.ActionBar.Transparent" />
-        <activity android:name=".DiscoverHashtagActivity"></activity>
+        <activity
+            android:name=".DiscoverHashtagActivity"
+            android:label="Hashtags"/>
     </application>
 
 </manifest>
