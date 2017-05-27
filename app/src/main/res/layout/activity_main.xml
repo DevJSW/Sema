@@ -55,7 +55,7 @@
         app:backgroundTint="@color/colorPrimary"
         android:layout_gravity="end|bottom"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@drawable/ic_add_chat"
+        android:src="@drawable/new_chat"
         android:visibility="gone" />
 
 </android.support.design.widget.CoordinatorLayout>

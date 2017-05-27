@@ -149,7 +149,7 @@ public class tab1hashtag extends Fragment {
                 viewHolder.setMessage(model.getMessage());
                 viewHolder.setHashtag(model.getHashtag());
                 viewHolder.setImage(getContext(), model.getImage());
-                //viewHolder.setLikeBtn(post_key);
+                viewHolder.setLikeBtn(post_key);
 
 
                 //IF USER HAS NO UNREAD MESSAGE, MAKE COUNTER GONE
@@ -468,9 +468,36 @@ public class tab1hashtag extends Fragment {
             mPostImg = (CircleImageView) mView.findViewById(R.id.post_image);
             mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
             mUnreadTxt = (TextView) mView.findViewById(R.id.unreadCounter);
+            mAuth = FirebaseAuth.getInstance();
             counterTxt = (RelativeLayout) mView.findViewById(R.id.counter);
+            mLikeBtn = (ImageView) mView.findViewById(R.id.favourite);
             mDatabaseLike.keepSynced(true);
             Query mQueryPostChats;
+
+        }
+
+        public void setLikeBtn(final String post_key) {
+
+            mDatabaseLike.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                        mLikeBtn.setVisibility(View.VISIBLE);
+
+                    } else {
+
+                        mLikeBtn.setVisibility(View.GONE);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
 
         }
 

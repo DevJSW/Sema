@@ -115,7 +115,7 @@
        android:id="@+id/rely"
        android:layout_alignParentRight="true"
        android:layout_gravity="right"
-       android:visibility="gone">
+       android:visibility="gon">
 
 
        <RelativeLayout
@@ -140,9 +140,27 @@
                android:paddingRight="35dp"
                android:paddingBottom="10dp"
                android:paddingTop="3dp"
-
                android:textStyle="bold" />
 
+          <ImageView
+              android:layout_width="15dp"
+              android:layout_height="20dp"
+              android:layout_alignBottom="@id/post_message2"
+              android:layout_alignRight="@id/post_message2"
+              android:paddingTop="6dp"
+              android:id="@+id/single_tick"
+              android:layout_marginRight="17dp"
+              android:src="@drawable/ic_done_white"/>
+
+           <ImageView
+               android:layout_width="15dp"
+               android:layout_height="20dp"
+               android:layout_alignBottom="@id/post_message2"
+               android:layout_alignRight="@id/post_message2"
+               android:paddingTop="6dp"
+               android:id="@+id/double_tick"
+               android:layout_marginRight="17dp"
+               android:src="@drawable/ic_done_all_white"/>
 
            <LinearLayout
                android:layout_width="wrap_content"
