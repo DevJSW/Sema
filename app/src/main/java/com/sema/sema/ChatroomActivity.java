@@ -404,20 +404,22 @@ public class ChatroomActivity extends AppCompatActivity {
                // viewHolder.setImage(getApplicationContext(), model.getImage());
 
                 //check if message is read then show double ticks
-                mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).addValueEventListener(new ValueEventListener() {
+                mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).child(post_key).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if (dataSnapshot.getValue() == post_key) {
+                        String unread_checker = (String) dataSnapshot.child("message").getValue();
+
+                        if (unread_checker != null) {
 
                             // IF MESSSAGE IS UNREAD SHOW SINGLE TICK
-                           // viewHolder.mSingleTick.setVisibility(View.VISIBLE);
-                           // viewHolder.mDoubleTick.setVisibility(View.GONE);
+                            viewHolder.mSingleTick.setVisibility(View.VISIBLE);
+                            viewHolder.mDoubleTick.setVisibility(View.GONE);
                         } else {
 
                             // IF MESSAGE IS READ SHOW DOUBLE TICKS
-                          //  viewHolder.mDoubleTick.setVisibility(View.VISIBLE);
-                           // viewHolder.mSingleTick.setVisibility(View.GONE);
+                            viewHolder.mDoubleTick.setVisibility(View.VISIBLE);
+                            viewHolder.mSingleTick.setVisibility(View.GONE);
                         }
                     }
 
@@ -764,8 +766,8 @@ public class ChatroomActivity extends AppCompatActivity {
           //  groupIcon = (ImageView) mView.findViewById(R.id.group_icon);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
             rely = (RelativeLayout) mView.findViewById(R.id.rely);
-            //mSingleTick = (ImageView)mView.findViewById(R.id.singleTick);
-           // mDoubleTick = (ImageView)mView.findViewById(R.id.doubleTick);
+            mSingleTick = (ImageView)mView.findViewById(R.id.single_tick);
+            mDoubleTick = (ImageView)mView.findViewById(R.id.double_tick);
             mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
 
 

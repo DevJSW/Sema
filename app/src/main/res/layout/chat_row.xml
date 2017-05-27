@@ -115,7 +115,7 @@
        android:id="@+id/rely"
        android:layout_alignParentRight="true"
        android:layout_gravity="right"
-       android:visibility="gon">
+       android:visibility="gone">
 
 
        <RelativeLayout
