@@ -56,7 +56,7 @@ public class ChatroomActivity extends AppCompatActivity {
     private ProgressDialog mProgress;
     private RecyclerView mCommentList;
     private DatabaseReference mDatabase;
-    private DatabaseReference mDatabaseComment, mDatabaseChatroom, mDatabaseUnread, mDatabaseNotification,  mDatabaseLastSeen, mDatabaseTyping;
+    private DatabaseReference mDatabaseComment, mDatabaseChatroom, mDatabaseUnread, mDatabaseNotification,  mDatabaseLastSeen, mDatabaseTyping, mDatabaseTick;
     private DatabaseReference mDatabaseUser;
     private DatabaseReference mDatabaseUser2;
     private DatabaseReference mDatabasePostChats;
@@ -123,6 +123,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mDatabaseLastSeen = FirebaseDatabase.getInstance().getReference().child("Last_Seen");
         mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
         mDatabaseNotification = FirebaseDatabase.getInstance().getReference().child("Notifications");
+        mDatabaseTick = FirebaseDatabase.getInstance().getReference().child("Tick_watcher");
         mQueryPostChats = mDatabasePostChats.orderByChild("post_key").equalTo(mPostKey);
         mQueryChats = mDatabasePostChats.orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
 
@@ -228,6 +229,8 @@ public class ChatroomActivity extends AppCompatActivity {
         mDatabaseComment.keepSynced(true);
         addToLastSeen();
 
+
+
     }
 
     private void addToLastSeen() {
@@ -253,13 +256,17 @@ public class ChatroomActivity extends AppCompatActivity {
             final DatabaseReference newPostTap = mDatabaseChatroom.child(mPostKey);
             final DatabaseReference newPostTab2 = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid());
 
-            //sender chat screen
+            //my screen
             final DatabaseReference newPost = mDatabaseChatroom.child(mPostKey).child(mCurrentUser.getUid()).push();
+            //reviever screen
             final DatabaseReference newPost3 = mDatabaseChatroom.child(mCurrentUser.getUid()).child(mPostKey).push();
+
             final DatabaseReference newPost2 = mDatabaseChatroom.child(mPostKey);
 
             //post message to unread child
             final DatabaseReference newPost2Unread = mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).push();
+
+            final DatabaseReference newPostTick = mDatabaseTick.child(mAuth.getCurrentUser().getUid()).push();
 
             // SEND MESSAGE DETAILS TO NOTIFICATIONS DATABASE
             final DatabaseReference newPost2Notification = mDatabaseNotification.child(mPostKey).push();
@@ -310,6 +317,7 @@ public class ChatroomActivity extends AppCompatActivity {
                                 newPost2Unread.child("date").setValue(dataSnapshot.child("date").getValue());
                                 newPost2Unread.child("sender_uid").setValue(mCurrentUser.getUid());
 
+
                                 // Notification message
                                 newPost2Notification.child("message").setValue(message_val);
                                 newPost2Notification.child("name").setValue(dataSnapshot.child("name").getValue());
@@ -325,7 +333,8 @@ public class ChatroomActivity extends AppCompatActivity {
                                 newPostTab2.child("date").setValue(dataSnapshot.child("date").getValue());
                                 newPostTab2.child("post_key").setValue(mPostKey);
 
-                                // reciever chat
+
+                                // reciever screen
                                 newPost.child("message").setValue(message_val);
                                 newPost.child("uid").setValue(mCurrentUser.getUid());
                                 newPost.child("name").setValue(dataSnapshot.child("name").getValue());
@@ -346,7 +355,7 @@ public class ChatroomActivity extends AppCompatActivity {
                                 newPost3.child("date").setValue(stringDate);
                                 newPost3.child("post_key").setValue(mPostKey);
                                 newPost3.child("change_chat_icon").setValue(mPostKey);
-
+                                newPost3.child("unread_listener").setValue(mPostKey);
 
                                 //clear edit text after message has been sent
                                 EditText edit = (EditText) findViewById(R.id.emojicon_edit_text);
@@ -403,14 +412,17 @@ public class ChatroomActivity extends AppCompatActivity {
                // viewHolder.setName(model.getName());
                // viewHolder.setImage(getApplicationContext(), model.getImage());
 
+                // delete unread listener
+                mDatabaseChatroom.child(mPostKey).child(mAuth.getCurrentUser().getUid()).child(post_key).child("unread_listener").removeValue();
+
                 //check if message is read then show double ticks
-                mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).child(post_key).addValueEventListener(new ValueEventListener() {
+                mDatabaseChatroom.child(mAuth.getCurrentUser().getUid()).child(mPostKey).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        String unread_checker = (String) dataSnapshot.child("message").getValue();
+                        //String unread_checker = (String) dataSnapshot.child("message").getValue();
 
-                        if (unread_checker != null) {
+                        if (dataSnapshot.child(post_key).hasChild("unread_listener")) {
 
                             // IF MESSSAGE IS UNREAD SHOW SINGLE TICK
                             viewHolder.mSingleTick.setVisibility(View.VISIBLE);
@@ -768,10 +780,12 @@ public class ChatroomActivity extends AppCompatActivity {
             rely = (RelativeLayout) mView.findViewById(R.id.rely);
             mSingleTick = (ImageView)mView.findViewById(R.id.single_tick);
             mDoubleTick = (ImageView)mView.findViewById(R.id.double_tick);
+            mAuth = FirebaseAuth.getInstance();
             mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
 
 
         }
+
 
         public void setMessage(String message) {
 
