@@ -114,7 +114,7 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
             @Override
             protected void populateViewHolder(final LetterViewHolder viewHolder, final People model, int position) {
 
-                final String PostKey = getRef(position).getKey();
+                final String  post_key = getRef(position).getKey();
 
                 viewHolder.setName(model.getName());
                 viewHolder.setStatus(model.getStatus());
@@ -126,6 +126,7 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
                     public void onClick(View v) {
 
                         Intent cardonClick = new Intent(AddFriendsActivity.this, ChatroomActivity.class);
+                        cardonClick.putExtra("heartraise_id", post_key );
                         startActivity(cardonClick);
 
                     }

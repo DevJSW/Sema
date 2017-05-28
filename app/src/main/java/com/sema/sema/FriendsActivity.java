@@ -61,31 +61,7 @@ public class FriendsActivity extends AppCompatActivity {
             }
         });
 
-        backBtn = (ImageView) findViewById(R.id.backBtn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FriendsActivity.this.finish();
 
-            }
-        });
-
-        searchInput = (EditText) findViewById(R.id.searchInput);
-        searchBtn = (ImageView) findViewById(R.id.searchBtn);
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                String question = searchInput.getText().toString().trim();
-
-                Intent cardonClick = new Intent(FriendsActivity.this, FriendsActivity.class);
-                cardonClick.putExtra("heartraise_id", question );
-                startActivity(cardonClick);
-
-            }
-
-        });
 
         String question = searchInput.getText().toString().trim();
 
