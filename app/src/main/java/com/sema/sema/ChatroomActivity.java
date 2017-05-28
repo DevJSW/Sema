@@ -403,7 +403,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
         ) {
             @Override
-            protected void populateViewHolder(final CommentViewHolder viewHolder, final Chat model, int position) {
+            protected void populateViewHolder(final CommentViewHolder viewHolder, final Chat model, final int position) {
 
                 final String post_key = getRef(position).getKey();
 
@@ -420,9 +420,10 @@ public class ChatroomActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        //String unread_checker = (String) dataSnapshot.child("message").getValue();
+                        String key = getRef(position).getKey();
+                       // String unread_checker = dataSnapshot.getKey();
 
-                        if (dataSnapshot.child(post_key).hasChild("unread_listener")) {
+                        if (dataSnapshot.child(key).hasChild("unread_listener")) {
 
                             // IF MESSSAGE IS UNREAD SHOW SINGLE TICK
                             viewHolder.mSingleTick.setVisibility(View.VISIBLE);
@@ -662,7 +663,8 @@ public class ChatroomActivity extends AppCompatActivity {
 
                     //show typing
                     mDatabaseTyping.child(mAuth.getCurrentUser().getUid()).child("typing").setValue("Typing...");
-
+                    // IF THERE IS UNREAD MESSAGE, DELETE.
+                    mDatabaseUnread.child(mPostKey).child(mAuth.getCurrentUser().getUid()).removeValue();
                     // remove date
                     mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).removeValue();
                 }

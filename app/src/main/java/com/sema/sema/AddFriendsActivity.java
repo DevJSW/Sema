@@ -1,7 +1,9 @@
 package com.sema.sema;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -42,7 +44,7 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_discover_hashtag);
+        setContentView(R.layout.activity_friends);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
@@ -54,9 +56,22 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
             }
         });
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(Intent.ACTION_SEND);
+                myIntent.setType("text/plain");
+                String shareBody ="Hi, lets start chatting on Sema app. download it from the link below https://play.google.com/store/apps/details?id=com.sema.sema";
+                String shareSub = "Hey ";
+                myIntent.putExtra(Intent.EXTRA_SUBJECT,shareBody);
+                myIntent.putExtra(Intent.EXTRA_TEXT,shareBody);
+                startActivity(Intent.createChooser(myIntent,"Invite a friend"));
+            }
+        });
+
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        mQueryMembers = mDatabaseUsers.orderByChild("hashtag").startAt(mPostKey);
         mMembersList = (RecyclerView) findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(this));
         mMembersList.setHasFixedSize(true);
@@ -90,7 +105,7 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
 
                 People.class,
-                R.layout.member4_row,
+                R.layout.member2_row,
                 LetterViewHolder.class,
                 mDatabaseUsers
 
@@ -109,6 +124,9 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        Intent cardonClick = new Intent(AddFriendsActivity.this, ChatroomActivity.class);
+                        startActivity(cardonClick);
 
                     }
                 });
@@ -200,11 +218,44 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
+
+        FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<People, LetterViewHolder>(
+
+                People.class,
+                R.layout.member2_row,
+                LetterViewHolder.class,
+                mDatabaseUsers.orderByChild("name").startAt(newText.toUpperCase())
+
+
+        ) {
+            @Override
+            protected void populateViewHolder(LetterViewHolder viewHolder, People model, int position) {
+                final String post_key = getRef(position).getKey();
+
+                viewHolder.setName(model.getName());
+                viewHolder.setStatus(model.getStatus());
+                viewHolder.setImage(getApplicationContext(), model.getImage());
+
+                // open chatroom activity
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Intent cardonClick = new Intent(AddFriendsActivity.this, ChatroomActivity.class);
+                        cardonClick.putExtra("heartraise_id", post_key );
+                        startActivity(cardonClick);
+                    }
+                });
+
+            }
+        };
+        mMembersList.setAdapter(firebaseRecyclerAdapter);
         return false;
 
 
