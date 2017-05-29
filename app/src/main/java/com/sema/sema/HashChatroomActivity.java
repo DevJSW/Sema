@@ -3,6 +3,8 @@ package com.sema.sema;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -56,7 +58,7 @@ public class HashChatroomActivity extends AppCompatActivity {
     private ProgressDialog mProgress;
     private RecyclerView mCommentList;
     private DatabaseReference mDatabase;
-    private DatabaseReference mDatabaseComment, mDatabaseChatroom, mDatabaseUnread, mDatabaseHashtag,  mDatabaseLastSeen;
+    private DatabaseReference mDatabaseComment, mDatabaseChatroom, mDatabaseUnread, mDatabaseHashtag, mDatabaseLastSeen, mDatabaseViews;
     private DatabaseReference mDatabaseUser;
     private DatabaseReference mDatabaseUser2;
     private DatabaseReference mDatabasePostChats;
@@ -67,10 +69,12 @@ public class HashChatroomActivity extends AppCompatActivity {
     private ImageView mSendBtn;
     private EditText mCommentField;
     private Uri mImageUri = null;
-    private static int GALLERY_REQUEST =1;
+    private static int GALLERY_REQUEST = 1;
     private Boolean mProcessStopChat = false;
     private Boolean mProcessLike = false;
     private DatabaseReference mDatabaseLike;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
     private Menu menu;
     Context context = this;
 
@@ -116,7 +120,6 @@ public class HashChatroomActivity extends AppCompatActivity {
         //final RelativeLayout hello = (RelativeLayout) findViewById(R.id.hello);
 
 
-
         mAuth = FirebaseAuth.getInstance();
         mPostKey = getIntent().getExtras().getString("heartraise_id");
         mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
@@ -125,6 +128,8 @@ public class HashChatroomActivity extends AppCompatActivity {
         mDatabaseLastSeen = FirebaseDatabase.getInstance().getReference().child("Last_Seen");
         mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
         mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
+        mDatabaseViews = FirebaseDatabase.getInstance().getReference().child("hash_views");
+        mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
         mQueryPostChats = mDatabasePostChats.orderByChild("post_key").equalTo(mPostKey);
         mQueryChats = mDatabasePostChats.orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
 
@@ -194,7 +199,60 @@ public class HashChatroomActivity extends AppCompatActivity {
             }
         });
 
+        // count number of comments in a hashtag
+        mDatabaseHashtag.child(mPostKey).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
+                TextView chat_counter = (TextView) findViewById(R.id.chat_counter);
+                chat_counter.setText(dataSnapshot.getChildrenCount() + "");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        // count number of views in a hashtag
+        mDatabaseViews.child(mPostKey).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                TextView views_counter = (TextView) findViewById(R.id.view_counter);
+                views_counter.setText(dataSnapshot.getChildrenCount() + "");
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        // count number of views in a hashtag
+        mDatabaseLike.child(mPostKey).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                TextView like_counter = (TextView) findViewById(R.id.star_counter);
+                like_counter.setText(dataSnapshot.getChildrenCount() + "");
+
+                if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+
+                    ImageView star_icon = (ImageView) findViewById(R.id.star_icon);
+                    star_icon.setImageResource(R.drawable.ic_star_white);
+                } else {
+
+                    ImageView star_icon = (ImageView) findViewById(R.id.star_icon);
+                    star_icon.setImageResource(R.drawable.ic_favourite_);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         mDatabaseComment.keepSynced(true);
         addToLastSeen();

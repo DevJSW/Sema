@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseUsers, mDatabaseHashtag, mDatabaseNotification, mDatabaseLastSeen;
     private FirebaseAuth auth;
     private FloatingActionButton fabHash, fabPerson;
-
+    private Menu menu;
     private ViewPager mViewPager;
 
     @Override
@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }  else if (id == R.id.action_add_friends){
 
-            Intent cardonClick = new Intent(MainActivity.this, FriendsActivity.class);
+            Intent cardonClick = new Intent(MainActivity.this, AddFriendsActivity.class);
             startActivity(cardonClick);
         } else if (id == R.id.action_add_group){
 

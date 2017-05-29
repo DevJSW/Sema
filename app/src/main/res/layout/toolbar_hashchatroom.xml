@@ -21,6 +21,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -52,18 +53,68 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="By: "
-                android:textSize="11dp"
+                android:textSize="10dp"
                 android:textColor="#fff"
                 android:id="@+id/toolbar_last_seen_date"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="11dp"
+                android:textSize="10dp"
                 android:id="@+id/toolbar_username"/>
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="13dp"
+                android:layout_marginRight="3dp"
+                android:src="@drawable/ic_views"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/view_counter"
+                android:textColor="#fff"
+                android:textSize="10dp"
+                android:layout_marginRight="15dp" />
+
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="3dp"
+                android:src="@drawable/new_chat"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/chat_counter"
+                android:textColor="#fff"
+                android:textSize="10dp"
+                android:layout_marginRight="15dp"/>
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="13dp"
+                android:layout_marginRight="3dp"
+                android:id="@+id/star_icon"
+                android:src="@drawable/ic_star_white"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/star_counter"
+                android:textColor="#fff"
+                android:textSize="10dp"
+                android:layout_marginRight="10dp"/>
+        </LinearLayout>
     </LinearLayout>
 
 </android.support.v7.widget.Toolbar>

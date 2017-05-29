@@ -54,16 +54,7 @@ public class DiscoverHashtagActivity extends AppCompatActivity implements Search
                 refreshItems();
             }
         });
-/*
-        backBtn = (ImageView) findViewById(R.id.backBtn);
-        backBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DiscoverHashtagActivity.this.finish();
 
-            }
-        });
-*/
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Hashtag");
         mQueryMembers = mDatabaseUsers.orderByChild("hashtag").startAt(mPostKey);
@@ -104,7 +95,6 @@ public class DiscoverHashtagActivity extends AppCompatActivity implements Search
                 LetterViewHolder.class,
                 mQueryMembers
 
-
         ) {
             @Override
             protected void populateViewHolder(final LetterViewHolder viewHolder, final People model, int position) {
@@ -121,7 +111,7 @@ public class DiscoverHashtagActivity extends AppCompatActivity implements Search
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent cardonClick = new Intent(DiscoverHashtagActivity.this, ChatroomActivity.class);
+                        Intent cardonClick = new Intent(DiscoverHashtagActivity.this, HashChatroomActivity.class);
                         cardonClick.putExtra("heartraise_id", PostKey );
                         startActivity(cardonClick);
                     }
@@ -229,8 +219,44 @@ public class DiscoverHashtagActivity extends AppCompatActivity implements Search
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        return false;
 
+        FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
+
+                People.class,
+                R.layout.hashtag_row,
+                LetterViewHolder.class,
+                mDatabaseUsers.orderByChild("hashtag").startAt(newText.toLowerCase())
+
+        ) {
+            @Override
+            protected void populateViewHolder(final LetterViewHolder viewHolder, final People model, int position) {
+
+                final String PostKey = getRef(position).getKey();
+
+                viewHolder.setName(model.getName());
+                viewHolder.setDate(model.getDate());
+                viewHolder.setMessage(model.getMessage());
+                viewHolder.setHashtag(model.getHashtag());
+                viewHolder.setImage(getApplicationContext(), model.getImage());
+
+                // open chatroom activity
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent cardonClick = new Intent(DiscoverHashtagActivity.this, HashChatroomActivity.class);
+                        cardonClick.putExtra("heartraise_id", PostKey );
+                        startActivity(cardonClick);
+                    }
+                });
+
+            }
+
+        };
+
+        mMembersList.setAdapter(firebaseRecyclerAdapter);
+
+
+        return false;
 
     }
 

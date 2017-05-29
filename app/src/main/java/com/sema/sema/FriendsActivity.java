@@ -62,10 +62,6 @@ public class FriendsActivity extends AppCompatActivity {
         });
 
 
-
-        String question = searchInput.getText().toString().trim();
-
-
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mMembersList = (RecyclerView) findViewById(R.id.Members_list);
