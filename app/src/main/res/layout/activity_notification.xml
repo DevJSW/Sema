@@ -51,7 +51,7 @@
                 android:textSize="13dp"
                 android:text="Play sounds for incoming &amp; outgoing messages"/>
 
-            <Switch
+            <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/default_ringtone"
@@ -88,10 +88,10 @@
                 android:textSize="13dp"
                 android:text="Default ringtone"/>
 
-            <Switch
+            <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/switch2"
+                android:id="@+id/notification_tone"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="82dp"
@@ -125,10 +125,10 @@
                 android:textSize="13dp"
                 android:text="Default"/>
 
-            <Switch
+            <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/switch3"
+                android:id="@+id/vibrate"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="82dp"
@@ -157,10 +157,10 @@
                 android:text="Light"/>
 
 
-            <Switch
+            <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/switch4"
+                android:id="@+id/light"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="82dp"
@@ -176,7 +176,7 @@
             <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Hastag notifications"
+                android:text="Hashtag notifications"
                 android:textSize="17dp"
                 android:layout_marginBottom="8dp"
                 android:textStyle="bold"/>
@@ -209,10 +209,10 @@
                 android:textSize="13dp"
                 android:text="Play sounds for incoming &amp; outgoing messages"/>
 
-            <Switch
+            <Check
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/switch5"
+                android:id="@+id/hashtag_ton"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="82dp"

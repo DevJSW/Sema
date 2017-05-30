@@ -4,8 +4,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
-import android.widget.CompoundButton;
-import android.widget.Switch;
+import android.view.View;
+import android.widget.CheckBox;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -16,7 +16,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class NotificationActivity extends AppCompatActivity {
 
-    private Switch mIncomingMessage, mDefaultRingtone, mVibrate, mLight;
+    private CheckBox mIncomingMessage, mDefaultRingtone, mVibrate, mLight;
     private DatabaseReference mDatabaseIncomingNotification;
     private FirebaseAuth mAuth;
 
@@ -47,31 +47,62 @@ public class NotificationActivity extends AppCompatActivity {
             }
         });
 
-        mIncomingMessage = (Switch) findViewById(R.id.default_ringtone);
-        mIncomingMessage.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        addListenerOnChk();
+
+        mIncomingMessage = (CheckBox) findViewById(R.id.default_ringtone);
+       mIncomingMessage.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+
+               mDatabaseIncomingNotification.addValueEventListener(new ValueEventListener() {
+                   @Override
+                   public void onDataChange(DataSnapshot dataSnapshot) {
+
+                       if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+
+                           mDatabaseIncomingNotification.child(mAuth.getCurrentUser().getUid()).removeValue();
+                           mIncomingMessage.setChecked(false);
+                           mIncomingMessage.toggle();
+
+                       } else {
+
+                           mDatabaseIncomingNotification.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                           mIncomingMessage.setChecked(true);
+                           mIncomingMessage.toggle();
+
+                       }
+                   }
+
+                   @Override
+                   public void onCancelled(DatabaseError databaseError) {
+
+                   }
+               });
+
+           }
+       });
+
+    }
+
+    private void addListenerOnChk() {
+
+        mDatabaseIncomingNotification.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if(isChecked) {
+                if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
 
-                    SharedPreferences.Editor editor = getSharedPreferences("com.sema.sema", MODE_PRIVATE).edit();
-                    editor.putBoolean("Service on", true);
-                    editor.commit();
-
-                    mDatabaseIncomingNotification.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-
+                    mIncomingMessage.setChecked(true);
                 } else {
-
-                    SharedPreferences.Editor editor = getSharedPreferences("com.sema.sema", MODE_PRIVATE).edit();
-                    editor.putBoolean("Service off", false);
-                    editor.commit();
-
-                    mDatabaseIncomingNotification.child(mAuth.getCurrentUser().getUid()).removeValue();
-
+                    mIncomingMessage.setChecked(false);
                 }
             }
-        });
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
