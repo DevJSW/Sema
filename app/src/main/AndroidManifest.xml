@@ -76,7 +76,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AddFriendsActivity"
-            android:label="Start chat"/>
+            android:label="Start chat" />
+        <activity
+            android:name=".NotificationActivity"
+            android:label="Notifications &amp; Sounds"/>
     </application>
 
 </manifest>

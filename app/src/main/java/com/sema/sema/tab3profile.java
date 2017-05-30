@@ -40,7 +40,7 @@ public class tab3profile extends Fragment {
         openNotification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               // startActivity(new Intent(new Intent(getActivity(), NotificationActivity.class)));
+                startActivity(new Intent(new Intent(getActivity(), NotificationActivity.class)));
             }
         });
 

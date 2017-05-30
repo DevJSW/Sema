@@ -46,11 +46,11 @@
                 android:paddingTop="1dp"
                 android:orientation="vertical">
 
-                    <TextView
+                    <com.sema.sema.CustonFont
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Name"
-                        android:textSize="12dp"
+                        android:textSize="13dp"
                         android:layout_marginLeft="7dp"
                         android:id="@+id/post_name" />
 
@@ -71,28 +71,28 @@
                             android:orientation="vertical">
 
 
-                            <TextView
+                            <com.sema.sema.CustonFont
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:text="Message"
                                 android:layout_marginLeft="20dp"
                                 android:id="@+id/post_message"
-                                android:textSize="13dp"
-                                android:padding="4dp"
+                                android:textSize="14dp"
+                                android:padding="6dp"
                                 android:paddingTop="2dp"
                                 android:layout_marginRight="5dp"
                                 android:textStyle="bold" />
 
 
 
-                            <TextView
+                            <com.sema.sema.CustonFont
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="10dp"
                                 android:text="date"
                                 android:layout_marginRight="15dp"
-                                android:textSize="11dp"
+                                android:textSize="10dp"
                                 android:layout_marginBottom="3dp"
                                 android:layout_gravity="right"
                                 android:id="@+id/post_date" />
@@ -108,7 +108,7 @@
                         android:layout_marginTop="5dp"
                         android:background="@drawable/heart_grey">
 
-                        <TextView
+                        <com.sema.sema.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
@@ -152,7 +152,7 @@
                             android:layout_marginBottom="2dp"
                             android:src="@drawable/placeholder_image"/>
 
-                        <TextView
+                        <com.sema.sema.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"

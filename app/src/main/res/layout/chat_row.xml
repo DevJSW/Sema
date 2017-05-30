@@ -36,7 +36,7 @@
                     android:orientation="vertical">
 
 
-                    <TextView
+                    <com.sema.sema.CustonFont
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -53,12 +53,12 @@
 
 
 
-                    <TextView
+                    <com.sema.sema.CustonFont
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:text="date"
-                        android:textSize="8dp"
+                        android:textSize="10dp"
                         android:layout_marginRight="15dp"
                         android:layout_marginBottom="3dp"
                         android:layout_gravity="left"
@@ -83,7 +83,7 @@
                 android:layout_alignParentRight="true"
                 android:orientation="vertical">
 
-                <TextView
+                <com.sema.sema.CustonFont
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -126,7 +126,7 @@
            android:layout_marginLeft="55dp"
            android:layout_below="@+id/post_name2">
 
-           <TextView
+           <com.sema.sema.CustonFont
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:textAppearance="?android:attr/textAppearanceMedium"
@@ -170,12 +170,12 @@
                android:layout_alignParentRight="true"
                android:layout_marginRight="20dp"
                android:orientation="horizontal">
-               <TextView
+               <com.sema.sema.CustonFont
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:layout_marginLeft="10dp"
                    android:text="date"
-                   android:textSize="8dp"
+                   android:textSize="10dp"
                    android:paddingTop="1dp"
                    android:layout_marginBottom="3dp"
                    android:layout_gravity="right"
@@ -203,7 +203,7 @@
            android:layout_alignParentRight="true"
            android:orientation="vertical">
 
-           <TextView
+           <com.sema.sema.CustonFont
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
                android:layout_alignParentRight="true"

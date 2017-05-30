@@ -9,7 +9,7 @@
         android:id="@+id/relly"
         android:layout_height="wrap_content">
 
-        <TextView
+        <com.sema.sema.CustonFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

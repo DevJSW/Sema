@@ -18,10 +18,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <TextView
+        <com.sema.sema.CustonFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15dp"
+            android:textSize="14dp"
             android:id="@+id/toolbar_username"
             android:paddingLeft="10dp"
             android:textStyle="bold"
@@ -35,7 +35,7 @@
             android:orientation="horizontal">
 
 
-            <TextView
+            <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Join a hashtag by writing a message"

@@ -14,6 +14,7 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
             android:id="@+id/rely_img"
             android:orientation="vertical">
 
@@ -43,11 +44,11 @@
 
         </RelativeLayout>
 
-        <TextView
+        <com.sema.sema.CustonFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/post_date"
-            android:textSize="8dp"
+            android:textSize="10dp"
             android:layout_alignParentRight="true"
             android:layout_margin="15dp"
             android:text="date"/>
@@ -60,13 +61,13 @@
             android:id="@+id/hash_liny"
             android:orientation="horizontal">
 
-            <TextView
+            <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="15dp"
+                android:textSize="14dp"
                 android:text="#"/>
 
-            <TextView
+            <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/post_hashtag"
@@ -77,36 +78,36 @@
                 android:text="hashtag"/>
         </LinearLayout>
 
-        <TextView
+        <com.sema.sema.CustonFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/post_nam"
             android:layout_below="@+id/hash_liny"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="1dp"
+            android:layout_marginTop="2dp"
             android:textColor="@color/colorPrimary"
             android:layout_toRightOf="@+id/rely_img"
-            android:textSize="10dp"
+            android:textSize="11dp"
             android:scaleType="fitXY"
             android:textStyle="bold"
             android:text="By: "/>
-            <TextView
+            <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/post_name"
+                android:layout_marginTop="2dp"
                 android:layout_below="@+id/hash_liny"
-                android:layout_marginTop="1dp"
                 android:layout_toRightOf="@+id/post_nam"
-                android:textSize="10dp"
+                android:textSize="11dp"
                 android:scaleType="fitXY"
                 android:textStyle="bold"
                 android:text="username"/>
 
-            <TextView
+            <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13dp"
-                android:layout_marginTop="1dp"
+                android:textSize="14dp"
+                android:layout_marginTop="2dp"
                 android:layout_toRightOf="@+id/rely_img"
                 android:layout_below="@+id/post_name"
                 android:layout_marginRight="10dp"
@@ -126,7 +127,7 @@
             android:background="@drawable/green_counter"
             android:layout_marginRight="10dp">
 
-            <TextView
+            <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -145,7 +146,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_toRightOf="@+id/rely_img"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="4dp"
             android:layout_below="@+id/rely_img"
             android:layout_marginRight="10dp"
             android:background="#cecccc"/>

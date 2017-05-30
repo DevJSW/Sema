@@ -17,18 +17,19 @@
             android:layout_marginBottom="40dp"
             android:src="@drawable/splash2" />
 
-        <TextView
+        <com.sema.sema.CustonFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Sema"
+            android:text="SEMA"
             android:textSize="17dp"
             android:textColor="@android:color/white"
             android:textStyle="bold" />
 
-        <TextView
+        <com.sema.sema.CustonFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
+            android:textSize="14dp"
             android:gravity="center"
             android:text="@string/slide_1_desc"
             android:textAlignment="center"

@@ -22,10 +22,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
+        <com.sema.sema.CustonFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15dp"
+            android:textSize="14dp"
             android:id="@+id/toolbar_username"
             android:paddingLeft="10dp" />
 
@@ -36,17 +36,15 @@
             android:orientation="horizontal">
 
 
-            <TextView
+            <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
                 android:id="@+id/toolbar_last_seen_date"/>
 
-            <TextView
+            <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:text="Typing..."
                 android:textSize="11dp"
                 android:id="@+id/typing_watcher"/>
 

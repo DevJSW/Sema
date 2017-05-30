@@ -40,11 +40,11 @@
                         android:layout_gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <TextView
+                        <com.sema.sema.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/meBtn"
-                            android:textSize="15dp"
+                            android:textSize="16dp"
                             android:layout_gravity="center_vertical"
                             android:scaleType="fitXY"
                             android:textStyle="bold"
@@ -93,11 +93,11 @@
                         android:layout_gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <TextView
+                        <com.sema.sema.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/settingsBtn"
-                            android:textSize="15dp"
+                            android:textSize="16dp"
                             android:layout_gravity="center_vertical"
                             android:scaleType="fitXY"
                             android:textStyle="bold"
@@ -136,7 +136,7 @@
                         android:layout_marginRight="5dp"
                         android:id="@+id/notification_image"
                         android:layout_margin="20dp"
-                        android:src="@drawable/splash"/>
+                        android:src="@drawable/ic_notify_img"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -145,11 +145,11 @@
                         android:layout_gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <TextView
+                        <com.sema.sema.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/notificationBtn"
-                            android:textSize="15dp"
+                            android:textSize="16dp"
                             android:layout_gravity="center_vertical"
                             android:scaleType="fitXY"
                             android:textStyle="bold"
@@ -186,11 +186,11 @@
                         android:layout_gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <TextView
+                        <com.sema.sema.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/shareBtn"
-                            android:textSize="15dp"
+                            android:textSize="16dp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="4dp"
                             android:scaleType="fitXY"
@@ -241,11 +241,11 @@
                         android:layout_gravity="center_vertical"
                         android:orientation="vertical">
 
-                        <TextView
+                        <com.sema.sema.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/privacyBtn"
-                            android:textSize="15dp"
+                            android:textSize="16dp"
                             android:layout_gravity="center_vertical"
                             android:scaleType="fitXY"
                             android:textStyle="bold"

@@ -3,6 +3,7 @@ package com.sema.sema;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -97,11 +98,13 @@ public class HashChatroomActivity extends AppCompatActivity {
         //keep layout on top of keyboard
 
         // Font path
+        final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Aller_Rg.ttf");
 
         setSupportActionBar(my_toolbar);
         rootView = findViewById(R.id.root_view);
         emojiImageView = (ImageView) findViewById(R.id.emoji_btn);
         emojiconEditText = (EmojiconEditText) findViewById(R.id.emojicon_edit_text);
+        emojiconEditText.setTypeface(custom_font);
         emojIcon = new EmojIconActions(this, rootView, emojiconEditText, emojiImageView);
         emojIcon.ShowEmojIcon();
         emojIcon.setIconsIds(R.drawable.ic_action_keyboard, R.drawable.smiley);
@@ -187,9 +190,11 @@ public class HashChatroomActivity extends AppCompatActivity {
                 // set username on toolbar
                 TextView toolbar_username = (TextView) findViewById(R.id.toolbar_username);
                 toolbar_username.setText(username);
+                toolbar_username.setTypeface(custom_font);
 
                 TextView toolbar_hashtag = (TextView) findViewById(R.id.toolbar_hashtag);
                 toolbar_hashtag.setText(hashtag);
+                toolbar_hashtag.setTypeface(custom_font);
 
             }
 
@@ -206,6 +211,7 @@ public class HashChatroomActivity extends AppCompatActivity {
 
                 TextView chat_counter = (TextView) findViewById(R.id.chat_counter);
                 chat_counter.setText(dataSnapshot.getChildrenCount() + "");
+                chat_counter.setTypeface(custom_font);
             }
 
             @Override
@@ -221,6 +227,7 @@ public class HashChatroomActivity extends AppCompatActivity {
 
                 TextView views_counter = (TextView) findViewById(R.id.view_counter);
                 views_counter.setText(dataSnapshot.getChildrenCount() + "");
+                views_counter.setTypeface(custom_font);
             }
 
             @Override
@@ -390,6 +397,13 @@ public class HashChatroomActivity extends AppCompatActivity {
                 viewHolder.setName(model.getName());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
                 viewHolder.setLikeBtn(post_key);
+
+                // SETTING UP FONTS
+                Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Aller_Rg.ttf");
+                viewHolder.tx.setTypeface(custom_font);
+                viewHolder.txdate.setTypeface(custom_font);
+                viewHolder.txname.setTypeface(custom_font);
+                viewHolder.txcaption.setTypeface(custom_font);
 
                 mDatabaseLike.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -756,7 +770,7 @@ public class HashChatroomActivity extends AppCompatActivity {
 
         DatabaseReference mDatabaseUnread;
         DatabaseReference mDatabaseLike;
-        TextView  mLikeCount;
+        TextView  mLikeCount, tx, tx2, txname, txname2, txdate, txdate2, txcaption, txcaption2;
         FirebaseAuth mAuth;
         ImageView mImage, mCardPhoto2, mImage2;
         RelativeLayout rely;
@@ -768,7 +782,13 @@ public class HashChatroomActivity extends AppCompatActivity {
             super(itemView);
             mView = itemView;
 
+            //font
+
             mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
+            tx = (TextView) mView.findViewById(R.id.post_message);
+            txname = (TextView) mView.findViewById(R.id.post_name);
+            txdate = (TextView) mView.findViewById(R.id.post_date);
+            txcaption = (TextView) mView.findViewById(R.id.captionInput);
             min_lay = (LinearLayout) mView.findViewById(R.id.main_lay);
             mDatabaseLike.keepSynced(true);
             mAuth = FirebaseAuth.getInstance();

@@ -3,6 +3,7 @@ package com.sema.sema;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -90,12 +91,14 @@ public class ChatroomActivity extends AppCompatActivity {
         Toolbar my_toolbar = (Toolbar) findViewById(R.id.mCustomToolbarChat);
         //keep layout on top of keyboard
 
-        // Font path
+        // SETTING UP FONTS
+        final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Aller_Rg.ttf");
 
         setSupportActionBar(my_toolbar);
         rootView = findViewById(R.id.root_view);
         emojiImageView = (ImageView) findViewById(R.id.emoji_btn);
         emojiconEditText = (EmojiconEditText) findViewById(R.id.emojicon_edit_text);
+        emojiconEditText.setTypeface(custom_font);
         emojIcon = new EmojIconActions(this, rootView, emojiconEditText, emojiImageView);
         emojIcon.ShowEmojIcon();
         emojIcon.setIconsIds(R.drawable.ic_action_keyboard, R.drawable.smiley);
@@ -181,6 +184,7 @@ public class ChatroomActivity extends AppCompatActivity {
                 // set username on toolbar
                 TextView toolbar_username = (TextView) findViewById(R.id.toolbar_username);
                 toolbar_username.setText(username);
+                toolbar_username.setTypeface(custom_font);
 
 
                 mDatabaseLastSeen.child(mPostKey).addValueEventListener(new ValueEventListener() {
@@ -190,6 +194,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
                         TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
                         toolbar_last_seen.setText(date);
+                        toolbar_last_seen.setTypeface(custom_font);
 
                     }
 
@@ -207,7 +212,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
                         TextView typing = (TextView) findViewById(R.id.typing_watcher);
                         typing.setText(Show_typing);
-
+                        typing.setTypeface(custom_font);
                     }
 
                     @Override
@@ -321,7 +326,7 @@ public class ChatroomActivity extends AppCompatActivity {
                                 // Notification message
                                 newPost2Notification.child("message").setValue(message_val);
                                 newPost2Notification.child("name").setValue(dataSnapshot.child("name").getValue());
-                                newPost2Notification.child("image").setValue(dataSnapshot.child("name").getValue());
+                                newPost2Notification.child("image").setValue(dataSnapshot.child("image").getValue());
                                 newPost2Notification.child("date").setValue(dataSnapshot.child("date").getValue());
                                 newPost2Notification.child("sender_uid").setValue(mCurrentUser.getUid());
 
@@ -411,6 +416,7 @@ public class ChatroomActivity extends AppCompatActivity {
                 viewHolder.setDate(model.getDate());
                // viewHolder.setName(model.getName());
                // viewHolder.setImage(getApplicationContext(), model.getImage());
+
 
                 // delete unread listener
                 mDatabaseChatroom.child(mPostKey).child(mAuth.getCurrentUser().getUid()).child(post_key).child("unread_listener").removeValue();
@@ -763,6 +769,7 @@ public class ChatroomActivity extends AppCompatActivity {
         DatabaseReference mDatabaseUnread;
         FirebaseAuth mAuth;
         ImageView mImage,  mImage2, groupIcon, mSingleTick, mDoubleTick;
+        TextView tx, tx2, txname, txname2, txdate, txdate2, txcaption, txcaption2;
         RelativeLayout rely, min_lay2;
         LinearLayout liny,  mCardPhoto, mCardPhoto2, min_lay;
         ProgressBar mProgressBar;
@@ -772,6 +779,13 @@ public class ChatroomActivity extends AppCompatActivity {
             mView = itemView;
 
             mCardPhoto = (LinearLayout) mView.findViewById(R.id.chat_image);
+            tx = (TextView) mView.findViewById(R.id.post_message);
+            tx2 = (TextView) mView.findViewById(R.id.post_message2);
+            txname = (TextView) mView.findViewById(R.id.post_name);
+            txdate = (TextView) mView.findViewById(R.id.post_date);
+            txdate2 = (TextView) mView.findViewById(R.id.post_date2);
+            txcaption = (TextView) mView.findViewById(R.id.captionInput);
+            txcaption2 = (TextView) mView.findViewById(R.id.captionInput2);
             min_lay = (LinearLayout) mView.findViewById(R.id.main_lay);
             mImage = (ImageView) mView.findViewById(R.id.post_image);
             mCardPhoto2 = (LinearLayout) mView.findViewById(R.id.chat_image2);
@@ -802,7 +816,6 @@ public class ChatroomActivity extends AppCompatActivity {
 
             TextView post_caption2 = (TextView) mView.findViewById(R.id.captionInput2);
             post_caption2.setText(message);
-
         }
 /*
         public void setName(String name) {

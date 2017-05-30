@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -63,6 +64,7 @@ public class tab1hashtag extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab1hashtag, container, false);
+
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -151,6 +153,11 @@ public class tab1hashtag extends Fragment {
                 viewHolder.setImage(getContext(), model.getImage());
                 viewHolder.setLikeBtn(post_key);
 
+                final Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Aller_Rg.ttf");
+                viewHolder.txname.setTypeface(custom_font);
+                viewHolder.txhash.setTypeface(custom_font);
+                viewHolder.txmessage.setTypeface(custom_font);
+                viewHolder.txdate.setTypeface(custom_font);
 
                 //IF USER HAS NO UNREAD MESSAGE, MAKE COUNTER GONE
                 mDatabaseUnread.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -175,7 +182,7 @@ public class tab1hashtag extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         viewHolder.mUnreadTxt.setText(dataSnapshot.getChildrenCount() + "");
-
+                        viewHolder.mUnreadTxt.setTypeface(custom_font);
                     }
 
                     @Override
@@ -455,7 +462,7 @@ public class tab1hashtag extends Fragment {
 
         CircleImageView mPostImg;
         ImageView mLikeBtn, groupIcon;
-        TextView mUnreadTxt;
+        TextView mUnreadTxt, txname, txhash, txdate, txmessage;
         DatabaseReference mDatabaseLike;
         RelativeLayout counterTxt;
         FirebaseAuth mAuth;
@@ -467,6 +474,10 @@ public class tab1hashtag extends Fragment {
             mView = itemView;
 
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
+            txname = (TextView) mView.findViewById(R.id.post_name);
+            txdate = (TextView) mView.findViewById(R.id.post_date);
+            txhash = (TextView) mView.findViewById(R.id.post_hashtag);
+            txmessage = (TextView) mView.findViewById(R.id.post_message);
             mPostImg = (CircleImageView) mView.findViewById(R.id.post_image);
             mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
             mUnreadTxt = (TextView) mView.findViewById(R.id.unreadCounter);

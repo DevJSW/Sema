@@ -6,6 +6,8 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -56,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // SETTING UP FONTS
+        final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Aller_Rg.ttf");
+
         fabHash = (FloatingActionButton) findViewById(R.id.fabChat);
         fabHash.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +76,9 @@ public class MainActivity extends AppCompatActivity {
 
 
                 final EditText hashInput = (EditText) dialog.findViewById(R.id.hashtagInput);
+                hashInput.setTypeface(custom_font);
                 Button cancel = (Button) dialog.findViewById(R.id.cancel);
+                cancel.setTypeface(custom_font);
                 cancel.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -80,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 });
 
                 Button create = (Button) dialog.findViewById(R.id.create);
+                create.setTypeface(custom_font);
                 create.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -233,12 +241,13 @@ public class MainActivity extends AppCompatActivity {
                             .setContentTitle("Sema")
                             .setTicker("Sema")
                             .setContentText(name + ": " + message)
-                            .setSmallIcon(R.drawable.ic_noty)
+                            .setSmallIcon(R.drawable.ic_sema_notification)
                             .setContentIntent(pIntent).getNotification();
 
                     noty.flags = Notification.FLAG_AUTO_CANCEL;
-                    Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                    new Notification.Builder(getApplicationContext()).setSound(uri);
+                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                    r.play();
                     NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                     nm.notify(0, noty);
             }
