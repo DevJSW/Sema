@@ -209,10 +209,10 @@
                 android:textSize="13dp"
                 android:text="Play sounds for incoming &amp; outgoing messages"/>
 
-            <Check
+            <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/hashtag_ton"
+                android:id="@+id/hashtag_tone"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="82dp"

@@ -3,12 +3,13 @@ package com.sema.sema;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -25,7 +26,7 @@ import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class FriendsActivity extends AppCompatActivity {
+public class TrendsActivity extends AppCompatActivity {
 
     private String mPostKey = null;
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -33,24 +34,15 @@ public class FriendsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ImageView searchBtn, backBtn;
     private EditText searchInput;
-    private Query mQueryMembers;
+    private Query mQueryMembers, mQueryTrends;
     private RecyclerView mMembersList;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friends);
+        setContentView(R.layout.activity_trends);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent cardonClick = new Intent(FriendsActivity.this, AddFriendsActivity.class);
-                startActivity(cardonClick);
-            }
-        });
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -60,16 +52,17 @@ public class FriendsActivity extends AppCompatActivity {
             }
         });
 
-
         mAuth = FirebaseAuth.getInstance();
-        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Hashtag");
+        mQueryMembers = mDatabaseUsers.orderByChild("hashtag").startAt(mPostKey);
+        mQueryTrends = mDatabaseUsers.orderByChild("trends").limitToLast(10);
         mMembersList = (RecyclerView) findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(this));
         mMembersList.setHasFixedSize(true);
 
         mDatabaseUsers.keepSynced(true);
-    }
 
+    }
     void refreshItems() {
         // Load items
         // ...
@@ -96,10 +89,9 @@ public class FriendsActivity extends AppCompatActivity {
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
 
                 People.class,
-                R.layout.member2_row,
+                R.layout.hashtag_row,
                 LetterViewHolder.class,
-                mDatabaseUsers
-
+                mQueryTrends
 
         ) {
             @Override
@@ -108,24 +100,16 @@ public class FriendsActivity extends AppCompatActivity {
                 final String PostKey = getRef(position).getKey();
 
                 viewHolder.setName(model.getName());
-                viewHolder.setStatus(model.getStatus());
+                viewHolder.setDate(model.getDate());
+                viewHolder.setMessage(model.getMessage());
+                viewHolder.setHashtag(model.getHashtag());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
                 // open chatroom activity
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent cardonClick = new Intent(FriendsActivity.this, ChatroomActivity.class);
-                        cardonClick.putExtra("heartraise_id", PostKey );
-                        startActivity(cardonClick);
-                    }
-                });
-
-                viewHolder.mChatBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Intent cardonClick = new Intent(FriendsActivity.this, ViewProfileActivity.class);
+                        Intent cardonClick = new Intent(TrendsActivity.this, HashChatroomActivity.class);
                         cardonClick.putExtra("heartraise_id", PostKey );
                         startActivity(cardonClick);
                     }
@@ -134,18 +118,19 @@ public class FriendsActivity extends AppCompatActivity {
             }
 
         };
-
+        final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager.setReverseLayout(true);
+        mLinearLayoutManager.setStackFromEnd(true);
         mMembersList.setAdapter(firebaseRecyclerAdapter);
 
     }
-
 
 
     public static class LetterViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
 
-        CircleImageView mChatBtn;
+        Button mChatBtn;
 
         ProgressBar mProgressBar;
 
@@ -154,9 +139,15 @@ public class FriendsActivity extends AppCompatActivity {
 
             mView = itemView;
 
-            mChatBtn = (CircleImageView) mView.findViewById(R.id.post_image);
+            //  mChatBtn = (Button) mView.findViewById(R.id.chatBtn);
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
 
+        }
+
+        public void setMessage(String message) {
+
+            TextView post_message = (TextView) mView.findViewById(R.id.post_message);
+            post_message.setText(message);
         }
 
         public void setName(String name) {
@@ -165,12 +156,17 @@ public class FriendsActivity extends AppCompatActivity {
             post_name.setText(name);
         }
 
-        public void setStatus(String status) {
+        public void setHashtag(String hashtag) {
 
-            TextView post_status = (TextView) mView.findViewById(R.id.status);
-            post_status.setText(status);
+            TextView post_hashtag = (TextView) mView.findViewById(R.id.post_hashtag);
+            post_hashtag.setText(hashtag);
         }
 
+        public void setDate(String date) {
+
+            TextView post_date = (TextView) mView.findViewById(R.id.post_date);
+            post_date.setText(date);
+        }
         public void setImage(final Context ctx, final String image) {
 
             final CircleImageView civ = (CircleImageView) mView.findViewById(R.id.post_image);
@@ -193,4 +189,21 @@ public class FriendsActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
+
+
+
 }
+

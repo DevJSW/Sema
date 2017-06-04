@@ -1,6 +1,5 @@
 package com.sema.sema;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -17,7 +16,7 @@ import com.google.firebase.database.ValueEventListener;
 public class NotificationActivity extends AppCompatActivity {
 
     private CheckBox mIncomingMessage, mDefaultRingtone, mVibrate, mLight;
-    private DatabaseReference mDatabaseIncomingNotification;
+    private DatabaseReference mDatabaseIncomingNotification, mDatabaseRingtone, mDatabaseVibrate, mDatabaseLight;
     private FirebaseAuth mAuth;
 
     @Override
@@ -27,27 +26,120 @@ public class NotificationActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mDatabaseIncomingNotification = FirebaseDatabase.getInstance().getReference().child("IncomingNotification");
+        mDatabaseRingtone = FirebaseDatabase.getInstance().getReference().child("IncomingRingtone");
+        mDatabaseVibrate = FirebaseDatabase.getInstance().getReference().child("IncomingVibrate");
+        mDatabaseLight = FirebaseDatabase.getInstance().getReference().child("IncomingLight");
+        mDatabaseIncomingNotification.keepSynced(true);
+        mDatabaseRingtone.keepSynced(true);
+        mDatabaseLight.keepSynced(true);
+        mDatabaseVibrate.keepSynced(true);
+
         mAuth = FirebaseAuth.getInstance();
 
-        mDatabaseIncomingNotification.addValueEventListener(new ValueEventListener() {
+
+        addListenerOnChk();
+
+        mLight = (CheckBox) findViewById(R.id.light);
+        mLight.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onClick(View v) {
 
-                if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+                mDatabaseLight.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                    SharedPreferences.Editor editor = getSharedPreferences("com.sema.sema", MODE_PRIVATE).edit();
-                    editor.putBoolean("Service on", true);
-                    editor.commit();
-                }
-            }
+                        if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                            mDatabaseLight.child(mAuth.getCurrentUser().getUid()).removeValue();
+                            mLight.setChecked(false);
+                            mLight.toggle();
+
+                        } else {
+
+                            mDatabaseLight.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                            mLight.setChecked(true);
+                            mLight.toggle();
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
 
             }
         });
 
-        addListenerOnChk();
+        mVibrate = (CheckBox) findViewById(R.id.vibrate);
+        mVibrate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mDatabaseVibrate.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+
+                            mDatabaseVibrate.child(mAuth.getCurrentUser().getUid()).removeValue();
+                            mVibrate.setChecked(false);
+                            mVibrate.toggle();
+
+                        } else {
+
+                            mDatabaseVibrate.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                            mVibrate.setChecked(true);
+                            mVibrate.toggle();
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+            }
+        });
+
+        mDefaultRingtone = (CheckBox) findViewById(R.id.notification_tone);
+        mDefaultRingtone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mDatabaseRingtone.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+
+                            mDatabaseRingtone.child(mAuth.getCurrentUser().getUid()).removeValue();
+                            mDefaultRingtone.setChecked(false);
+                            mDefaultRingtone.toggle();
+
+                        } else {
+
+                            mDatabaseRingtone.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                            mDefaultRingtone.setChecked(true);
+                            mDefaultRingtone.toggle();
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+        });
+
 
         mIncomingMessage = (CheckBox) findViewById(R.id.default_ringtone);
        mIncomingMessage.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +187,60 @@ public class NotificationActivity extends AppCompatActivity {
                     mIncomingMessage.setChecked(true);
                 } else {
                     mIncomingMessage.setChecked(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabaseRingtone.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+
+                    mDefaultRingtone.setChecked(true);
+                } else {
+                    mDefaultRingtone.setChecked(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabaseVibrate.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+
+                    mVibrate.setChecked(true);
+                } else {
+                    mVibrate.setChecked(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabaseLight.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+
+                    mLight.setChecked(true);
+                } else {
+                    mLight.setChecked(false);
                 }
             }
 

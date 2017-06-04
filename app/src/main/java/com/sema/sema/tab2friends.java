@@ -98,6 +98,7 @@ public class tab2friends extends Fragment {
         mDatabaseLike.keepSynced(true);
         mDatabaseUnread.keepSynced(true);
         mDatabaseNotification.keepSynced(true);
+        mQueryPostChats.keepSynced(true);
 
         mQueryPostChats.addValueEventListener(new ValueEventListener() {
             @Override

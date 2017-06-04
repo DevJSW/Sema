@@ -101,6 +101,7 @@ public class tab1hashtag extends Fragment {
         mDatabaseUnread.keepSynced(true);
         mDatabaseHashtag.keepSynced(true);
         mDatabaseNotification.keepSynced(true);
+        mQueryPostChats.keepSynced(true);
 
         mQueryPostChats.addValueEventListener(new ValueEventListener() {
             @Override

@@ -79,7 +79,18 @@
             android:label="Start chat" />
         <activity
             android:name=".NotificationActivity"
-            android:label="Notifications &amp; Sounds"/>
+            android:label="Notifications &amp; Sounds" />
+        <activity
+            android:name=".TrendsActivity"
+            android:label="Trends" />
+        <activity
+            android:name=".ViewHashtagActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ViewProfileActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

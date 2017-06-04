@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -45,18 +46,30 @@ public class MainActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private DatabaseReference mDatabaseUsers, mDatabaseHashtag, mDatabaseNotification, mDatabaseLastSeen;
+    private static double longitude;
+    private static double latitude;
     private FirebaseAuth auth;
     private FloatingActionButton fabHash, fabPerson;
+    private FirebaseAuth mAuth;
+    private TextView mLatitude;
+    Context mContext;
     private Menu menu;
     private ViewPager mViewPager;
+
+    GPSTracker gps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mContext=this;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        auth = FirebaseAuth.getInstance();
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+
 
         // SETTING UP FONTS
         final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Aller_Rg.ttf");
@@ -122,7 +135,8 @@ public class MainActivity extends AppCompatActivity {
                                     newPost.child("uid").setValue(dataSnapshot.child("uid").getValue());
                                     newPost.child("name").setValue(dataSnapshot.child("name").getValue());
                                     newPost.child("image").setValue(dataSnapshot.child("image").getValue());
-                                    newPost.child("date").setValue(stringDate);
+                                    newPost.child("date").setValue(stringDate2);
+                                    newPost.child(auth.getCurrentUser().getUid()).setValue(auth.getCurrentUser().getUid());
 
                                     //newPost2.child(auth.getCurrentUser().getUid()).child("uid").setValue(dataSnapshot.getValue());
 
@@ -145,6 +159,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+       // Toast.makeText(mContext, String.valueOf(latitude + longitude),Toast.LENGTH_LONG).show();
+
+
         fabPerson = (FloatingActionButton) findViewById(R.id.fabPerson);
         fabPerson.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,9 +177,7 @@ public class MainActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mDatabaseNotification = FirebaseDatabase.getInstance().getReference().child("Notifications");
         mDatabaseLastSeen = FirebaseDatabase.getInstance().getReference().child("Last_Seen");
-        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
-        auth = FirebaseAuth.getInstance();
         mDatabaseNotification.keepSynced(true);
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -169,6 +185,26 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+
+        // create class object
+        gps = new GPSTracker(MainActivity.this);
+        // check if GPS enabled
+        if(gps.canGetLocation()){
+            double latitude = gps.getLatitude();
+            double longitude = gps.getLongitude();
+            // \n is for new line
+            Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+
+            mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("latitude").setValue(latitude);
+            mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("longitude").setValue(longitude);
+        }else{
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+        }
+
 
 
 
@@ -205,10 +241,14 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+
         checkForNotifications();
         addToLastSeen();
 
     }
+
+
+
 
 
     private void addToLastSeen() {
@@ -239,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
                     PendingIntent pIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, 0);
                     Notification noty = new Notification.Builder(MainActivity.this)
                             .setContentTitle("Sema")
-                            .setTicker("Sema")
+                            .setTicker("You have a new message")
                             .setContentText(name + ": " + message)
                             .setSmallIcon(R.drawable.ic_sema_notification)
                             .setContentIntent(pIntent).getNotification();
@@ -273,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-          }
+    }
 
 
     @Override
@@ -303,6 +343,10 @@ public class MainActivity extends AppCompatActivity {
         } else if (id == R.id.action_add_group){
 
             Intent cardonClick = new Intent(MainActivity.this, DiscoverHashtagActivity.class);
+            startActivity(cardonClick);
+        } else if (id == R.id.action_trending){
+
+            Intent cardonClick = new Intent(MainActivity.this, TrendsActivity.class);
             startActivity(cardonClick);
         }
 
@@ -396,25 +440,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
-    private void animateFab(int position) {
-        switch (position) {
-            case 0:
-                fabHash.show();
-                fabPerson.hide();
-                break;
-            case 1:
-                fabPerson.show();
-                fabHash.hide();
-                break;
-
-            default:
-                fabHash.show();
-                fabPerson.hide();
-                break;
-        }
-    }
 
 
 }

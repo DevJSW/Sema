@@ -229,6 +229,16 @@ public class ChatroomActivity extends AppCompatActivity {
             }
         });
 
+        LinearLayout tap_view = (LinearLayout) findViewById(R.id.open_view);
+        tap_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent cardonClick = new Intent(ChatroomActivity.this, ViewProfileActivity.class);
+                cardonClick.putExtra("heartraise_id", mPostKey );
+                startActivity(cardonClick);
+            }
+        });
 
 
         mDatabaseComment.keepSynced(true);
@@ -798,6 +808,7 @@ public class ChatroomActivity extends AppCompatActivity {
             mDoubleTick = (ImageView)mView.findViewById(R.id.double_tick);
             mAuth = FirebaseAuth.getInstance();
             mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
+            mDatabaseUnread.keepSynced(true);
 
 
         }
@@ -817,15 +828,7 @@ public class ChatroomActivity extends AppCompatActivity {
             TextView post_caption2 = (TextView) mView.findViewById(R.id.captionInput2);
             post_caption2.setText(message);
         }
-/*
-        public void setName(String name) {
 
-            TextView post_name = (TextView) mView.findViewById(R.id.post_name);
-            post_name.setText(name);
-
-
-        }
-*/
 
         public void setDate(String date) {
 
@@ -835,46 +838,7 @@ public class ChatroomActivity extends AppCompatActivity {
             TextView post_date2 = (TextView) mView.findViewById(R.id.post_date2);
             post_date2.setText(date);
         }
-/*
-        public void setImage(final Context ctx, final String image) {
-            final ImageView post_image = (ImageView) mView.findViewById(R.id.post_image);
 
-            Picasso.with(ctx)
-                    .load(image)
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(post_image, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-
-
-                            Picasso.with(ctx).load(image).into(post_image);
-                        }
-                    });
-            final ImageView post_image2 = (ImageView) mView.findViewById(R.id.post_image2);
-
-            Picasso.with(ctx)
-                    .load(image)
-                    .networkPolicy(NetworkPolicy.OFFLINE)
-                    .into(post_image2, new Callback() {
-                        @Override
-                        public void onSuccess() {
-
-                        }
-
-                        @Override
-                        public void onError() {
-
-
-                            Picasso.with(ctx).load(image).into(post_image2);
-                        }
-                    });
-        }
-*/
         public void setPhoto(final Context ctx, final String photo) {
             final ImageView post_photo = (ImageView) mView.findViewById(R.id.post_photo);
 

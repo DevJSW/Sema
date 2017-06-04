@@ -33,7 +33,7 @@ public class DiscoverHashtagActivity extends AppCompatActivity implements Search
 
     private String mPostKey = null;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private DatabaseReference mDatabaseUsers;
+    private DatabaseReference mDatabaseUsers, mDatabaseViews;
     private FirebaseAuth mAuth;
     private ImageView searchBtn, backBtn;
     private EditText searchInput;
@@ -57,12 +57,14 @@ public class DiscoverHashtagActivity extends AppCompatActivity implements Search
 
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Hashtag");
+        mDatabaseViews = FirebaseDatabase.getInstance().getReference().child("hash_views");
         mQueryMembers = mDatabaseUsers.orderByChild("hashtag").startAt(mPostKey);
         mMembersList = (RecyclerView) findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(this));
         mMembersList.setHasFixedSize(true);
 
         mDatabaseUsers.keepSynced(true);
+        mDatabaseViews.keepSynced(true);
 
     }
     void refreshItems() {
@@ -111,6 +113,7 @@ public class DiscoverHashtagActivity extends AppCompatActivity implements Search
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        mDatabaseViews.child(PostKey).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
                         Intent cardonClick = new Intent(DiscoverHashtagActivity.this, HashChatroomActivity.class);
                         cardonClick.putExtra("heartraise_id", PostKey );
                         startActivity(cardonClick);

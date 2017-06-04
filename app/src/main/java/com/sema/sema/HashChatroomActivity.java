@@ -25,7 +25,6 @@ import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -153,8 +152,10 @@ public class HashChatroomActivity extends AppCompatActivity {
         mDatabaseUser.keepSynced(true);
         mDatabaseUnread.keepSynced(true);
         mDatabaseLike.keepSynced(true);
+        mDatabaseViews.keepSynced(true);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Hashtag").child(mPostKey).child("Chats");
+        mDatabase.keepSynced(true);
         mQueryInAscending = mDatabase.orderByChild("date").startAt(-1 * new Date().getTime());
         mSendBtn = (ImageView) findViewById(R.id.sendBtn);
         mSendBtn.setOnClickListener(new View.OnClickListener() {
@@ -205,13 +206,16 @@ public class HashChatroomActivity extends AppCompatActivity {
         });
 
         // count number of comments in a hashtag
-        mDatabaseHashtag.child(mPostKey).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseHashtag.child(mPostKey).child("Chats").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 TextView chat_counter = (TextView) findViewById(R.id.chat_counter);
                 chat_counter.setText(dataSnapshot.getChildrenCount() + "");
                 chat_counter.setTypeface(custom_font);
+
+                // send number of comments to current post
+                mDatabaseHashtag.child(mPostKey).child("trends").setValue(dataSnapshot.getChildrenCount() + "");
             }
 
             @Override
@@ -258,6 +262,17 @@ public class HashChatroomActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+            }
+        });
+
+        LinearLayout tap_view = (LinearLayout) findViewById(R.id.open_view);
+        tap_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent cardonClick = new Intent(HashChatroomActivity.this, ViewHashtagActivity.class);
+                cardonClick.putExtra("heartraise_id", mPostKey );
+                startActivity(cardonClick);
             }
         });
 
@@ -340,6 +355,7 @@ public class HashChatroomActivity extends AppCompatActivity {
 
                                 //update messege showing on tab1 chats activity
                                 newPost2.child("message").setValue(message_val);
+                                newPost2.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
 
 
                                 //clear edit text after message has been sent
@@ -367,8 +383,6 @@ public class HashChatroomActivity extends AppCompatActivity {
             });
 
 
-
-            // mProgress.dismiss();
 
         }
 
@@ -398,12 +412,7 @@ public class HashChatroomActivity extends AppCompatActivity {
                 viewHolder.setImage(getApplicationContext(), model.getImage());
                 viewHolder.setLikeBtn(post_key);
 
-                // SETTING UP FONTS
-                Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Aller_Rg.ttf");
-                viewHolder.tx.setTypeface(custom_font);
-                viewHolder.txdate.setTypeface(custom_font);
-                viewHolder.txname.setTypeface(custom_font);
-                viewHolder.txcaption.setTypeface(custom_font);
+
 
                 mDatabaseLike.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -617,13 +626,28 @@ public class HashChatroomActivity extends AppCompatActivity {
                     }
                 });
 
-                viewHolder.mCardPhoto.setOnClickListener(new View.OnClickListener() {
+
+                viewHolder.UserImg.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        //  Intent cardonClick = new Intent(Chatroom2Activity.this, OpenPhotoActivity.class);
-                        // cardonClick.putExtra("heartraise_id", post_key );
-                        // startActivity(cardonClick);
+                        mDatabaseHashtag.child(mPostKey).child("Chats").child(post_key).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                String uid = dataSnapshot.child("uid").getValue().toString();
+
+                                Intent cardonClick = new Intent(HashChatroomActivity.this, ViewHashtagActivity.class);
+                                cardonClick.putExtra("heartraise_id", uid );
+                                startActivity(cardonClick);
+
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
 
                     }
                 });
@@ -770,12 +794,12 @@ public class HashChatroomActivity extends AppCompatActivity {
 
         DatabaseReference mDatabaseUnread;
         DatabaseReference mDatabaseLike;
-        TextView  mLikeCount, tx, tx2, txname, txname2, txdate, txdate2, txcaption, txcaption2;
+        TextView  mLikeCount;
         FirebaseAuth mAuth;
-        ImageView mImage, mCardPhoto2, mImage2;
+        ImageView mImage;
+        CircleImageView UserImg;
         RelativeLayout rely;
         LinearLayout liny,  min_lay,  mCardPhoto;
-        ProgressBar mProgressBar;
         RelativeLayout ReyLikeBtn;
 
         public CommentViewHolder(View itemView) {
@@ -785,17 +809,13 @@ public class HashChatroomActivity extends AppCompatActivity {
             //font
 
             mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
-            tx = (TextView) mView.findViewById(R.id.post_message);
-            txname = (TextView) mView.findViewById(R.id.post_name);
-            txdate = (TextView) mView.findViewById(R.id.post_date);
-            txcaption = (TextView) mView.findViewById(R.id.captionInput);
             min_lay = (LinearLayout) mView.findViewById(R.id.main_lay);
             mDatabaseLike.keepSynced(true);
             mAuth = FirebaseAuth.getInstance();
             mLikeCount = (TextView) mView.findViewById(R.id.likeCount);
             mCardPhoto = (LinearLayout) mView.findViewById(R.id.chat_image);
-            mImage = (ImageView) mView.findViewById(R.id.post_image);
-            //  groupIcon = (ImageView) mView.findViewById(R.id.group_icon);
+          //  mImage = (ImageView) mView.findViewById(R.id.post_image);
+            UserImg = (CircleImageView) mView.findViewById(R.id.post_image);
             ReyLikeBtn = (RelativeLayout) mView.findViewById(R.id.counter);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
             rely = (RelativeLayout) mView.findViewById(R.id.rely);
