@@ -416,6 +416,8 @@ public class HashChatroomActivity extends AppCompatActivity {
                 viewHolder.setMessage(model.getMessage());
                 viewHolder.setDate(model.getDate());
                 viewHolder.setName(model.getName());
+                viewHolder.setCity(model.getCity());
+                viewHolder.setAddress(model.getAddress());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
                 viewHolder.setLikeBtn(post_key);
 
@@ -874,6 +876,22 @@ public class HashChatroomActivity extends AppCompatActivity {
 
             TextView post_name = (TextView) mView.findViewById(R.id.post_name);
             post_name.setText(name);
+
+
+        }
+
+        public void setAddress(String address) {
+
+            TextView post_address = (TextView) mView.findViewById(R.id.post_address);
+            post_address.setText(address);
+
+
+        }
+
+        public void setCity(String city) {
+
+            TextView post_city = (TextView) mView.findViewById(R.id.post_city);
+            post_city.setText(city);
 
 
         }

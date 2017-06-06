@@ -70,24 +70,34 @@
                             android:layout_marginTop="2dp"
                             android:orientation="vertical">
 
+                            <com.sema.sema.CustonFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="10dp"
+                                android:text="date"
+                                android:paddingTop="3dp"
+                                android:layout_marginRight="8dp"
+                                android:layout_alignParentRight="true"
+                                android:textSize="9dp"
+                                android:layout_gravity="right"
+                                android:id="@+id/post_date" />
 
                             <com.sema.sema.CustonFont
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:text="Message"
-                                android:layout_marginLeft="20dp"
+                                android:layout_marginLeft="18dp"
                                 android:id="@+id/post_message"
                                 android:textSize="14dp"
-                                android:padding="6dp"
-                                android:paddingTop="2dp"
-                                android:layout_marginRight="5dp"
-                                android:textStyle="bold" />
+                                android:layout_marginBottom="3dp"
+                                android:layout_marginRight="5dp" />
 
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_marginBottom="2dp"
                                 android:layout_marginLeft="15dp">
 
                                 <ImageView
@@ -100,7 +110,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_toRightOf="@+id/location"
-                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginLeft="1dp"
                                     android:layout_marginBottom="1dp"
                                     android:textColor="#fff"
                                     android:textSize="9dp"
@@ -124,20 +134,10 @@
                                     android:layout_marginBottom="1dp"
                                     android:textColor="#fff"
                                     android:textSize="9dp"
-                                    android:id="@+id/post_locality"
+                                    android:id="@+id/post_address"
                                     android:text="locality"/>
 
-                                <com.sema.sema.CustonFont
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:text="date"
-                                    android:layout_marginRight="15dp"
-                                    android:layout_alignParentRight="true"
-                                    android:textSize="9dp"
-                                    android:layout_marginBottom="3dp"
-                                    android:layout_gravity="right"
-                                    android:id="@+id/post_date" />
+
 
 
                             </RelativeLayout>
@@ -158,7 +158,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:text="0"
-                            android:textSize="10dp"
+                            android:textSize="9dp"
                             android:layout_centerInParent="true"
                             android:textColor="#fff"
                             android:id="@+id/likeCount"

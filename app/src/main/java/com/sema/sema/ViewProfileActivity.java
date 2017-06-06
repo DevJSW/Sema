@@ -100,6 +100,34 @@ public class ViewProfileActivity extends AppCompatActivity {
             }
         });
 
+        mDatabaseUsers.child(mPostKey).child("location").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.hasChild("country") || dataSnapshot.hasChild("city") || dataSnapshot.hasChild("address")) {
+
+                    String user_country = dataSnapshot.child("country").getValue().toString();
+                    String user_city = dataSnapshot.child("city").getValue().toString();
+                    String user_address = dataSnapshot.child("address").getValue().toString();
+
+                    TextView country = (TextView) findViewById(R.id.post_country);
+                    country.setText(user_country);
+
+                    TextView city = (TextView) findViewById(R.id.post_city);
+                    city.setText(user_city);
+
+                    TextView address = (TextView) findViewById(R.id.post_address);
+                    address.setText(user_address);
+                } else {}
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 
     @Override

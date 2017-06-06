@@ -256,7 +256,11 @@ public class ChatroomActivity extends AppCompatActivity {
                     TextView locality = (TextView) findViewById(R.id.post_locality);
                     locality.setText(txt_locality);
 
-                } else {}
+                } else {
+
+                    LinearLayout liny = (LinearLayout) findViewById(R.id.liny_loc);
+                    liny.setVisibility(View.GONE);
+                }
 
 
             }

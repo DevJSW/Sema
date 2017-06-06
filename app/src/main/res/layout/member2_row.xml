@@ -47,7 +47,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="3dp"
                 android:layout_marginRight="10dp"
                 android:layout_toRightOf="@+id/rely_img"
                 android:layout_below="@+id/post_name"
@@ -58,21 +58,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginTop="2dp"
+            android:id="@+id/liny_loc"
             android:layout_toRightOf="@+id/rely_img"
             android:layout_below="@+id/status">
 
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_marginTop="2dp"
-                android:src="@drawable/ic_location"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp" />
 
             <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/post_city"
                 android:layout_marginTop="1dp"
-                android:layout_marginLeft="5dp"
                 android:text="city"/>
 
             <com.sema.sema.CustonFont
@@ -84,7 +84,7 @@
             <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/post_locality"
+                android:id="@+id/post_country"
                 android:layout_marginLeft="5dp"
                 android:layout_marginTop="1dp"
                 android:text="locality"/>
