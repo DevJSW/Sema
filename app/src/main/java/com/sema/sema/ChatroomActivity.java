@@ -245,14 +245,19 @@ public class ChatroomActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                String txt_city = dataSnapshot.child("city").getValue().toString();
-                String txt_locality = dataSnapshot.child("address").getValue().toString();
+                if (dataSnapshot.hasChild("city") || dataSnapshot.hasChild("address")) {
 
-                TextView city = (TextView) findViewById(R.id.post_city);
-                city.setText(txt_city);
+                    String txt_city = dataSnapshot.child("city").getValue().toString();
+                    String txt_locality = dataSnapshot.child("address").getValue().toString();
 
-                TextView locality = (TextView) findViewById(R.id.post_locality);
-                locality.setText(txt_locality);
+                    TextView city = (TextView) findViewById(R.id.post_city);
+                    city.setText(txt_city);
+
+                    TextView locality = (TextView) findViewById(R.id.post_locality);
+                    locality.setText(txt_locality);
+
+                } else {}
+
 
             }
 

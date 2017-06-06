@@ -60,12 +60,12 @@
             <ImageView
                 android:layout_width="13dp"
                 android:layout_height="10dp"
+                android:layout_marginTop="2dp"
                 android:src="@drawable/ic_location_white"/>
 
             <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="italic"
                 android:textSize="11dp"
                 android:layout_marginLeft="2dp"
                 android:text="city"
@@ -80,7 +80,6 @@
             <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="italic"
                 android:textSize="11dp"
                 android:text="city"
                 android:id="@+id/post_locality"/>

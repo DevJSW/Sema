@@ -332,12 +332,9 @@ public class HashChatroomActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            final String userimg2 = (String) dataSnapshot.child("image").getValue();
-                            final String username2 = (String) dataSnapshot.child("name").getValue();
 
                             mProcessStopChat = true;
 
-                            if (mProcessStopChat) {
 
 
                                 // unread
@@ -352,6 +349,17 @@ public class HashChatroomActivity extends AppCompatActivity {
                                 newPost.child("date").setValue(stringDate);
                                 newPost.child("post_key").setValue(mPostKey);
                                 newPost.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                // if address and city == null
+                                if (dataSnapshot.child("location").hasChild("city") || dataSnapshot.child("location").hasChild("address")) {
+
+                                    final String current_city = (String) dataSnapshot.child("location").child("city").getValue();
+                                    final String current_locality = (String) dataSnapshot.child("location").child("address").getValue();
+
+                                    newPost.child("city").setValue(current_city);
+                                    newPost.child("address").setValue(current_locality);
+                                } else {}
+
+                                newPost.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
 
                                 //update messege showing on tab1 chats activity
                                 newPost2.child("message").setValue(message_val);
@@ -364,7 +372,6 @@ public class HashChatroomActivity extends AppCompatActivity {
 
                                 mProcessStopChat = false;
 
-                            }
 
                         }
 
