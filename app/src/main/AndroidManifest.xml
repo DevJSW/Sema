@@ -90,7 +90,8 @@
         <activity
             android:name=".ViewProfileActivity"
             android:label=""
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".MapActivity"></activity>
     </application>
 
 </manifest>

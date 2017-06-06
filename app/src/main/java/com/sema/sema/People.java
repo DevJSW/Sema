@@ -5,13 +5,13 @@ package com.sema.sema;
  */
 public class People {
 
-    private String name, image, date, message, status, hashtag;
+    private String name, image, date, message, status, hashtag, city, address, country;
 
     public People() {
 
     }
 
-    public People(String name, String image, String date, String message, String status, String hashtag) {
+    public People(String name, String image, String date, String message, String status, String hashtag, String city, String address, String country) {
         this.name = name;
 
         this.image = image;
@@ -19,6 +19,9 @@ public class People {
         this.message = message;
         this.status = status;
         this.hashtag = hashtag;
+        this.city = city;
+        this.address = address;
+        this.country = country;
     }
 
     public String getName() {
@@ -67,5 +70,29 @@ public class People {
 
     public void setHashtag(String hashtag) {
         this.hashtag = hashtag;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 }

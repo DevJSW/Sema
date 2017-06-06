@@ -30,7 +30,7 @@ public class TrendsActivity extends AppCompatActivity {
 
     private String mPostKey = null;
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private DatabaseReference mDatabaseUsers;
+    private DatabaseReference mDatabaseUsers, mDatabaseViews;
     private FirebaseAuth mAuth;
     private ImageView searchBtn, backBtn;
     private EditText searchInput;
@@ -54,6 +54,7 @@ public class TrendsActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Hashtag");
+        mDatabaseViews = FirebaseDatabase.getInstance().getReference().child("hash_views");
         mQueryMembers = mDatabaseUsers.orderByChild("hashtag").startAt(mPostKey);
         mQueryTrends = mDatabaseUsers.orderByChild("trends").limitToLast(10);
         mMembersList = (RecyclerView) findViewById(R.id.Members_list);
@@ -109,6 +110,7 @@ public class TrendsActivity extends AppCompatActivity {
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        mDatabaseViews.child(PostKey).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
                         Intent cardonClick = new Intent(TrendsActivity.this, HashChatroomActivity.class);
                         cardonClick.putExtra("heartraise_id", PostKey );
                         startActivity(cardonClick);

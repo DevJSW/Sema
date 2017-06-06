@@ -113,6 +113,8 @@ public class FriendsActivity extends AppCompatActivity {
 
                 viewHolder.setName(model.getName());
                 viewHolder.setStatus(model.getStatus());
+                viewHolder.setCity(model.getCity());
+                viewHolder.setCountry(model.getCountry());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
                 // open chatroom activity
@@ -188,6 +190,24 @@ public class FriendsActivity extends AppCompatActivity {
             TextView post_name = (TextView) mView.findViewById(R.id.post_name);
             post_name.setText(name);
         }
+
+        public void setCountry(String country) {
+
+            TextView post_country = (TextView) mView.findViewById(R.id.post_country);
+            post_country.setText(country);
+
+
+        }
+
+        public void setCity(String city) {
+
+            TextView post_city = (TextView) mView.findViewById(R.id.post_city);
+            post_city.setText(city);
+
+
+        }
+
+
 
         public void setStatus(String status) {
 

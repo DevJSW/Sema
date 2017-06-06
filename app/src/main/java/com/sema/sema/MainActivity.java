@@ -30,7 +30,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -201,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
             double latitude = gps.getLatitude();
             double longitude = gps.getLongitude();
             // \n is for new line
-            Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+           // Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
 
             mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("latitude").setValue(latitude);
             mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("longitude").setValue(longitude);
@@ -222,6 +221,9 @@ public class MainActivity extends AppCompatActivity {
                 mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("country").setValue(country);
                 mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("postalCode").setValue(postalCode);
                 mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("knownName").setValue(knownName);
+
+                mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("city").setValue(city);
+                mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("country").setValue(country);
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -308,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
                     PendingIntent pIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, 0);
                     Notification noty = new Notification.Builder(MainActivity.this)
                             .setContentTitle("Sema")
-                            .setTicker("You have a new message")
+                            .setTicker("You have a new message from " + name)
                             .setContentText(name + ": " + message)
                             .setSmallIcon(R.drawable.ic_sema_notification)
                             .setContentIntent(pIntent).getNotification();
