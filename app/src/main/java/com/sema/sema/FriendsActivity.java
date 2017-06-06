@@ -16,9 +16,12 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -68,6 +71,7 @@ public class FriendsActivity extends AppCompatActivity {
         mMembersList.setHasFixedSize(true);
 
         mDatabaseUsers.keepSynced(true);
+
     }
 
     void refreshItems() {
@@ -131,6 +135,24 @@ public class FriendsActivity extends AppCompatActivity {
                     }
                 });
 
+                mDatabaseUsers.child(PostKey).child("location").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        String city = dataSnapshot.child("city").getValue().toString();
+                        String locality = dataSnapshot.child("address").getValue().toString();
+
+                        viewHolder.city.setText(city);
+                        viewHolder.locality.setText(locality);
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
             }
 
         };
@@ -147,6 +169,7 @@ public class FriendsActivity extends AppCompatActivity {
 
         CircleImageView mChatBtn;
 
+        TextView city, locality;
         ProgressBar mProgressBar;
 
         public LetterViewHolder(View itemView) {
@@ -156,7 +179,8 @@ public class FriendsActivity extends AppCompatActivity {
 
             mChatBtn = (CircleImageView) mView.findViewById(R.id.post_image);
             mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
-
+            city = (TextView) mView.findViewById(R.id.post_city);
+            locality = (TextView) mView.findViewById(R.id.post_locality);
         }
 
         public void setName(String name) {

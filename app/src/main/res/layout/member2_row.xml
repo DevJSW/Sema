@@ -54,6 +54,42 @@
                 android:singleLine="true"
                 android:id="@+id/status"
                 android:text="Status"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_toRightOf="@+id/rely_img"
+            android:layout_below="@+id/status">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginTop="2dp"
+                android:src="@drawable/ic_location"/>
+
+            <com.sema.sema.CustonFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/post_city"
+                android:layout_marginTop="1dp"
+                android:layout_marginLeft="5dp"
+                android:text="city"/>
+
+            <com.sema.sema.CustonFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:text=","/>
+
+            <com.sema.sema.CustonFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/post_locality"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="1dp"
+                android:text="locality"/>
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"

@@ -7,6 +7,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.location.Address;
+import android.location.Geocoder;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -38,16 +40,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private DatabaseReference mDatabaseUsers, mDatabaseHashtag, mDatabaseNotification, mDatabaseLastSeen;
-    private static double longitude;
-    private static double latitude;
     private FirebaseAuth auth;
     private FloatingActionButton fabHash, fabPerson;
     private FirebaseAuth mAuth;
@@ -57,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager mViewPager;
 
     GPSTracker gps;
+    Geocoder geocoder;
+    List<Address> addresses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,6 +192,8 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
 
 
+        geocoder = new Geocoder(this, Locale.getDefault());
+
         // create class object
         gps = new GPSTracker(MainActivity.this);
         // check if GPS enabled
@@ -198,6 +205,28 @@ public class MainActivity extends AppCompatActivity {
 
             mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("latitude").setValue(latitude);
             mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("longitude").setValue(longitude);
+
+            try {
+                addresses = geocoder.getFromLocation(latitude, longitude, 1);
+
+                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                String city = addresses.get(0).getLocality();
+                String state = addresses.get(0).getAdminArea();
+                String country = addresses.get(0).getCountryName();
+                String postalCode = addresses.get(0).getPostalCode();
+                String knownName = addresses.get(0).getFeatureName();
+
+                mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("address").setValue(address);
+                mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("city").setValue(city);
+                mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("state").setValue(state);
+                mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("country").setValue(country);
+                mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("postalCode").setValue(postalCode);
+                mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("knownName").setValue(knownName);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }else{
             // can't get location
             // GPS or Network is not enabled

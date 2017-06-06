@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:gravity="center"
+    android:background="@color/colorPrimary"
     android:id="@+id/lin_lay"
     tools:context="com.sema.sema.Splashscreen">
 
@@ -18,7 +19,7 @@
             android:id="@+id/splash"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="25dp"
-            android:src="@drawable/icon" />
+            android:src="@drawable/splash" />
 
     </LinearLayout>
 

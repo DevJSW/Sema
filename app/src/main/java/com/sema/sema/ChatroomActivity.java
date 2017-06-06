@@ -241,6 +241,27 @@ public class ChatroomActivity extends AppCompatActivity {
         });
 
 
+        mDatabaseUser2.child(mPostKey).child("location").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                String txt_city = dataSnapshot.child("city").getValue().toString();
+                String txt_locality = dataSnapshot.child("address").getValue().toString();
+
+                TextView city = (TextView) findViewById(R.id.post_city);
+                city.setText(txt_city);
+
+                TextView locality = (TextView) findViewById(R.id.post_locality);
+                locality.setText(txt_locality);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         mDatabaseComment.keepSynced(true);
         addToLastSeen();
 
