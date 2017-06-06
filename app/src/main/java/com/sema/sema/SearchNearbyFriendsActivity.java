@@ -3,7 +3,6 @@ package com.sema.sema;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -21,16 +20,19 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class AddFriendsActivity extends AppCompatActivity  implements SearchView.OnQueryTextListener{
+public class SearchNearbyFriendsActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private String mPostKey = null;
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -44,9 +46,9 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_friends);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setContentView(R.layout.activity_search_nearby_friends);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -57,16 +59,6 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
         });
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent cardonClick = new Intent(AddFriendsActivity.this, SearchNearbyFriendsActivity.class);
-                startActivity(cardonClick);
-            }
-        });
-
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mMembersList = (RecyclerView) findViewById(R.id.Members_list);
@@ -74,6 +66,7 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
         mMembersList.setHasFixedSize(true);
 
         mDatabaseUsers.keepSynced(true);
+
 
     }
     void refreshItems() {
@@ -104,7 +97,7 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
                 People.class,
                 R.layout.member2_row,
                 LetterViewHolder.class,
-                mDatabaseUsers
+                mDatabaseUsers.orderByChild("location").equalTo(mAuth.getCurrentUser().getUid())
 
 
         ) {
@@ -116,15 +109,13 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
                 viewHolder.setName(model.getName());
                 viewHolder.setStatus(model.getStatus());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
-                viewHolder.setCity(model.getCity());
-                viewHolder.setCountry(model.getCountry());
 
                 // open chatroom activity
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        Intent cardonClick = new Intent(AddFriendsActivity.this, ChatroomActivity.class);
+                        Intent cardonClick = new Intent(SearchNearbyFriendsActivity.this, ChatroomActivity.class);
                         cardonClick.putExtra("heartraise_id", post_key );
                         startActivity(cardonClick);
 
@@ -170,21 +161,6 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
             post_name.setText(name);
         }
 
-        public void setCountry(String country) {
-
-            TextView post_country = (TextView) mView.findViewById(R.id.post_country);
-            post_country.setText(country);
-
-
-        }
-
-        public void setCity(String city) {
-
-            TextView post_city = (TextView) mView.findViewById(R.id.post_city);
-            post_city.setText(city);
-
-
-        }
 
         public void setImage(final Context ctx, final String image) {
 
@@ -205,12 +181,29 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
             });
         }
 
+        public void setCountry(String country) {
+
+            TextView post_country = (TextView) mView.findViewById(R.id.post_country);
+            post_country.setText(country);
+
+
+        }
+
+        public void setCity(String city) {
+
+            TextView post_city = (TextView) mView.findViewById(R.id.post_city);
+            post_city.setText(city);
+
+
+        }
+
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.search_menu, menu);
+        getMenuInflater().inflate(R.menu.search_menu_, menu);
         MenuItem menuItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menuItem);
         searchView.setOnQueryTextListener(this);
@@ -238,14 +231,14 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
     }
 
     @Override
-    public boolean onQueryTextChange(String newText) {
+    public boolean onQueryTextChange(final String newText) {
 
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<People, LetterViewHolder>(
 
                 People.class,
                 R.layout.member2_row,
                 LetterViewHolder.class,
-                mDatabaseUsers.orderByChild("name").startAt(newText.toUpperCase())
+                mDatabaseUsers.orderByChild("address").startAt(newText.toUpperCase())
 
 
         ) {
@@ -262,9 +255,35 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
                     @Override
                     public void onClick(View v) {
 
-                        Intent cardonClick = new Intent(AddFriendsActivity.this, ChatroomActivity.class);
+                        Intent cardonClick = new Intent(SearchNearbyFriendsActivity.this, ChatroomActivity.class);
                         cardonClick.putExtra("heartraise_id", post_key );
                         startActivity(cardonClick);
+                    }
+                });
+
+                mDatabaseUsers.orderByChild("address").startAt(newText.toUpperCase()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() == null){
+
+                            TextView mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
+                            ImageView mNoPostImg = (ImageView) findViewById(R.id.noPostChat);
+
+                            mNoPostImg.setVisibility(View.VISIBLE);
+                            mNoPostTxt.setVisibility(View.VISIBLE);
+                        } else {
+
+                            TextView mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
+                            ImageView mNoPostImg = (ImageView) findViewById(R.id.noPostChat);
+
+                            mNoPostImg.setVisibility(View.GONE);
+                            mNoPostTxt.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
                     }
                 });
 
@@ -278,5 +297,3 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
 
 
 }
-
-

@@ -91,7 +91,10 @@
             android:name=".ViewProfileActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MapActivity"></activity>
+        <activity android:name=".MapActivity" />
+        <activity
+            android:name=".SearchNearbyFriendsActivity"
+            android:label="Search by address"/>
     </application>
 
 </manifest>

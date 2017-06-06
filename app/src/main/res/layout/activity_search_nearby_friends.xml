@@ -1,14 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.sema.sema.MainActivity$PlaceholderFragment">
+    tools:context="com.sema.sema.SearchNearbyFriendsActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
+
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
@@ -29,6 +30,7 @@
 
 
     </LinearLayout>
+
     <ProgressBar
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="40dp"
@@ -39,40 +41,28 @@
         android:visibility="gone" />
 
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
         android:scaleType="fitXY"
         android:id="@+id/noPostChat"
         android:layout_above="@+id/noPostTxt"
-        android:visibility="gone"
-        android:src="@drawable/no_hashtags"/>
+        android:src="@drawable/map2"/>
     <com.sema.sema.CustonFont
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:text="You've no hashtags. Tap + at the top of your screen or search for other hashtags."
+        android:text="Enter the address of a place to see &amp; start chatting with people around there."
         android:textSize="15dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:visibility="gone"
         android:layout_marginTop="10dp"
         android:id="@+id/noPostTxt"
         android:textColor="@color/colorPrimary"/>
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:id="@+id/startChat"
-        android:visibility="gone"
-        android:background="@color/colorPrimary"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/noPostTxt"
-        android:textColor="#ffffff"
-        android:text="Start chat"/>
+
 
 
 </RelativeLayout>

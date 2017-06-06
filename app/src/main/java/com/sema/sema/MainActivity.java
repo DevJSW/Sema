@@ -215,15 +215,19 @@ public class MainActivity extends AppCompatActivity {
                 String postalCode = addresses.get(0).getPostalCode();
                 String knownName = addresses.get(0).getFeatureName();
 
+                mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("city").setValue(city);
+                mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("country").setValue(country);
+                mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("address").setValue(address);
+
                 mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("address").setValue(address);
                 mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("city").setValue(city);
                 mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("state").setValue(state);
                 mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("country").setValue(country);
                 mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("postalCode").setValue(postalCode);
                 mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("location").child("knownName").setValue(knownName);
-
                 mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("city").setValue(city);
                 mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("country").setValue(country);
+                mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("address").setValue(address);
 
             } catch (IOException e) {
                 e.printStackTrace();

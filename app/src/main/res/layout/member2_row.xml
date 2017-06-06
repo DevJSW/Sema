@@ -14,7 +14,6 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
             android:id="@+id/rely_img"
             android:orientation="vertical">
 
@@ -58,7 +57,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="2dp"
             android:id="@+id/liny_loc"
             android:layout_toRightOf="@+id/rely_img"
             android:layout_below="@+id/status">
@@ -68,6 +66,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp" />
 
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="13dp"
+                android:layout_marginTop="3dp"
+                android:src="@drawable/ic_location_grey"/>
+
             <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -75,17 +79,13 @@
                 android:layout_marginTop="1dp"
                 android:text="city"/>
 
-            <com.sema.sema.CustonFont
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
-                android:text=","/>
+
 
             <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/post_country"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="4dp"
                 android:layout_marginTop="1dp"
                 android:text="locality"/>
 
@@ -95,8 +95,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_toRightOf="@+id/rely_img"
-            android:layout_marginTop="6dp"
-            android:layout_below="@+id/rely_img"
+            android:layout_marginTop="8dp"
+            android:layout_below="@+id/liny_loc"
             android:layout_marginRight="10dp"
             android:background="#cecccc"/>
 

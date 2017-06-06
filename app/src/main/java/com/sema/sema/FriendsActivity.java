@@ -50,7 +50,7 @@ public class FriendsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent cardonClick = new Intent(FriendsActivity.this, AddFriendsActivity.class);
+                Intent cardonClick = new Intent(FriendsActivity.this, SearchNearbyFriendsActivity.class);
                 startActivity(cardonClick);
             }
         });
