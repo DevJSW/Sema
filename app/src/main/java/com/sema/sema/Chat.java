@@ -5,6 +5,7 @@ package com.sema.sema;
  */
 public class Chat {
 
+    // AIzaSyBF2bupjfqKdp-d_cpa5XsJpOVbErmqr0g
     private String name, image, photo, date, message, hashtag, city, address;
 
     public Chat() {

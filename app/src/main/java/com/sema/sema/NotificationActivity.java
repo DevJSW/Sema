@@ -18,6 +18,7 @@ public class NotificationActivity extends AppCompatActivity {
     private CheckBox mIncomingMessage, mDefaultRingtone, mVibrate, mLight;
     private DatabaseReference mDatabaseIncomingNotification, mDatabaseRingtone, mDatabaseVibrate, mDatabaseLight;
     private FirebaseAuth mAuth;
+    private boolean proccessNotification = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,22 +45,28 @@ public class NotificationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                proccessNotification = true;
                 mDatabaseLight.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+                        if (proccessNotification) {
 
-                            mDatabaseLight.child(mAuth.getCurrentUser().getUid()).removeValue();
-                            mLight.setChecked(false);
-                            mLight.toggle();
+                            if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
 
-                        } else {
+                                mDatabaseLight.child(mAuth.getCurrentUser().getUid()).removeValue();
+                                mLight.setChecked(false);
+                                mLight.toggle();
 
-                            mDatabaseLight.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                            mLight.setChecked(true);
-                            mLight.toggle();
+                            } else {
 
+                                mDatabaseLight.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                mLight.setChecked(true);
+                                mLight.toggle();
+
+                            }
+
+                            proccessNotification = false;
                         }
                     }
 
@@ -78,22 +85,27 @@ public class NotificationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                proccessNotification = true;
+
                 mDatabaseVibrate.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+                        if (proccessNotification) {
+                            if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
 
-                            mDatabaseVibrate.child(mAuth.getCurrentUser().getUid()).removeValue();
-                            mVibrate.setChecked(false);
-                            mVibrate.toggle();
+                                mDatabaseVibrate.child(mAuth.getCurrentUser().getUid()).removeValue();
+                                mVibrate.setChecked(false);
+                                mVibrate.toggle();
 
-                        } else {
+                            } else {
 
-                            mDatabaseVibrate.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                            mVibrate.setChecked(true);
-                            mVibrate.toggle();
+                                mDatabaseVibrate.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                mVibrate.setChecked(true);
+                                mVibrate.toggle();
 
+                                proccessNotification = false;
+                            }
                         }
                     }
 
@@ -112,22 +124,27 @@ public class NotificationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+                proccessNotification = true;
+
                 mDatabaseRingtone.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+                        if (proccessNotification) {
+                            if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
 
-                            mDatabaseRingtone.child(mAuth.getCurrentUser().getUid()).removeValue();
-                            mDefaultRingtone.setChecked(false);
-                            mDefaultRingtone.toggle();
+                                mDatabaseRingtone.child(mAuth.getCurrentUser().getUid()).removeValue();
+                                mDefaultRingtone.setChecked(false);
+                                mDefaultRingtone.toggle();
 
-                        } else {
+                            } else {
 
-                            mDatabaseRingtone.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                            mDefaultRingtone.setChecked(true);
-                            mDefaultRingtone.toggle();
+                                mDatabaseRingtone.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                                mDefaultRingtone.setChecked(true);
+                                mDefaultRingtone.toggle();
 
+                                proccessNotification = false;
+                            }
                         }
                     }
 
@@ -146,22 +163,26 @@ public class NotificationActivity extends AppCompatActivity {
            @Override
            public void onClick(View v) {
 
+               proccessNotification = true;
+
                mDatabaseIncomingNotification.addValueEventListener(new ValueEventListener() {
                    @Override
                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                       if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+                       if (proccessNotification) {
+                           if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
 
-                           mDatabaseIncomingNotification.child(mAuth.getCurrentUser().getUid()).removeValue();
-                           mIncomingMessage.setChecked(false);
-                           mIncomingMessage.toggle();
+                               mDatabaseIncomingNotification.child(mAuth.getCurrentUser().getUid()).removeValue();
+                               mIncomingMessage.setChecked(false);
 
-                       } else {
+                           } else {
 
-                           mDatabaseIncomingNotification.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                           mIncomingMessage.setChecked(true);
-                           mIncomingMessage.toggle();
+                               mDatabaseIncomingNotification.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                               mIncomingMessage.setChecked(true);
 
+                           }
+
+                           proccessNotification = false;
                        }
                    }
 

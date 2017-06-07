@@ -249,6 +249,8 @@ public class SearchNearbyFriendsActivity extends AppCompatActivity implements Se
                 viewHolder.setName(model.getName());
                 viewHolder.setStatus(model.getStatus());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
+                viewHolder.setCity(model.getCity());
+                viewHolder.setCountry(model.getCountry());
 
                 // open chatroom activity
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {

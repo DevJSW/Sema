@@ -121,7 +121,7 @@ public class TrendsActivity extends AppCompatActivity {
 
         };
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setReverseLayout(true);
+        mLinearLayoutManager.setReverseLayout(false);
         mLinearLayoutManager.setStackFromEnd(true);
         mMembersList.setAdapter(firebaseRecyclerAdapter);
 
