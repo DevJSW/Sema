@@ -15,7 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class NotificationActivity extends AppCompatActivity {
 
-    private CheckBox mIncomingMessage, mDefaultRingtone, mVibrate, mLight;
+    private CheckBox mIncomingMessage, mDefaultRingtone, mVibrate, mLight, mHashTone;
     private DatabaseReference mDatabaseIncomingNotification, mDatabaseRingtone, mDatabaseVibrate, mDatabaseLight;
     private FirebaseAuth mAuth;
     private boolean proccessNotification = false;
@@ -58,15 +58,17 @@ public class NotificationActivity extends AppCompatActivity {
                                 mLight.setChecked(false);
                                 mLight.toggle();
 
+                                proccessNotification = false;
+
                             } else {
 
                                 mDatabaseLight.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
                                 mLight.setChecked(true);
                                 mLight.toggle();
 
+                                proccessNotification = false;
                             }
 
-                            proccessNotification = false;
                         }
                     }
 
@@ -137,6 +139,8 @@ public class NotificationActivity extends AppCompatActivity {
                                 mDefaultRingtone.setChecked(false);
                                 mDefaultRingtone.toggle();
 
+                                proccessNotification = false;
+
                             } else {
 
                                 mDatabaseRingtone.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
@@ -175,14 +179,17 @@ public class NotificationActivity extends AppCompatActivity {
                                mDatabaseIncomingNotification.child(mAuth.getCurrentUser().getUid()).removeValue();
                                mIncomingMessage.setChecked(false);
 
+                               proccessNotification = false;
+
                            } else {
 
                                mDatabaseIncomingNotification.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
                                mIncomingMessage.setChecked(true);
 
+                               proccessNotification = false;
+
                            }
 
-                           proccessNotification = false;
                        }
                    }
 
@@ -203,7 +210,7 @@ public class NotificationActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+                if (!dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
 
                     mIncomingMessage.setChecked(true);
                 } else {
@@ -221,7 +228,7 @@ public class NotificationActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+                if (!dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
 
                     mDefaultRingtone.setChecked(true);
                 } else {
@@ -239,7 +246,7 @@ public class NotificationActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+                if (!dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
 
                     mVibrate.setChecked(true);
                 } else {
@@ -253,11 +260,30 @@ public class NotificationActivity extends AppCompatActivity {
             }
         });
 
+        mHashTone = (CheckBox) findViewById(R.id.hashtag_tone);
+        mDatabaseIncomingNotification.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (!dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+
+                   // mHashTone.setChecked(true);
+                } else {
+                  //  mHashTone.setChecked(false);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         mDatabaseLight.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+                if (!dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
 
                     mLight.setChecked(true);
                 } else {

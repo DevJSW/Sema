@@ -36,6 +36,7 @@ public class TrendsActivity extends AppCompatActivity {
     private EditText searchInput;
     private Query mQueryMembers, mQueryTrends;
     private RecyclerView mMembersList;
+    private LinearLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,10 +122,14 @@ public class TrendsActivity extends AppCompatActivity {
 
         };
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setReverseLayout(false);
+        mLinearLayoutManager.setReverseLayout(true);
         mLinearLayoutManager.setStackFromEnd(true);
-        mMembersList.setAdapter(firebaseRecyclerAdapter);
 
+        mLayoutManager = new LinearLayoutManager(TrendsActivity.this);
+        mLayoutManager.setReverseLayout(true);
+        mLayoutManager.setStackFromEnd(true);
+        mMembersList.setAdapter(firebaseRecyclerAdapter);
+        mMembersList.setLayoutManager(mLayoutManager);
     }
 
 

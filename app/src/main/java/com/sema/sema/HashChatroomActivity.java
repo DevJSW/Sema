@@ -236,7 +236,7 @@ public class HashChatroomActivity extends AppCompatActivity {
                 chat_counter.setTypeface(custom_font);
 
                 // send number of comments to current post
-                mDatabaseHashtag.child(mPostKey).child("trends").setValue(dataSnapshot.getChildrenCount() + "");
+                mDatabaseHashtag.child(mPostKey).child("trends").setValue(dataSnapshot.getChildrenCount() );
             }
 
             @Override
@@ -272,11 +272,13 @@ public class HashChatroomActivity extends AppCompatActivity {
                 if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
 
                     ImageView star_icon = (ImageView) findViewById(R.id.star_icon);
-                    star_icon.setImageResource(R.drawable.ic_star_white);
+                    star_icon.setImageResource(R.drawable.ic_favourite_);
+
                 } else {
 
+
                     ImageView star_icon = (ImageView) findViewById(R.id.star_icon);
-                    star_icon.setImageResource(R.drawable.ic_favourite_);
+                    star_icon.setImageResource(R.drawable.ic_star_white);
                 }
             }
 
@@ -386,6 +388,8 @@ public class HashChatroomActivity extends AppCompatActivity {
                                 newPost2.child("message").setValue(message_val);
                                 newPost2.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
 
+                            // send number of comments to current post
+                            mDatabaseHashtag.child(mPostKey).child("trends").setValue(dataSnapshot.getChildrenCount() );
 
                                 //clear edit text after message has been sent
                                 EditText edit = (EditText) findViewById(R.id.emojicon_edit_text);

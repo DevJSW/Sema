@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -44,8 +46,11 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
@@ -61,7 +66,7 @@ public class ChatroomActivity extends AppCompatActivity {
     private ProgressDialog mProgress;
     private RecyclerView mCommentList;
     private DatabaseReference mDatabase;
-    private DatabaseReference mDatabaseComment, mDatabaseChatroom, mDatabaseUnread, mDatabaseNotification,  mDatabaseLastSeen, mDatabaseTyping, mDatabaseTick;
+    private DatabaseReference mDatabaseComment,  mDatabaseUsers, mDatabaseChatroom, mDatabaseUnread, mDatabaseNotification,  mDatabaseLastSeen, mDatabaseTyping, mDatabaseTick;
     private DatabaseReference mDatabaseUser;
     private DatabaseReference mDatabaseUser2;
     private DatabaseReference mDatabasePostChats;
@@ -76,6 +81,10 @@ public class ChatroomActivity extends AppCompatActivity {
     private Boolean mProcessStopChat = false;
     private Menu menu;
     Context context = this;
+
+    GPSTracker gps;
+    Geocoder geocoder;
+    List<Address> addresses;
 
     private LinearLayoutManager mLayoutManager;
     EmojiconEditText emojiconEditText;
@@ -108,6 +117,7 @@ public class ChatroomActivity extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
 
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         rootView = findViewById(R.id.root_view);
         emojiImageView = (ImageView) findViewById(R.id.emoji_btn);
         emojiconEditText = (EmojiconEditText) findViewById(R.id.emojicon_edit_text);
@@ -293,6 +303,57 @@ public class ChatroomActivity extends AppCompatActivity {
             }
         });
 
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        // create class object
+        gps = new GPSTracker(ChatroomActivity.this);
+        // check if GPS enabled
+        if(gps.canGetLocation()){
+            double latitude = gps.getLatitude();
+            double longitude = gps.getLongitude();
+            // \n is for new line
+            // Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+
+            mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("latitude").setValue(latitude);
+            mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("longitude").setValue(longitude);
+
+            try {
+                addresses = geocoder.getFromLocation(latitude, longitude, 1);
+
+                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                String city = addresses.get(0).getLocality();
+                String state = addresses.get(0).getAdminArea();
+                String country = addresses.get(0).getCountryName();
+                String postalCode = addresses.get(0).getPostalCode();
+                String knownName = addresses.get(0).getFeatureName();
+
+                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("city").setValue(city);
+                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("country").setValue(country);
+                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("address").setValue(address);
+
+                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("address").setValue(address);
+                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("city").setValue(city);
+                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("state").setValue(state);
+                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("country").setValue(country);
+                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("postalCode").setValue(postalCode);
+                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("knownName").setValue(knownName);
+                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("city").setValue(city);
+                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("country").setValue(country);
+                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("address").setValue(address);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }else{
+            // can't get location
+            // GPS or Network is not enabled
+            // Ask user to enable GPS/network in settings
+            gps.showSettingsAlert();
+        }
+
+
+
         mDatabaseComment.keepSynced(true);
         addToLastSeen();
 
@@ -340,6 +401,8 @@ public class ChatroomActivity extends AppCompatActivity {
 
             // post last active date to user data
             final DatabaseReference newPost4 = mDatabaseUser;
+
+
 
 
 
@@ -448,11 +511,60 @@ public class ChatroomActivity extends AppCompatActivity {
                 }
             });
 
+            geocoder = new Geocoder(this, Locale.getDefault());
+
+            // create class object
+            gps = new GPSTracker(ChatroomActivity.this);
+            // check if GPS enabled
+            if(gps.canGetLocation()){
+                double latitude = gps.getLatitude();
+                double longitude = gps.getLongitude();
+                // \n is for new line
+                // Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
+
+                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("latitude").setValue(latitude);
+                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("longitude").setValue(longitude);
+
+                try {
+                    addresses = geocoder.getFromLocation(latitude, longitude, 1);
+
+                    String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                    String city = addresses.get(0).getLocality();
+                    String state = addresses.get(0).getAdminArea();
+                    String country = addresses.get(0).getCountryName();
+                    String postalCode = addresses.get(0).getPostalCode();
+                    String knownName = addresses.get(0).getFeatureName();
+
+                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("city").setValue(city);
+                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("country").setValue(country);
+                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("address").setValue(address);
+
+                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("address").setValue(address);
+                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("city").setValue(city);
+                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("state").setValue(state);
+                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("country").setValue(country);
+                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("postalCode").setValue(postalCode);
+                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("knownName").setValue(knownName);
+                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("city").setValue(city);
+                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("country").setValue(country);
+                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("address").setValue(address);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }else{
+                // can't get location
+                // GPS or Network is not enabled
+                // Ask user to enable GPS/network in settings
+                gps.showSettingsAlert();
+            }
 
 
             // mProgress.dismiss();
 
         }
+
 
     }
 

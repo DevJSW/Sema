@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    private DatabaseReference mDatabaseUsers, mDatabaseHashtag, mDatabaseNotification, mDatabaseLastSeen;
+    private DatabaseReference mDatabaseUsers, mDatabaseHashtag, mDatabaseNotification, mDatabaseLastSeen, mDatabaseIncomingNotification, mDatabaseVibrate;
     private FirebaseAuth auth;
     private FloatingActionButton fabHash, fabPerson;
     private FirebaseAuth mAuth;
@@ -180,6 +180,8 @@ public class MainActivity extends AppCompatActivity {
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mDatabaseNotification = FirebaseDatabase.getInstance().getReference().child("Notifications");
+        mDatabaseIncomingNotification = FirebaseDatabase.getInstance().getReference().child("IncomingNotification");
+        mDatabaseVibrate = FirebaseDatabase.getInstance().getReference().child("IncomingVibrate");
         mDatabaseLastSeen = FirebaseDatabase.getInstance().getReference().child("Last_Seen");
         mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
         mDatabaseNotification.keepSynced(true);
@@ -308,7 +310,6 @@ public class MainActivity extends AppCompatActivity {
 
                     // send notification to reciever
 
-
                     Context context = getApplicationContext();
                     Intent intent = new Intent(context, MainActivity.class);
                     PendingIntent pIntent = PendingIntent.getActivity(MainActivity.this, 0, intent, 0);
@@ -318,6 +319,7 @@ public class MainActivity extends AppCompatActivity {
                             .setContentText(name + ": " + message)
                             .setSmallIcon(R.drawable.ic_sema_notification)
                             .setContentIntent(pIntent).getNotification();
+
 
                     noty.flags = Notification.FLAG_AUTO_CANCEL;
                     Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -368,17 +370,14 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
 
-            Intent cardonClick = new Intent(MainActivity.this, SelectInterestActivity.class);
+            Intent cardonClick = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(cardonClick);
             return true;
-        }  else if (id == R.id.action_add_friends){
-
-            Intent cardonClick = new Intent(MainActivity.this, AddFriendsActivity.class);
-            startActivity(cardonClick);
-        } else if (id == R.id.action_add_group){
+        }   else if (id == R.id.action_add_group){
 
             Intent cardonClick = new Intent(MainActivity.this, DiscoverHashtagActivity.class);
             startActivity(cardonClick);
+
         } else if (id == R.id.action_trending){
 
             Intent cardonClick = new Intent(MainActivity.this, TrendsActivity.class);

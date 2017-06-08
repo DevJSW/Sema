@@ -21,9 +21,12 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -32,6 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AddFriendsActivity extends AppCompatActivity  implements SearchView.OnQueryTextListener{
 
+    private String myCountry = null;
     private String mPostKey = null;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private DatabaseReference mDatabaseUsers;
@@ -75,6 +79,45 @@ public class AddFriendsActivity extends AppCompatActivity  implements SearchView
 
         mDatabaseUsers.keepSynced(true);
 
+        mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                myCountry = dataSnapshot.child("location").child("country").getValue().toString();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mQueryMembers =  mDatabaseUsers.child("location").orderByChild("country").equalTo(myCountry);
+        mDatabaseUsers.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() == null){
+
+                    TextView mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
+                    ImageView mNoPostImg = (ImageView) findViewById(R.id.noPostChat);
+
+                    mNoPostImg.setVisibility(View.VISIBLE);
+                    mNoPostTxt.setVisibility(View.VISIBLE);
+                } else {
+
+                    TextView mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
+                    ImageView mNoPostImg = (ImageView) findViewById(R.id.noPostChat);
+
+                    mNoPostImg.setVisibility(View.GONE);
+                    mNoPostTxt.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
     void refreshItems() {
         // Load items

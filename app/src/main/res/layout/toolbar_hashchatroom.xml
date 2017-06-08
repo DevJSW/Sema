@@ -55,6 +55,7 @@
                 android:layout_height="wrap_content"
                 android:text="By: "
                 android:textSize="11dp"
+                android:layout_marginLeft="8dp"
                 android:textColor="#fff"
                 android:id="@+id/toolbar_last_seen_date"/>
 

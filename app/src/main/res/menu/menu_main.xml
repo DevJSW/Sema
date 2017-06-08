@@ -7,11 +7,6 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/action_add_friends"
-        android:orderInCategory="100"
-        android:title="Suggested friends"
-        app:showAsAction="never" />
 
     <item
         android:id="@+id/action_add_group"
@@ -22,7 +17,7 @@
     <item
         android:id="@+id/action_trending"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_trending_"
+        android:icon="@drawable/ic_trending"
         android:title="hashtag"
         app:showAsAction="always" />
 
