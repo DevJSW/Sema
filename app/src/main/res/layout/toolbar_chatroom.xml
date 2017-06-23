@@ -37,10 +37,11 @@
             android:orientation="horizontal">
 
 
-            <com.sema.sema.CustonFont
+            <com.github.curioustechizen.ago.RelativeTimeTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
+                app:relative_time_prefix="Last Seen "
                 android:id="@+id/toolbar_last_seen_date"/>
 
             <com.sema.sema.CustonFont

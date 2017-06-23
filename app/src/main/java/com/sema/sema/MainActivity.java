@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         fabPerson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent cardonClick = new Intent(MainActivity.this, AddFriendsActivity.class);
+                Intent cardonClick = new Intent(MainActivity.this, PhonebookListActivity.class);
                 startActivity(cardonClick);
             }
         });

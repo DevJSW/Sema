@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AbsListView;
@@ -34,6 +35,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.github.curioustechizen.ago.RelativeTimeTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -215,8 +217,8 @@ public class ChatroomActivity extends AppCompatActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String date = (String) dataSnapshot.child("last_seen").getValue();
 
-                        TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
-                        toolbar_last_seen.setText(date);
+                        RelativeTimeTextView toolbar_last_seen = (RelativeTimeTextView) findViewById(R.id.toolbar_last_seen_date);
+                        toolbar_last_seen.setReferenceTime((new Date().getTime()));
                         toolbar_last_seen.setTypeface(custom_font);
 
                     }
@@ -349,7 +351,6 @@ public class ChatroomActivity extends AppCompatActivity {
             // can't get location
             // GPS or Network is not enabled
             // Ask user to enable GPS/network in settings
-            gps.showSettingsAlert();
         }
 
 
@@ -511,56 +512,6 @@ public class ChatroomActivity extends AppCompatActivity {
                 }
             });
 
-            geocoder = new Geocoder(this, Locale.getDefault());
-
-            // create class object
-            gps = new GPSTracker(ChatroomActivity.this);
-            // check if GPS enabled
-            if(gps.canGetLocation()){
-                double latitude = gps.getLatitude();
-                double longitude = gps.getLongitude();
-                // \n is for new line
-                // Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
-
-                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("latitude").setValue(latitude);
-                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("longitude").setValue(longitude);
-
-                try {
-                    addresses = geocoder.getFromLocation(latitude, longitude, 1);
-
-                    String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                    String city = addresses.get(0).getLocality();
-                    String state = addresses.get(0).getAdminArea();
-                    String country = addresses.get(0).getCountryName();
-                    String postalCode = addresses.get(0).getPostalCode();
-                    String knownName = addresses.get(0).getFeatureName();
-
-                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("city").setValue(city);
-                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("country").setValue(country);
-                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("address").setValue(address);
-
-                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("address").setValue(address);
-                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("city").setValue(city);
-                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("state").setValue(state);
-                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("country").setValue(country);
-                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("postalCode").setValue(postalCode);
-                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("location").child("knownName").setValue(knownName);
-                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("city").setValue(city);
-                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("country").setValue(country);
-                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("address").setValue(address);
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }else{
-                // can't get location
-                // GPS or Network is not enabled
-                // Ask user to enable GPS/network in settings
-                gps.showSettingsAlert();
-            }
-
-
             // mProgress.dismiss();
 
         }
@@ -581,6 +532,66 @@ public class ChatroomActivity extends AppCompatActivity {
 
 
         ) {
+
+
+            @Override
+            public void onBindViewHolder(final CommentViewHolder holder, int position, List<Object> payloads) {
+
+                final String post_key = getRef(position).getKey();
+
+                mDatabaseComment.child(mPostKey).child(mCurrentUser.getUid()).child(post_key).addValueEventListener(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        final String post_photo = (String) dataSnapshot.child("photo").getValue();
+                        final String chat_icon = (String) dataSnapshot.child("change_chat_icon").getValue();
+
+                        if (post_photo != null) {
+
+                            holder.mCardPhoto.setVisibility(View.VISIBLE);
+                            holder.min_lay.setVisibility(View.GONE);
+
+                            holder.mCardPhoto2.setVisibility(View.VISIBLE);
+                            holder.min_lay2.setVisibility(View.GONE);
+
+                            // if card has my uid, then change chat balloon shape
+                        } else {
+
+                            holder.mCardPhoto.setVisibility(View.GONE);
+                            holder.min_lay.setVisibility(View.VISIBLE);
+
+                            holder.mCardPhoto2.setVisibility(View.GONE);
+                            holder.min_lay2.setVisibility(View.VISIBLE);
+
+                        }
+
+                        if (chat_icon == null) {
+
+                            holder.rely.setVisibility(View.VISIBLE);
+                            holder.liny.setVisibility(View.GONE);
+
+                            // if card has my uid, then change chat balloon shape
+                        } else {
+
+                            holder.rely.setVisibility(View.GONE);
+                            holder.liny.setVisibility(View.VISIBLE);
+                        }
+
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+                super.onBindViewHolder(holder, position, payloads);
+            }
+
             @Override
             protected void populateViewHolder(final CommentViewHolder viewHolder, final Chat model, final int position) {
 
@@ -595,32 +606,6 @@ public class ChatroomActivity extends AppCompatActivity {
                 // delete unread listener
                 mDatabaseChatroom.child(mPostKey).child(mAuth.getCurrentUser().getUid()).child(post_key).child("unread_listener").removeValue();
 
-                //check if message is read then show double ticks
-                mDatabaseChatroom.child(mAuth.getCurrentUser().getUid()).child(mPostKey).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        String key = getRef(position).getKey();
-                       // String unread_checker = dataSnapshot.getKey();
-
-                        if (dataSnapshot.child(key).hasChild("unread_listener")) {
-
-                            // IF MESSSAGE IS UNREAD SHOW SINGLE TICK
-                            viewHolder.mSingleTick.setVisibility(View.VISIBLE);
-                            viewHolder.mDoubleTick.setVisibility(View.GONE);
-                        } else {
-
-                            // IF MESSAGE IS READ SHOW DOUBLE TICKS
-                            viewHolder.mDoubleTick.setVisibility(View.VISIBLE);
-                            viewHolder.mSingleTick.setVisibility(View.GONE);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
 
                 //DELETE UNREAD MESSAGES WHILE SCROLLING
                 mCommentList.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -640,159 +625,6 @@ public class ChatroomActivity extends AppCompatActivity {
                     }
                 });
 
-                mDatabaseComment.child(post_key).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        final String group_uid = (String) dataSnapshot.child("this_is_a_group").getValue();
-
-                        mDatabaseComment.child(mPostKey).child(mCurrentUser.getUid()).child(post_key).addValueEventListener(new ValueEventListener() {
-
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                final String post_photo = (String) dataSnapshot.child("photo").getValue();
-                                final String chat_icon = (String) dataSnapshot.child("change_chat_icon").getValue();
-
-                                if (post_photo != null) {
-
-                                    viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
-                                    viewHolder.mCardPhoto.setVisibility(View.VISIBLE);
-                                    viewHolder.min_lay.setVisibility(View.GONE);
-
-                                    viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
-                                    viewHolder.mCardPhoto2.setVisibility(View.VISIBLE);
-                                    viewHolder.min_lay2.setVisibility(View.GONE);
-
-                                    // if card has my uid, then change chat balloon shape
-                                } else {
-
-                                    viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
-                                    viewHolder.mCardPhoto.setVisibility(View.GONE);
-                                    viewHolder.min_lay.setVisibility(View.VISIBLE);
-
-                                    viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
-                                    viewHolder.mCardPhoto2.setVisibility(View.GONE);
-                                    viewHolder.min_lay2.setVisibility(View.VISIBLE);
-
-                                }
-
-                                if (chat_icon == null) {
-
-                                    viewHolder.rely.setVisibility(View.VISIBLE);
-                                    viewHolder.liny.setVisibility(View.GONE);
-
-                                    // if card has my uid, then change chat balloon shape
-                                } else {
-
-                                    viewHolder.rely.setVisibility(View.GONE);
-                                    viewHolder.liny.setVisibility(View.VISIBLE);
-                                }
-
-
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-
-                mDatabaseComment.child(mCurrentUser.getUid()).child(mPostKey).child(post_key).addValueEventListener(new ValueEventListener() {
-
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        final String post_photo = (String) dataSnapshot.child("photo").getValue();
-                        final String chat_icon = (String) dataSnapshot.child("change_chat_icon").getValue();
-
-                        if (post_photo != null) {
-
-                            viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
-                            viewHolder.mCardPhoto.setVisibility(View.VISIBLE);
-                            viewHolder.min_lay.setVisibility(View.GONE);
-
-                            // if card has my uid, then change chat balloon shape
-                        } else {
-
-                            viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
-                            viewHolder.mCardPhoto.setVisibility(View.GONE);
-                            viewHolder.min_lay.setVisibility(View.VISIBLE);
-
-                        }
-
-                        if (chat_icon == null) {
-
-                            viewHolder.rely.setVisibility(View.VISIBLE);
-                            viewHolder.liny.setVisibility(View.GONE);
-
-                            // if card has my uid, then change chat balloon shape
-                        } else {
-
-                            viewHolder.rely.setVisibility(View.GONE);
-                            viewHolder.liny.setVisibility(View.VISIBLE);
-                        }
-
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-
-                mDatabaseUser.child(mAuth.getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-
-                        final String current_user_uid = (String) snapshot.child("uid").getValue();
-
-                        mDatabaseComment.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
-
-                            @Override
-                            public void onDataChange(DataSnapshot snapshot) {
-
-                                final String reciever_uid = (String) snapshot.child("uid").getValue();
-
-
-                                if (snapshot.hasChild(mAuth.getCurrentUser().getUid())) {
-
-                                    //viewHolder.rely.setVisibility(View.VISIBLE);
-                                    //viewHolder.liny.setVisibility(View.GONE);
-
-                                } else {
-
-                                    // viewHolder.rely.setVisibility(View.GONE);
-                                    // viewHolder.liny.setVisibility(View.VISIBLE);
-                                }
-
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
 
 
             }
@@ -808,6 +640,20 @@ public class ChatroomActivity extends AppCompatActivity {
 
         // Now set the layout manager and the adapter to the RecyclerView
         mCommentList.setLayoutManager(mLayoutManager);
+
+        //mRecycler.smoothScrollToPosition(mMessagesAdapter.getItemCount() - 1);
+        mCommentList.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, final int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                mCommentList.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mCommentList.smoothScrollToPosition(bottom);
+                    }
+                }, 0);
+            }
+        });
+
 
         firebaseRecyclerAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
 
@@ -996,10 +842,10 @@ public class ChatroomActivity extends AppCompatActivity {
 
         public void setDate(String date) {
 
-            TextView post_date = (TextView) mView.findViewById(R.id.post_date);
+            RelativeTimeTextView post_date = (RelativeTimeTextView) mView.findViewById(R.id.post_date);
             post_date.setText(date);
 
-            TextView post_date2 = (TextView) mView.findViewById(R.id.post_date2);
+            RelativeTimeTextView post_date2 = (RelativeTimeTextView) mView.findViewById(R.id.post_date2);
             post_date2.setText(date);
         }
 

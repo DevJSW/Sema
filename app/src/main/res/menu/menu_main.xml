@@ -17,7 +17,7 @@
     <item
         android:id="@+id/action_trending"
         android:orderInCategory="100"
-        android:icon="@drawable/ic_trending"
+        android:icon="@drawable/ic_trending_"
         android:title="hashtag"
         app:showAsAction="always" />
 
