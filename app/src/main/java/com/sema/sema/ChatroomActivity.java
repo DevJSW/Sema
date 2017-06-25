@@ -30,6 +30,7 @@ import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -532,7 +533,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
 
         ) {
-
+            
 
             @Override
             public void onBindViewHolder(final CommentViewHolder holder, int position, List<Object> payloads) {

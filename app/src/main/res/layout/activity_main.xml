@@ -58,4 +58,6 @@
         android:src="@drawable/new_chat"
         android:visibility="gone" />
 
+
+
 </android.support.design.widget.CoordinatorLayout>

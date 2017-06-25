@@ -37,7 +37,7 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="Email"/>
         <activity
             android:name=".SignupActivity"
             android:label="Signup" />
@@ -100,7 +100,10 @@
             android:name=".SearchNearbyFriendsActivity"
             android:label="Search by address" />
         <activity android:name=".ContactListsActivity" />
-        <activity android:name=".PhonebookListActivity"></activity>
+        <activity android:name=".PhonebookListActivity" />
+        <activity
+            android:name=".ChooseLoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

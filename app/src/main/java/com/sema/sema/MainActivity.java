@@ -22,11 +22,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -44,6 +47,8 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import static com.sema.sema.R.id.fab;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -67,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mContext=this;
+        mContext = this;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -77,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
 
         // SETTING UP FONTS
         final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Aller_Rg.ttf");
+
+
 
         fabHash = (FloatingActionButton) findViewById(R.id.fabChat);
         fabHash.setOnClickListener(new View.OnClickListener() {
@@ -159,9 +166,11 @@ public class MainActivity extends AppCompatActivity {
                 });
 
 
-
             }
         });
+
+
+
 
 
        // Toast.makeText(mContext, String.valueOf(latitude + longitude),Toast.LENGTH_LONG).show();
@@ -171,7 +180,7 @@ public class MainActivity extends AppCompatActivity {
         fabPerson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent cardonClick = new Intent(MainActivity.this, PhonebookListActivity.class);
+                Intent cardonClick = new Intent(MainActivity.this, AddFriendsActivity.class);
                 startActivity(cardonClick);
             }
         });
@@ -283,6 +292,7 @@ public class MainActivity extends AppCompatActivity {
         addToLastSeen();
 
     }
+
 
 
 
@@ -462,11 +472,11 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "HASHTAG";
+                    return "HASHTAGS";
                 case 1:
                     return "CHATS";
                 case 2:
-                    return "PROFILE";
+                    return "MORE";
             }
             return null;
         }

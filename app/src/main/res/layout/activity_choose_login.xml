@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:background="@color/colorPrimary"
+    tools:context="com.sema.sema.ChooseLoginActivity">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+            <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_marginTop="75dp"
+                android:id="@+id/topImg"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/splash"
+                android:layout_marginBottom="10dp"
+                android:scaleType="fitXY" />
+
+        <com.sema.sema.CustonFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/topImg"
+            android:layout_centerHorizontal="true"
+            android:textColor="#fff"
+            android:textSize="21dp"
+            android:text="Sema Messenger"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="55dp">
+
+                <Button
+                    android:layout_width="200dp"
+                    android:layout_height="45dp"
+                    android:id="@+id/signIn"
+                    android:background="@drawable/button_bg"
+                    android:layout_centerHorizontal="true"
+                    android:layout_alignParentBottom="true"
+                    android:textColor="#fff"
+                    android:layout_marginBottom="15dp"
+                    android:text="Login with Google"
+                    android:textAllCaps="false"/>
+
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="45dp"
+                android:id="@+id/emailLogin"
+                android:background="@drawable/button_bg"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="true"
+                android:textColor="#fff"
+                android:text="Login with Email"
+                android:textAllCaps="false"/>
+
+        </LinearLayout>
+
+        </RelativeLayout>
+
+</android.support.design.widget.CoordinatorLayout>
