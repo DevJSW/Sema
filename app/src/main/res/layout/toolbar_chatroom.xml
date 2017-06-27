@@ -27,6 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14dp"
+            android:maxLines="1"
             android:id="@+id/toolbar_username"
             android:paddingLeft="10dp" />
 
@@ -41,6 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
+                android:maxLines="1"
                 app:relative_time_prefix="Last Seen "
                 android:id="@+id/toolbar_last_seen_date"/>
 
@@ -48,6 +50,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
+                android:maxLines="1"
                 android:id="@+id/typing_watcher"/>
 
         </LinearLayout>
@@ -83,6 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
+                android:maxLines="1"
                 android:text="city"
                 android:id="@+id/post_locality"/>
 

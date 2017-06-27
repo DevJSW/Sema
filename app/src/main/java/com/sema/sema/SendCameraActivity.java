@@ -1,10 +1,13 @@
 package com.sema.sema;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +39,7 @@ import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
 
-public class SendPhotoActivity extends AppCompatActivity {
+public class SendCameraActivity extends AppCompatActivity {
 
     private String mPostKey = null;
 
@@ -54,10 +57,9 @@ public class SendPhotoActivity extends AppCompatActivity {
     private StorageReference mStorage;
     private ProgressDialog mProgress;
 
-    private Uri mImageUri = null;
-    private Uri audioUri = null;
-    private static int GALLERY_REQUEST =1;
-    private static int AUDIO_REQUEST =1;
+    Uri imageUri;
+    Uri selectedImageUri = null;
+    final int TAKE_PICTURE = 115;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,7 @@ public class SendPhotoActivity extends AppCompatActivity {
         mAddPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addPhoto();
+                takePhoto();
             }
         });
         mCaption = (EditText) findViewById(R.id.captionInput);
@@ -109,7 +111,7 @@ public class SendPhotoActivity extends AppCompatActivity {
 
         });
 
-        addPhoto();
+        takePhoto();
     }
 
     private void startPosting() {
@@ -125,13 +127,14 @@ public class SendPhotoActivity extends AppCompatActivity {
         final String user_id = mAuth.getCurrentUser().getUid();
         final String uid = user_id.substring(0, Math.min(user_id.length(), 4));
 
-        if (mImageUri != null) {
+        if (imageUri != null) {
 
             mProgress.show();
 
-            StorageReference filepath = mStorage.child("chats_images").child(mImageUri.getLastPathSegment());
+            StorageReference filepath = mStorage.child("chats_images").child(imageUri.getLastPathSegment());
 
-            filepath.putFile(mImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
+            filepath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
@@ -160,7 +163,7 @@ public class SendPhotoActivity extends AppCompatActivity {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                                     // reciever chat
-                                    newPostTap.child("message").setValue("Photo: " + caption_val);
+                                    newPostTap.child("message").setValue(caption_val);
                                     newPostTap.child("uid").setValue(mCurrentUser.getUid());
                                     newPostTap.child("name").setValue(reciever_name);
                                     newPostTap.child("image").setValue(reciever_image);
@@ -171,7 +174,7 @@ public class SendPhotoActivity extends AppCompatActivity {
                                     // unread
                                     // newPost2Unread.child("message").setValue(message_val);
 
-                                    newPostTab2.child("message").setValue("Photo: " + caption_val);
+                                    newPostTab2.child("message").setValue(caption_val);
                                     newPostTab2.child("uid").setValue(mCurrentUser.getUid());
                                     newPostTab2.child("name").setValue(dataSnapshot.child("name").getValue());
                                     newPostTab2.child("image").setValue(dataSnapshot.child("image").getValue());
@@ -219,7 +222,7 @@ public class SendPhotoActivity extends AppCompatActivity {
 
                     mProgress.dismiss();
 
-                    Toast.makeText(SendPhotoActivity.this, "photo sent", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SendCameraActivity.this, "photo sent", Toast.LENGTH_LONG).show();
                     finish();
 
                 }
@@ -230,11 +233,15 @@ public class SendPhotoActivity extends AppCompatActivity {
         }
     }
 
-    private void addPhoto() {
+    private void takePhoto() {
 
-        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        galleryIntent.setType("image");
-        startActivityForResult(galleryIntent, GALLERY_REQUEST);
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        File photoFile = new File(Environment.getExternalStorageDirectory(),  "Photo.png");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                Uri.fromFile(photoFile));
+        imageUri = Uri.fromFile(photoFile);
+        startActivityForResult(intent, TAKE_PICTURE);
+
 
     }
 
@@ -256,18 +263,15 @@ public class SendPhotoActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
-
-            mImageUri = data.getData();
-            mAddPhoto.setImageURI(mImageUri);
-
-
-
+        switch (requestCode) {
+            case TAKE_PICTURE:
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri selectedImageUri = imageUri;
+                    mAddPhoto.setImageURI(selectedImageUri);
+                }
         }
     }
-
 
 }

@@ -3,13 +3,18 @@ package com.sema.sema;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Point;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +25,8 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,12 +38,16 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.github.curioustechizen.ago.RelativeTimeTextView;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,12 +56,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -65,6 +84,7 @@ public class ChatroomActivity extends AppCompatActivity {
     private static final String TAG = ChatroomActivity.class.getSimpleName();
     private String mPostKey = null;
     private TextView mNoPostTxt;
+    private ImageView cameraBtn;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private ProgressDialog mProgress;
     private RecyclerView mCommentList;
@@ -76,11 +96,14 @@ public class ChatroomActivity extends AppCompatActivity {
     private Query mQueryPostChats;
     private Query mQueryInAscending;
     private FirebaseUser mCurrentUser;
+    private StorageReference mStorage;
     private FirebaseAuth mAuth;
     private ImageView mSendBtn;
     private EditText mCommentField;
-    private Uri mImageUri = null;
-    private static int GALLERY_REQUEST =1;
+    private Uri audioUri = null;
+    private Uri videoUri = null;
+    private static int AUDIO_REQUEST =1;
+    private static int REQUEST_TAKE_GALLERY_VIDEO =1;
     private Boolean mProcessStopChat = false;
     private Menu menu;
     Context context = this;
@@ -112,6 +135,8 @@ public class ChatroomActivity extends AppCompatActivity {
 
         setSupportActionBar(my_toolbar);
 
+
+
         Window window = ChatroomActivity.this.getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             window.setStatusBarColor(ContextCompat.getColor( ChatroomActivity.this,R.color.colorPrimaryDark));
@@ -120,6 +145,8 @@ public class ChatroomActivity extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
 
+        mStorage = FirebaseStorage.getInstance().getReference();
+        mProgress = new ProgressDialog(this);
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         rootView = findViewById(R.id.root_view);
         emojiImageView = (ImageView) findViewById(R.id.emoji_btn);
@@ -163,6 +190,17 @@ public class ChatroomActivity extends AppCompatActivity {
         mCommentList.setHasFixedSize(true);
         // clear unread messages
         mDatabaseUnread.child(mPostKey).child(mAuth.getCurrentUser().getUid()).removeValue();
+
+        cameraBtn = (ImageView) findViewById(R.id.cameraBtn);
+        cameraBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent cardonClick = new Intent(ChatroomActivity.this, SendCameraActivity.class);
+                cardonClick.putExtra("heartraise_id", mPostKey );
+                startActivity(cardonClick);
+            }
+        });
 
         mCommentList.setLayoutManager(new LinearLayoutManager(this));
         mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
@@ -694,6 +732,7 @@ public class ChatroomActivity extends AppCompatActivity {
                     mDatabaseUnread.child(mPostKey).child(mAuth.getCurrentUser().getUid()).removeValue();
                     // remove date
                     mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).removeValue();
+
                 }
             }
         };
@@ -734,6 +773,7 @@ public class ChatroomActivity extends AppCompatActivity {
                                                                 mDatabaseTyping.child(mAuth.getCurrentUser().getUid()).removeValue();
                                                                 // show last seen
                                                                 mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).child("last_seen").setValue(stringDate);
+
                                                             }
                                                         }
                                                     }
@@ -910,16 +950,113 @@ public class ChatroomActivity extends AppCompatActivity {
                 this.finish();
                 return true;
             default:
-                if (id == R.id.action_settings) {
+                if (id == R.id.action_gallery) {
 
                     Intent cardonClick = new Intent(ChatroomActivity.this, SendPhotoActivity.class);
                     cardonClick.putExtra("heartraise_id", mPostKey );
                     startActivity(cardonClick);
+
+
+                } else if (id == R.id.action_audio) {
+
+                    Intent audioIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    audioUri = Uri.fromFile(new File("path/to/audio.mp3"));
+                    audioIntent.setType("audio/mpeg");
+                    startActivityForResult(audioIntent, AUDIO_REQUEST);
+
+
+                } else if (id == R.id.action_video) {
+
+                    Intent intent = new Intent();
+                    intent.setType("video/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent,"Select Video"),REQUEST_TAKE_GALLERY_VIDEO);
+
+
                 }
 
 
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == AUDIO_REQUEST && resultCode == RESULT_OK) {
+
+            audioUri = data.getData();
+
+        } else if (requestCode == REQUEST_TAKE_GALLERY_VIDEO && resultCode == RESULT_OK) {
+
+            videoUri = data.getData();
+        }
+
+        sendAudio();
+    }
+
+    private void sendAudio() {
+        mProgress.setMessage("Loading audio, please wait...");
+        mProgress.setCancelable(false);
+
+        Date date = new Date();
+        final String stringDate = DateFormat.getDateTimeInstance().format(date);
+
+        /*final String caption_val = mCaption.getText().toString().trim();*/
+
+        final String user_id = mAuth.getCurrentUser().getUid();
+        final String uid = user_id.substring(0, Math.min(user_id.length(), 4));
+
+        if (audioUri != null) {
+
+            mProgress.show();
+
+           /* StorageReference filepath = mStorage.child("chats_images").child(mImageUri.getLastPathSegment());
+*/
+            StorageMetadata metadata = new StorageMetadata.Builder().setContentType("audio/mpeg").build();
+            UploadTask uploadTask = mStorage.child("audio/"+audioUri.getLastPathSegment()).putFile(audioUri, metadata);
+            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+
+                }
+            });
+
+            // Listen for state changes, errors, and completion of the upload.
+            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    System.out.println("Uploading..., " + progress + "% done");
+                    mProgress.setMessage("Uploading..., " + progress + "% done");
+
+                }
+            }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                    System.out.println("Upload is paused");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // Handle successful uploads on complete
+                    Uri downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+
+                    Toast.makeText(ChatroomActivity.this, "audio sent", Toast.LENGTH_LONG).show();
+                    mProgress.dismiss();
+
+                }
+            });
+
+
+        }
+    }
+
 
 }

@@ -4,9 +4,28 @@
 
 
     <item
-        android:id="@+id/action_settings"
-        android:icon="@drawable/ic_add_a_photo_white"
-        android:title="Add Photo"
-        app:showAsAction="always" />
+        android:id="@+id/action_video"
+        android:icon="@drawable/ic_video"
+        android:title="Send video"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_audio"
+        android:icon="@drawable/ic_audio"
+        android:title="Send mp3"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_gallery"
+        android:icon="@drawable/ic_picture"
+        android:title="Gallery"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_record"
+        android:icon="@drawable/ic_picture"
+        android:title="Record Audio"
+        app:showAsAction="never" />
+
 
 </menu>

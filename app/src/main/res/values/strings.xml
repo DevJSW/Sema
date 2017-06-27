@@ -58,5 +58,6 @@
     <string name="title_activity_friends">FriendsActivity</string>
     <string name="title_activity_send_photo2">SendPhoto2Activity</string>
     <string name="title_activity_view_profile2">ViewProfileActivity2</string>
+    <string name="title_activity_chat">ChatActivity</string>
 
 </resources>
