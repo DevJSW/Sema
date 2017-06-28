@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -25,14 +27,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -41,10 +48,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnPausedListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageMetadata;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -89,6 +103,15 @@ public class HashChatroomActivity extends AppCompatActivity {
     EmojIconActions emojIcon;
     View rootView;
     private Query mQueryChats;
+    private Uri audioUri = null;
+    private Uri videoUri = null;
+    private static int AUDIO_REQUEST =1;
+    private static int REQUEST_TAKE_GALLERY_VIDEO =1;
+    private StorageReference mStorage;
+
+    private Boolean isFabOpen = false;
+    private FloatingActionButton fab,fab1,fab2,fab3,fab4;
+    private Animation fab_open,fab_close,rotate_forward,rotate_backward;
 
 
     /** Called when the activity is first created. */
@@ -111,6 +134,120 @@ public class HashChatroomActivity extends AppCompatActivity {
         // Font path
         final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Aller_Rg.ttf");
 
+        fab = (FloatingActionButton)findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                animateFAB();
+            }
+        });
+        fab1 = (FloatingActionButton)findViewById(R.id.fab1);
+        fab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                fab.startAnimation(rotate_backward);
+                fab1.startAnimation(fab_close);
+                fab2.startAnimation(fab_close);
+                fab3.startAnimation(fab_close);
+                fab4.startAnimation(fab_close);
+                fab1.setClickable(false);
+                fab2.setClickable(false);
+                fab3.setClickable(false);
+                fab4.setClickable(false);
+                isFabOpen = false;
+
+                Intent cardonClick = new Intent(HashChatroomActivity.this, SendCameraActivity.class);
+                cardonClick.putExtra("heartraise_id", mPostKey );
+                startActivity(cardonClick);
+            }
+        });
+        fab2 = (FloatingActionButton)findViewById(R.id.fab2);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                fab.startAnimation(rotate_backward);
+                fab1.startAnimation(fab_close);
+                fab2.startAnimation(fab_close);
+                fab3.startAnimation(fab_close);
+                fab4.startAnimation(fab_close);
+                fab1.setClickable(false);
+                fab2.setClickable(false);
+                fab3.setClickable(false);
+                fab4.setClickable(false);
+                isFabOpen = false;
+
+                Intent cardonClick = new Intent(HashChatroomActivity.this, HashSendPhotoActivity.class);
+                cardonClick.putExtra("heartraise_id", mPostKey );
+                startActivity(cardonClick);
+            }
+        });
+
+        fab3 = (FloatingActionButton)findViewById(R.id.fab3);
+        fab3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                fab.startAnimation(rotate_backward);
+                fab1.startAnimation(fab_close);
+                fab2.startAnimation(fab_close);
+                fab3.startAnimation(fab_close);
+                fab4.startAnimation(fab_close);
+                fab1.setClickable(false);
+                fab2.setClickable(false);
+                fab3.setClickable(false);
+                fab4.setClickable(false);
+                isFabOpen = false;
+
+                Intent audioIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                audioUri = Uri.fromFile(new File("path/to/audio.mp3"));
+                audioIntent.setType("audio/mpeg");
+                startActivityForResult(audioIntent, AUDIO_REQUEST);
+            }
+        });
+
+        fab4 = (FloatingActionButton)findViewById(R.id.fab4);
+        fab4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                fab.startAnimation(rotate_backward);
+                fab1.startAnimation(fab_close);
+                fab2.startAnimation(fab_close);
+                fab3.startAnimation(fab_close);
+                fab4.startAnimation(fab_close);
+                fab1.setClickable(false);
+                fab2.setClickable(false);
+                fab3.setClickable(false);
+                fab4.setClickable(false);
+                isFabOpen = false;
+
+                Intent intent = new Intent();
+                intent.setType("video/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,"Select Video"),REQUEST_TAKE_GALLERY_VIDEO);
+            }
+        });
+
+        fab4 = (FloatingActionButton)findViewById(R.id.fab4);
+
+        ImageView camera = (ImageView) findViewById(R.id.quickShot);
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cardonClick = new Intent(HashChatroomActivity.this, SendCameraActivity.class);
+                cardonClick.putExtra("heartraise_id", mPostKey );
+                startActivity(cardonClick);
+            }
+        });
+
+        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
+        rotate_forward = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_forward);
+        rotate_backward = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_backward);
+
+        mStorage = FirebaseStorage.getInstance().getReference();
         setSupportActionBar(my_toolbar);
         rootView = findViewById(R.id.root_view);
         emojiImageView = (ImageView) findViewById(R.id.emoji_btn);
@@ -302,6 +439,37 @@ public class HashChatroomActivity extends AppCompatActivity {
         mDatabaseComment.keepSynced(true);
         addToLastSeen();
 
+    }
+
+    public void animateFAB(){
+
+        if(isFabOpen){
+
+            fab.startAnimation(rotate_backward);
+            fab1.startAnimation(fab_close);
+            fab2.startAnimation(fab_close);
+            fab3.startAnimation(fab_close);
+            fab4.startAnimation(fab_close);
+            fab1.setClickable(false);
+            fab2.setClickable(false);
+            fab3.setClickable(false);
+            fab4.setClickable(false);
+            isFabOpen = false;
+
+        } else {
+
+            fab.startAnimation(rotate_forward);
+            fab1.startAnimation(fab_open);
+            fab2.startAnimation(fab_open);
+            fab3.startAnimation(fab_open);
+            fab4.startAnimation(fab_open);
+            fab1.setClickable(true);
+            fab2.setClickable(true);
+            fab3.setClickable(true);
+            fab4.setClickable(true);
+            isFabOpen = true;
+
+        }
     }
 
     private void addToLastSeen() {
@@ -729,22 +897,13 @@ public class HashChatroomActivity extends AppCompatActivity {
 
         final Runnable input_finish_checker = new Runnable() {
             public void run() {
-                if (System.currentTimeMillis() > (last_text_edit[0] + delay - 500)) {
+                if (System.currentTimeMillis() > (last_text_edit[0])) {
                     // ............
                     // ............
-                    TextView typing = (TextView) findViewById(R.id.typing_watcher);
-                    TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
-                    typing.setVisibility(View.VISIBLE);
-                    toolbar_last_seen.setVisibility(View.GONE);
+
                 }
             }
         };
-
-        mDatabaseChatroom.child(mPostKey).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
 
                     //checking if a user is typing
                     EditText editText = (EditText) findViewById(R.id.emojicon_edit_text);
@@ -766,12 +925,33 @@ public class HashChatroomActivity extends AppCompatActivity {
                                                             if (s.length() > 0) {
                                                                 last_text_edit[0] = System.currentTimeMillis();
                                                                 handler.postDelayed(input_finish_checker, delay);
+
+                                                                // HIDE AUDIO BUTTON WHILE USER IS TYPING
+                                                                ImageView audio = (ImageView) findViewById(R.id.ic_audio);
+                                                                audio.setVisibility(View.GONE);
+
+                                                                ImageView camera = (ImageView) findViewById(R.id.quickShot);
+                                                                camera.setVisibility(View.GONE);
+
+                                                                ImageView sendy = (ImageView) findViewById(R.id.sendBtn);
+                                                                sendy.setVisibility(View.VISIBLE);
+
+
                                                             } else {
 
-                                                                TextView typing = (TextView) findViewById(R.id.typing_watcher);
-                                                                TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
-                                                                typing.setVisibility(View.GONE);
-                                                                toolbar_last_seen.setVisibility(View.VISIBLE);
+                                                                Date date = new Date();
+                                                                final String stringDate = DateFormat.getDateTimeInstance().format(date);
+
+
+                                                                // SHOW AUDIO BUTTON WHILE USER IS TYPING
+                                                                ImageView audio = (ImageView) findViewById(R.id.ic_audio);
+                                                                audio.setVisibility(View.VISIBLE);
+
+                                                                ImageView camera = (ImageView) findViewById(R.id.quickShot);
+                                                                camera.setVisibility(View.VISIBLE);
+
+                                                                ImageView sendy = (ImageView) findViewById(R.id.sendBtn);
+                                                                sendy.setVisibility(View.GONE);
 
                                                             }
                                                         }
@@ -779,15 +959,6 @@ public class HashChatroomActivity extends AppCompatActivity {
 
                     );
 
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
 
         // if recyclerview is at the bottom, clear any unread messages
@@ -1001,6 +1172,84 @@ public class HashChatroomActivity extends AppCompatActivity {
 
 
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == AUDIO_REQUEST && resultCode == RESULT_OK) {
+
+            audioUri = data.getData();
+
+        } else if (requestCode == REQUEST_TAKE_GALLERY_VIDEO && resultCode == RESULT_OK) {
+
+            videoUri = data.getData();
+        }
+
+        sendAudio();
+    }
+
+    private void sendAudio() {
+        mProgress.setMessage("Loading audio, please wait...");
+        mProgress.setCancelable(false);
+
+        Date date = new Date();
+        final String stringDate = DateFormat.getDateTimeInstance().format(date);
+
+        /*final String caption_val = mCaption.getText().toString().trim();*/
+
+        final String user_id = mAuth.getCurrentUser().getUid();
+        final String uid = user_id.substring(0, Math.min(user_id.length(), 4));
+
+        if (audioUri != null) {
+
+            mProgress.show();
+
+           /* StorageReference filepath = mStorage.child("chats_images").child(mImageUri.getLastPathSegment());
+*/
+            StorageMetadata metadata = new StorageMetadata.Builder().setContentType("audio/mpeg").build();
+            UploadTask uploadTask = mStorage.child("audio/"+audioUri.getLastPathSegment()).putFile(audioUri, metadata);
+            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+
+                }
+            });
+
+            // Listen for state changes, errors, and completion of the upload.
+            uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    System.out.println("Uploading..., " + progress + "% done");
+                    mProgress.setMessage("Uploading..., " + progress + "% done");
+
+                }
+            }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                    System.out.println("Upload is paused");
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                    // Handle unsuccessful uploads
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    // Handle successful uploads on complete
+                    Uri downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
+
+                    Toast.makeText(HashChatroomActivity.this, "audio sent", Toast.LENGTH_LONG).show();
+                    mProgress.dismiss();
+
+                }
+            });
+
+
         }
     }
 

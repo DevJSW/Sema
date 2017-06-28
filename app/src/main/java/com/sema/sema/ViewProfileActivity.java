@@ -1,5 +1,6 @@
 package com.sema.sema;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -50,9 +51,9 @@ public class ViewProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //Intent cardonClick = new Intent(ViewProfileActivity.this, MapActivity.class);
-               // cardonClick.putExtra("heartraise_id", mPostKey );
-               // startActivity(cardonClick);
+                Intent cardonClick = new Intent(ViewProfileActivity.this, MapsActivity.class);
+                cardonClick.putExtra("heartraise_id", mPostKey );
+                startActivity(cardonClick);
             }
         });
 

@@ -33,6 +33,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -120,6 +122,10 @@ public class ChatroomActivity extends AppCompatActivity {
     View rootView;
     private Query mQueryChats;
 
+    private Boolean isFabOpen = false;
+    private FloatingActionButton fab,fab1,fab2,fab3,fab4,fab5;
+    private Animation fab_open,fab_close,rotate_forward,rotate_backward;
+
 
     /** Called when the activity is first created. */
 
@@ -144,6 +150,118 @@ public class ChatroomActivity extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
+
+        fab = (FloatingActionButton)findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                animateFAB();
+            }
+        });
+        fab1 = (FloatingActionButton)findViewById(R.id.fab1);
+        fab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                fab.startAnimation(rotate_backward);
+                fab1.startAnimation(fab_close);
+                fab2.startAnimation(fab_close);
+                fab3.startAnimation(fab_close);
+                fab4.startAnimation(fab_close);
+                fab5.startAnimation(fab_close);
+                fab1.setClickable(false);
+                fab2.setClickable(false);
+                fab3.setClickable(false);
+                fab4.setClickable(false);
+                fab5.setClickable(false);
+                isFabOpen = false;
+
+                Intent cardonClick = new Intent(ChatroomActivity.this, SendCameraActivity.class);
+                cardonClick.putExtra("heartraise_id", mPostKey );
+                startActivity(cardonClick);
+            }
+        });
+        fab2 = (FloatingActionButton)findViewById(R.id.fab2);
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                fab.startAnimation(rotate_backward);
+                fab1.startAnimation(fab_close);
+                fab2.startAnimation(fab_close);
+                fab3.startAnimation(fab_close);
+                fab4.startAnimation(fab_close);
+                fab5.startAnimation(fab_close);
+                fab1.setClickable(false);
+                fab2.setClickable(false);
+                fab3.setClickable(false);
+                fab4.setClickable(false);
+                fab5.setClickable(false);
+                isFabOpen = false;
+
+                Intent cardonClick = new Intent(ChatroomActivity.this, SendPhotoActivity.class);
+                cardonClick.putExtra("heartraise_id", mPostKey );
+                startActivity(cardonClick);
+            }
+        });
+
+        fab3 = (FloatingActionButton)findViewById(R.id.fab3);
+        fab3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                fab.startAnimation(rotate_backward);
+                fab1.startAnimation(fab_close);
+                fab2.startAnimation(fab_close);
+                fab3.startAnimation(fab_close);
+                fab4.startAnimation(fab_close);
+                fab5.startAnimation(fab_close);
+                fab1.setClickable(false);
+                fab2.setClickable(false);
+                fab3.setClickable(false);
+                fab4.setClickable(false);
+                fab5.setClickable(false);
+                isFabOpen = false;
+
+                Intent audioIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                audioUri = Uri.fromFile(new File("path/to/audio.mp3"));
+                audioIntent.setType("audio/mpeg");
+                startActivityForResult(audioIntent, AUDIO_REQUEST);
+            }
+        });
+
+        fab4 = (FloatingActionButton)findViewById(R.id.fab4);
+        fab4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                fab.startAnimation(rotate_backward);
+                fab1.startAnimation(fab_close);
+                fab2.startAnimation(fab_close);
+                fab3.startAnimation(fab_close);
+                fab4.startAnimation(fab_close);
+                fab5.startAnimation(fab_close);
+                fab1.setClickable(false);
+                fab2.setClickable(false);
+                fab3.setClickable(false);
+                fab4.setClickable(false);
+                fab5.setClickable(false);
+                isFabOpen = false;
+
+                Intent intent = new Intent();
+                intent.setType("video/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,"Select Video"),REQUEST_TAKE_GALLERY_VIDEO);
+            }
+        });
+
+        fab4 = (FloatingActionButton)findViewById(R.id.fab4);
+        fab5 = (FloatingActionButton)findViewById(R.id.fab5);
+
+        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
+        fab_close = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
+        rotate_forward = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_forward);
+        rotate_backward = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_backward);
 
         mStorage = FirebaseStorage.getInstance().getReference();
         mProgress = new ProgressDialog(this);
@@ -191,7 +309,7 @@ public class ChatroomActivity extends AppCompatActivity {
         // clear unread messages
         mDatabaseUnread.child(mPostKey).child(mAuth.getCurrentUser().getUid()).removeValue();
 
-        cameraBtn = (ImageView) findViewById(R.id.cameraBtn);
+       /* cameraBtn = (ImageView) findViewById(R.id.cameraBtn);
         cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -201,7 +319,7 @@ public class ChatroomActivity extends AppCompatActivity {
                 startActivity(cardonClick);
             }
         });
-
+*/
         mCommentList.setLayoutManager(new LinearLayoutManager(this));
         mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mDatabaseComment.keepSynced(true);
@@ -313,6 +431,16 @@ public class ChatroomActivity extends AppCompatActivity {
             }
         });
 
+        ImageView camera = (ImageView) findViewById(R.id.quickShot);
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cardonClick = new Intent(ChatroomActivity.this, SendCameraActivity.class);
+                cardonClick.putExtra("heartraise_id", mPostKey );
+                startActivity(cardonClick);
+            }
+        });
+
 
         mDatabaseUser2.child(mPostKey).child("location").addValueEventListener(new ValueEventListener() {
             @Override
@@ -399,6 +527,41 @@ public class ChatroomActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public void animateFAB(){
+
+        if(isFabOpen){
+
+            fab.startAnimation(rotate_backward);
+            fab1.startAnimation(fab_close);
+            fab2.startAnimation(fab_close);
+            fab3.startAnimation(fab_close);
+            fab4.startAnimation(fab_close);
+            fab5.startAnimation(fab_close);
+            fab1.setClickable(false);
+            fab2.setClickable(false);
+            fab3.setClickable(false);
+            fab4.setClickable(false);
+            fab5.setClickable(false);
+            isFabOpen = false;
+
+        } else {
+
+            fab.startAnimation(rotate_forward);
+            fab1.startAnimation(fab_open);
+            fab2.startAnimation(fab_open);
+            fab3.startAnimation(fab_open);
+            fab4.startAnimation(fab_open);
+            fab5.startAnimation(fab_open);
+            fab1.setClickable(true);
+            fab2.setClickable(true);
+            fab3.setClickable(true);
+            fab4.setClickable(true);
+            fab5.setClickable(true);
+            isFabOpen = true;
+
+        }
     }
 
     private void addToLastSeen() {
@@ -722,7 +885,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
         final Runnable input_finish_checker = new Runnable() {
             public void run() {
-                if (System.currentTimeMillis() > (last_text_edit[0] + delay - 500)) {
+                if (System.currentTimeMillis() > (last_text_edit[0])) {
                     // ............
                     // ............
 
@@ -764,6 +927,17 @@ public class ChatroomActivity extends AppCompatActivity {
                                                                 last_text_edit[0] = System.currentTimeMillis();
                                                                 handler.postDelayed(input_finish_checker, delay);
 
+                                                                // HIDE AUDIO BUTTON WHILE USER IS TYPING
+                                                                ImageView audio = (ImageView) findViewById(R.id.ic_audio);
+                                                                audio.setVisibility(View.GONE);
+
+                                                                ImageView camera = (ImageView) findViewById(R.id.quickShot);
+                                                                camera.setVisibility(View.GONE);
+
+                                                                ImageView sendy = (ImageView) findViewById(R.id.sendBtn);
+                                                                sendy.setVisibility(View.VISIBLE);
+
+
                                                             } else {
 
                                                                 Date date = new Date();
@@ -773,6 +947,16 @@ public class ChatroomActivity extends AppCompatActivity {
                                                                 mDatabaseTyping.child(mAuth.getCurrentUser().getUid()).removeValue();
                                                                 // show last seen
                                                                 mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).child("last_seen").setValue(stringDate);
+
+                                                                // SHOW AUDIO BUTTON WHILE USER IS TYPING
+                                                                ImageView audio = (ImageView) findViewById(R.id.ic_audio);
+                                                                audio.setVisibility(View.VISIBLE);
+
+                                                                ImageView camera = (ImageView) findViewById(R.id.quickShot);
+                                                                camera.setVisibility(View.VISIBLE);
+
+                                                                ImageView sendy = (ImageView) findViewById(R.id.sendBtn);
+                                                                sendy.setVisibility(View.GONE);
 
                                                             }
                                                         }

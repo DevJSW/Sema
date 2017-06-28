@@ -233,7 +233,7 @@ public class SendPhotoActivity extends AppCompatActivity {
     private void addPhoto() {
 
         Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-        galleryIntent.setType("image");
+        galleryIntent.setType("image/*");
         startActivityForResult(galleryIntent, GALLERY_REQUEST);
 
     }
