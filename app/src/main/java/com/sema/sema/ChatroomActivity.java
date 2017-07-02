@@ -81,6 +81,8 @@ import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconEditText;
 import hani.momanii.supernova_emoji_library.Helper.EmojiconTextView;
 
+import static com.sema.sema.R.id.container;
+
 public class ChatroomActivity extends AppCompatActivity {
 
     private static final String TAG = ChatroomActivity.class.getSimpleName();
@@ -92,7 +94,7 @@ public class ChatroomActivity extends AppCompatActivity {
     private RecyclerView mCommentList;
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabaseComment,  mDatabaseUsers, mDatabaseChatroom, mDatabaseUnread, mDatabaseNotification,  mDatabaseLastSeen, mDatabaseTyping, mDatabaseTick;
-    private DatabaseReference mDatabaseUser;
+    private DatabaseReference mDatabaseUser, mDatabaseLatestMessage;
     private DatabaseReference mDatabaseUser2;
     private DatabaseReference mDatabasePostChats;
     private Query mQueryPostChats;
@@ -293,6 +295,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
+        mDatabaseLatestMessage = FirebaseDatabase.getInstance().getReference().child("latest_messages");
         mDatabaseTyping = FirebaseDatabase.getInstance().getReference().child("Typing");
         mDatabaseLastSeen = FirebaseDatabase.getInstance().getReference().child("Last_Seen");
         mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
@@ -309,17 +312,6 @@ public class ChatroomActivity extends AppCompatActivity {
         // clear unread messages
         mDatabaseUnread.child(mPostKey).child(mAuth.getCurrentUser().getUid()).removeValue();
 
-       /* cameraBtn = (ImageView) findViewById(R.id.cameraBtn);
-        cameraBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent cardonClick = new Intent(ChatroomActivity.this, SendCameraActivity.class);
-                cardonClick.putExtra("heartraise_id", mPostKey );
-                startActivity(cardonClick);
-            }
-        });
-*/
         mCommentList.setLayoutManager(new LinearLayoutManager(this));
         mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mDatabaseComment.keepSynced(true);
@@ -328,6 +320,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mDatabaseUser.keepSynced(true);
         mDatabaseUnread.keepSynced(true);
         mDatabaseNotification.keepSynced(true);
+        mDatabaseLatestMessage.keepSynced(true);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(mPostKey).child(mAuth.getCurrentUser().getUid());
         mDatabaseLastSeen = FirebaseDatabase.getInstance().getReference().child("Last_Seen");
@@ -369,13 +362,13 @@ public class ChatroomActivity extends AppCompatActivity {
                 toolbar_username.setTypeface(custom_font);
 
 
-                mDatabaseLastSeen.child(mPostKey).addValueEventListener(new ValueEventListener() {
+                mDatabaseUser.child("last_seen").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         String date = (String) dataSnapshot.child("last_seen").getValue();
 
-                        RelativeTimeTextView toolbar_last_seen = (RelativeTimeTextView) findViewById(R.id.toolbar_last_seen_date);
-                        toolbar_last_seen.setReferenceTime((new Date().getTime()));
+                        TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
+                        toolbar_last_seen.setText(date);
                         toolbar_last_seen.setTypeface(custom_font);
 
                     }
@@ -446,13 +439,13 @@ public class ChatroomActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if (dataSnapshot.hasChild("city") || dataSnapshot.hasChild("address")) {
+                if (/*dataSnapshot.hasChild("city") ||*/ dataSnapshot.hasChild("address")) {
 
                     String txt_city = dataSnapshot.child("city").getValue().toString();
                     String txt_locality = dataSnapshot.child("address").getValue().toString();
 
-                    TextView city = (TextView) findViewById(R.id.post_city);
-                    city.setText(txt_city);
+                    /*TextView city = (TextView) findViewById(R.id.post_city);
+                    city.setText(txt_city);*/
 
                     TextView locality = (TextView) findViewById(R.id.post_locality);
                     locality.setText(txt_locality);
@@ -576,7 +569,7 @@ public class ChatroomActivity extends AppCompatActivity {
         // mProgress.setMessage("Posting...");
 
         Date date = new Date();
-        final String stringDate = DateFormat.getDateTimeInstance().format(date);
+        final String stringDate = DateFormat.getTimeInstance().format(date);
 
         final String message_val = emojiconEditText.getText().toString().trim();
         if (!TextUtils.isEmpty(message_val)) {
@@ -584,17 +577,16 @@ public class ChatroomActivity extends AppCompatActivity {
             //mProgress.show();
             //pushing chats into chat's tab
 
-            final DatabaseReference newPostTap = mDatabaseChatroom.child(mPostKey);
-            final DatabaseReference newPostTab2 = mDatabaseChatroom.child(mAuth.getCurrentUser().getUid());
+            final DatabaseReference newPostReceiverLatestMsg = mDatabaseLatestMessage.child(mPostKey).child(mAuth.getCurrentUser().getUid());
+            final DatabaseReference newPostSenderLatestMsg = mDatabaseLatestMessage.child(mAuth.getCurrentUser().getUid()).child(mPostKey);
 
             //my screen
             final DatabaseReference newPost = mDatabaseChatroom.child(mPostKey).child(mCurrentUser.getUid()).push();
             //reviever screen
             final DatabaseReference newPost3 = mDatabaseChatroom.child(mCurrentUser.getUid()).child(mPostKey).push();
 
-            final DatabaseReference newPost2 = mDatabaseChatroom.child(mPostKey);
 
-            //post message to unread child
+          /*  //post message to unread child
             final DatabaseReference newPost2Unread = mDatabaseUnread.child(mAuth.getCurrentUser().getUid()).child(mPostKey).push();
 
             final DatabaseReference newPostTick = mDatabaseTick.child(mAuth.getCurrentUser().getUid()).push();
@@ -603,7 +595,7 @@ public class ChatroomActivity extends AppCompatActivity {
             final DatabaseReference newPost2Notification = mDatabaseNotification.child(mPostKey).push();
 
             // post last active date to user data
-            final DatabaseReference newPost4 = mDatabaseUser;
+            final DatabaseReference newPost4 = mDatabaseUser;*/
 
 
 
@@ -615,7 +607,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
                     final String userimg = (String) dataSnapshot.child("image").getValue();
                     final String username = (String) dataSnapshot.child("name").getValue();
-
+                    final String reveiver_uid = (String) dataSnapshot.child("uid").getValue();
 
                     // getting user details
                     final String reciever_name = (String) dataSnapshot.child("name").getValue();
@@ -634,40 +626,24 @@ public class ChatroomActivity extends AppCompatActivity {
                             if (mProcessStopChat) {
 
                                 // reciever chat
-                                newPostTap.child("message").setValue(message_val);
-                                newPostTap.child("uid").setValue(mCurrentUser.getUid());
-                                newPostTap.child("name").setValue(username);
-                                newPostTap.child("image").setValue(userimg);
-                                newPostTap.child("sender_uid").setValue(mCurrentUser.getUid());
-                                newPostTap.child("date").setValue(dataSnapshot.child("date").getValue());
-                                newPostTap.child("post_key").setValue(mPostKey);
+                                newPostReceiverLatestMsg.child("message").setValue(message_val);
+                                newPostReceiverLatestMsg.child("uid").setValue(mCurrentUser.getUid());
+                                newPostReceiverLatestMsg.child("name").setValue(dataSnapshot.child("name").getValue());
+                                newPostReceiverLatestMsg.child("image").setValue(dataSnapshot.child("image").getValue());
+                                newPostReceiverLatestMsg.child("sender_uid").setValue(mCurrentUser.getUid());
+                                newPostReceiverLatestMsg.child("date").setValue(dataSnapshot.child("date").getValue());
+                                newPostReceiverLatestMsg.child("post_key").setValue(mPostKey);
 
 
-                                // unread MESSAGES
-                                newPost2Unread.child("message").setValue(message_val);
-                                newPost2Unread.child("name").setValue(dataSnapshot.child("name").getValue());
-                                newPost2Unread.child("image").setValue(dataSnapshot.child("name").getValue());
-                                newPost2Unread.child("date").setValue(dataSnapshot.child("date").getValue());
-                                newPost2Unread.child("sender_uid").setValue(mCurrentUser.getUid());
+                                newPostSenderLatestMsg.child("message").setValue(message_val);
+                                newPostSenderLatestMsg.child("uid").setValue(mCurrentUser.getUid());
+                                newPostSenderLatestMsg.child("name").setValue(username);
+                                newPostSenderLatestMsg.child("image").setValue(userimg);
+                                newPostSenderLatestMsg.child("sender_uid").setValue(mPostKey);
+                                newPostSenderLatestMsg.child("date").setValue(dataSnapshot.child("date").getValue());
+                                newPostSenderLatestMsg.child("post_key").setValue(mPostKey);
 
-
-                                // Notification message
-                                newPost2Notification.child("message").setValue(message_val);
-                                newPost2Notification.child("name").setValue(dataSnapshot.child("name").getValue());
-                                newPost2Notification.child("image").setValue(dataSnapshot.child("image").getValue());
-                                newPost2Notification.child("date").setValue(dataSnapshot.child("date").getValue());
-                                newPost2Notification.child("sender_uid").setValue(mCurrentUser.getUid());
-
-                                newPostTab2.child("message").setValue(message_val);
-                                newPostTab2.child("uid").setValue(mCurrentUser.getUid());
-                                newPostTab2.child("name").setValue(dataSnapshot.child("name").getValue());
-                                newPostTab2.child("image").setValue(dataSnapshot.child("image").getValue());
-                                newPostTab2.child("sender_uid").setValue(mPostKey);
-                                newPostTab2.child("date").setValue(dataSnapshot.child("date").getValue());
-                                newPostTab2.child("post_key").setValue(mPostKey);
-
-
-                                // reciever screen
+                                //sender  screen
                                 newPost.child("message").setValue(message_val);
                                 newPost.child("uid").setValue(mCurrentUser.getUid());
                                 newPost.child("name").setValue(dataSnapshot.child("name").getValue());
@@ -676,15 +652,14 @@ public class ChatroomActivity extends AppCompatActivity {
                                 newPost.child("date").setValue(stringDate);
                                 newPost.child("post_key").setValue(mPostKey);
 
-                                //update messege showing on tab1 chats activity
-                                newPost2.child("message").setValue(message_val);
-                                //newPost4.child("last_active_date").setValue(stringDate);
 
+                                // reciever screen
                                 newPost3.child("message").setValue(message_val);
                                 newPost3.child("uid").setValue(mCurrentUser.getUid());
                                 newPost3.child("name").setValue(dataSnapshot.child("name").getValue());
                                 newPost3.child("image").setValue(dataSnapshot.child("image").getValue());
-                                newPost3.child("sender_uid").setValue(mCurrentUser.getUid());
+                                newPost3.child("read").setValue(false);
+                                newPost3.child("receiver_uid").setValue(reveiver_uid);
                                 newPost3.child("date").setValue(stringDate);
                                 newPost3.child("post_key").setValue(mPostKey);
                                 newPost3.child("change_chat_icon").setValue(mPostKey);
@@ -801,31 +776,13 @@ public class ChatroomActivity extends AppCompatActivity {
 
                 viewHolder.setMessage(model.getMessage());
                 viewHolder.setDate(model.getDate());
+                viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
                // viewHolder.setName(model.getName());
                // viewHolder.setImage(getApplicationContext(), model.getImage());
 
 
                 // delete unread listener
                 mDatabaseChatroom.child(mPostKey).child(mAuth.getCurrentUser().getUid()).child(post_key).child("unread_listener").removeValue();
-
-
-                //DELETE UNREAD MESSAGES WHILE SCROLLING
-                mCommentList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                        super.onScrollStateChanged(recyclerView, newState);
-
-                        if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
-                            // Do something
-                            mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                        } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                            // Do something
-                            mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                        } else {
-                            // Do something
-                        }
-                    }
-                });
 
 
 
@@ -900,11 +857,6 @@ public class ChatroomActivity extends AppCompatActivity {
             }
         };
 
-        mDatabaseChatroom.child(mPostKey).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
 
                     //checking if a user is typing
                     EditText editText = (EditText) findViewById(R.id.emojicon_edit_text);
@@ -964,15 +916,6 @@ public class ChatroomActivity extends AppCompatActivity {
 
                     );
 
-                }
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
 
         // if recyclerview is at the bottom, clear any unread messages
@@ -1039,7 +982,6 @@ public class ChatroomActivity extends AppCompatActivity {
           //  groupIcon = (ImageView) mView.findViewById(R.id.group_icon);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
             rely = (RelativeLayout) mView.findViewById(R.id.rely);
-            mSingleTick = (ImageView)mView.findViewById(R.id.single_tick);
             mDoubleTick = (ImageView)mView.findViewById(R.id.double_tick);
             mAuth = FirebaseAuth.getInstance();
             mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
@@ -1182,7 +1124,6 @@ public class ChatroomActivity extends AppCompatActivity {
 
     private void sendAudio() {
         mProgress.setMessage("Loading audio, please wait...");
-        mProgress.setCancelable(false);
 
         Date date = new Date();
         final String stringDate = DateFormat.getDateTimeInstance().format(date);
@@ -1211,9 +1152,9 @@ public class ChatroomActivity extends AppCompatActivity {
             uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                    double progress = (100 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                    System.out.println("Uploading..., " + progress + "% done");
-                    mProgress.setMessage("Uploading..., " + progress + "% done");
+                    double progress = (10 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    System.out.println("Upload is " + progress + "% done");
+                    mProgress.setMessage("Upload is " + progress + "% done");
 
                 }
             }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
@@ -1228,11 +1169,13 @@ public class ChatroomActivity extends AppCompatActivity {
                 }
             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    // Handle successful uploads on complete
+                public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
+
                     Uri downloadUrl = taskSnapshot.getMetadata().getDownloadUrl();
 
-                    Toast.makeText(ChatroomActivity.this, "audio sent", Toast.LENGTH_LONG).show();
+                    //mDatabaseChatroom.child("test").child("audio_url").setValue(downloadUrl);
+
+                    Toast.makeText(ChatroomActivity.this, (CharSequence) downloadUrl, Toast.LENGTH_LONG).show();
                     mProgress.dismiss();
 
                 }

@@ -77,7 +77,7 @@ public class HashChatroomActivity extends AppCompatActivity {
     private RecyclerView mCommentList;
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabaseComment, mDatabaseChatroom, mDatabaseUnread, mDatabaseHashtag, mDatabaseLastSeen, mDatabaseViews;
-    private DatabaseReference mDatabaseUser;
+    private DatabaseReference mDatabaseUser, mDatabaseJoinedHashtag;
     private DatabaseReference mDatabaseUser2;
     private DatabaseReference mDatabasePostChats;
     private Query mQueryPostChats;
@@ -276,8 +276,9 @@ public class HashChatroomActivity extends AppCompatActivity {
         mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
+        mDatabaseJoinedHashtag = FirebaseDatabase.getInstance().getReference().child("joined_hashtags");
         mDatabaseLastSeen = FirebaseDatabase.getInstance().getReference().child("Last_Seen");
-        mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
+        mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("all_hashtags");
         mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
         mDatabaseViews = FirebaseDatabase.getInstance().getReference().child("hash_views");
         mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
@@ -302,6 +303,7 @@ public class HashChatroomActivity extends AppCompatActivity {
         mDatabaseUnread.keepSynced(true);
         mDatabaseLike.keepSynced(true);
         mDatabaseViews.keepSynced(true);
+        mDatabaseJoinedHashtag.keepSynced(true);
 
         mDatabase = FirebaseDatabase.getInstance().getReference().child("Hashtag").child(mPostKey).child("Chats");
         mDatabase.keepSynced(true);
@@ -523,14 +525,6 @@ public class HashChatroomActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
-
-                            mProcessStopChat = true;
-
-
-
-                                // unread
-                                newPost2Unread.child("message").setValue(message_val);
-
                                 // reciever chat
                                 newPost.child("message").setValue(message_val);
                                 newPost.child("uid").setValue(mCurrentUser.getUid());
@@ -540,21 +534,20 @@ public class HashChatroomActivity extends AppCompatActivity {
                                 newPost.child("date").setValue(stringDate);
                                 newPost.child("post_key").setValue(mPostKey);
                                 newPost.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
-                                // if address and city == null
-                                if (dataSnapshot.child("location").hasChild("city") || dataSnapshot.child("location").hasChild("address")) {
 
-                                    final String current_city = (String) dataSnapshot.child("location").child("city").getValue();
+                            // if address and city == null
+                                if (/*dataSnapshot.child("location").hasChild("city") ||*/ dataSnapshot.child("location").hasChild("address")) {
+
+                                   /* final String current_city = (String) dataSnapshot.child("location").child("city").getValue();*/
                                     final String current_locality = (String) dataSnapshot.child("location").child("address").getValue();
 
-                                    newPost.child("city").setValue(current_city);
+                                   /* newPost.child("city").setValue(current_city);*/
                                     newPost.child("address").setValue(current_locality);
                                 } else {}
 
+
                                 newPost.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
 
-                                //update messege showing on tab1 chats activity
-                                newPost2.child("message").setValue(message_val);
-                                newPost2.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
 
                             // send number of comments to current post
                             mDatabaseHashtag.child(mPostKey).child("trends").setValue(dataSnapshot.getChildrenCount() );
@@ -563,8 +556,33 @@ public class HashChatroomActivity extends AppCompatActivity {
                                 EditText edit = (EditText) findViewById(R.id.emojicon_edit_text);
                                 edit.setText(null);
 
-                                mProcessStopChat = false;
+                            // adding my user uid to hashtag chatroom
+                            final DatabaseReference newPost2 = mDatabaseJoinedHashtag.child(mAuth.getCurrentUser().getUid()).child(mPostKey);
 
+                            mDatabaseHashtag.child(mPostKey).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    String hashtag_name = (String) dataSnapshot.child("hashtag").getValue();
+                                    String hashtag_image = (String) dataSnapshot.child("image").getValue();
+                                    String hashtag_date = (String) dataSnapshot.child("date").getValue();
+                                    String creator_name = (String) dataSnapshot.child("name").getValue();
+                                    String creator_uid = (String) dataSnapshot.child("uid").getValue();
+
+                                    newPost2.child("hashtag").setValue(hashtag_name);
+                                    newPost2.child("image").setValue(hashtag_image);
+                                    newPost2.child("date").setValue(hashtag_date);
+                                    newPost2.child("name").setValue(creator_name);
+                                    newPost2.child("uid").setValue(creator_uid);
+                                    newPost2.child("post_key").setValue(mPostKey);
+                                    newPost2.child("message").setValue(message_val);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
 
                         }
 
@@ -609,11 +627,10 @@ public class HashChatroomActivity extends AppCompatActivity {
                 viewHolder.setMessage(model.getMessage());
                 viewHolder.setDate(model.getDate());
                 viewHolder.setName(model.getName());
-                viewHolder.setCity(model.getCity());
+                /*viewHolder.setCity(model.getCity());*/
                 viewHolder.setAddress(model.getAddress());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
                 viewHolder.setLikeBtn(post_key);
-
 
 
                 mDatabaseLike.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -693,24 +710,6 @@ public class HashChatroomActivity extends AppCompatActivity {
                     }
                 });
 
-
-                //DELETE UNREAD MESSAGES WHILE SCROLLING
-                mCommentList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                    @Override
-                    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                        super.onScrollStateChanged(recyclerView, newState);
-
-                        if (newState == AbsListView.OnScrollListener.SCROLL_STATE_FLING) {
-                            // Do something
-                            mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                        } else if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
-                            // Do something
-                            mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
-                        } else {
-                            // Do something
-                        }
-                    }
-                });
 
                 mDatabaseComment.child(post_key).addValueEventListener(new ValueEventListener() {
                     @Override
@@ -1084,14 +1083,14 @@ public class HashChatroomActivity extends AppCompatActivity {
 
         }
 
-        public void setCity(String city) {
+       /* public void setCity(String city) {
 
             TextView post_city = (TextView) mView.findViewById(R.id.post_city);
             post_city.setText(city);
 
 
         }
-
+*/
 
         public void setDate(String date) {
 

@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private DatabaseReference mDatabaseUsers, mDatabaseHashtag, mDatabaseNotification, mDatabaseLastSeen, mDatabaseIncomingNotification, mDatabaseVibrate;
+    private DatabaseReference mDatabaseUsersOnline, mDatabaseJoinedHashtag;
     private FirebaseAuth auth;
     private FloatingActionButton fabHash, fabPerson;
     private FirebaseAuth mAuth;
@@ -135,7 +136,7 @@ public class MainActivity extends AppCompatActivity {
                             final DatabaseReference newPost = mDatabaseHashtag.push();
 
                             // adding my user uid to hashtag chatroom
-                            final DatabaseReference newPost2 = mDatabaseHashtag.child("hashtag_chatroom").child(auth.getCurrentUser().getUid());
+                            final DatabaseReference newPost2 = mDatabaseJoinedHashtag.child(auth.getCurrentUser().getUid()).child(newPost.getKey());
 
                             mDatabaseUsers.child(auth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
                                 @Override
@@ -146,11 +147,17 @@ public class MainActivity extends AppCompatActivity {
                                     newPost.child("uid").setValue(dataSnapshot.child("uid").getValue());
                                     newPost.child("name").setValue(dataSnapshot.child("name").getValue());
                                     newPost.child("image").setValue(dataSnapshot.child("image").getValue());
+                                    newPost.child("post_key").setValue(newPost.getKey());
                                     newPost.child("date").setValue(stringDate2);
-                                    newPost.child(auth.getCurrentUser().getUid()).setValue(auth.getCurrentUser().getUid());
+                                    newPost.child("members").setValue(1);
 
-                                    //newPost2.child(auth.getCurrentUser().getUid()).child("uid").setValue(dataSnapshot.getValue());
-
+                                    // ADD HASHTAG TO USER JOINED HASHTAG
+                                    newPost2.child("hashtag").setValue(hashTag);
+                                    newPost2.child("uid").setValue(dataSnapshot.child("uid").getValue());
+                                    newPost2.child("name").setValue(dataSnapshot.child("name").getValue());
+                                    newPost2.child("image").setValue(dataSnapshot.child("image").getValue());
+                                    newPost2.child("post_key").setValue(newPost.getKey());
+                                    newPost2.child("date").setValue(stringDate2);
 
                                 }
 
@@ -189,11 +196,14 @@ public class MainActivity extends AppCompatActivity {
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mDatabaseNotification = FirebaseDatabase.getInstance().getReference().child("Notifications");
+        mDatabaseJoinedHashtag = FirebaseDatabase.getInstance().getReference().child("joined_hashtags");
         mDatabaseIncomingNotification = FirebaseDatabase.getInstance().getReference().child("IncomingNotification");
         mDatabaseVibrate = FirebaseDatabase.getInstance().getReference().child("IncomingVibrate");
         mDatabaseLastSeen = FirebaseDatabase.getInstance().getReference().child("Last_Seen");
         mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
         mDatabaseNotification.keepSynced(true);
+        mDatabaseJoinedHashtag.keepSynced(true);
+        mDatabaseHashtag.keepSynced(true);
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
@@ -291,19 +301,39 @@ public class MainActivity extends AppCompatActivity {
         checkForNotifications();
         addToLastSeen();
 
+     /*   checkConnection();*/
+
     }
 
+   /* private void checkConnection() {
 
+        boolean isConnected = ConnectivityReceiver.isConnected();
+        if (isConnected) {
 
+            mDatabaseUsersOnline = FirebaseDatabase.getInstance().getReference().child("users_online");
+            mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).setValue("isOnline");
 
+        } else {
 
+            long date = new Date().getTime();
+
+            DatabaseReference mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users");
+            mDatabaseUsersOnline = FirebaseDatabase.getInstance().getReference().child("users_online");
+            mAuth = FirebaseAuth.getInstance();
+            mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).removeValue();
+            mDatabaseUser.child(mAuth.getCurrentUser().getUid()).child("last_seen").setValue(date);
+
+        }
+    }
+*/
 
     private void addToLastSeen() {
 
-        Date date = new Date();
+        long date = new Date().getTime();
         final String stringDate = DateFormat.getDateTimeInstance().format(date);
 
-        mDatabaseLastSeen.child(auth.getCurrentUser().getUid()).child("last_seen").setValue(stringDate);
+
+        mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("last_seen").setValue(stringDate);
     }
 
     private void checkForNotifications() {

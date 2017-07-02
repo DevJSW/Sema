@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:emojicon="http://schemas.android.com/apk/res-auto"
     android:id="@+id/root_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/ic_wallpaper"
+    android:background="@drawable/sema_wallpaper"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.sema.sema.ChatroomActivity">
@@ -14,178 +14,175 @@
         layout="@layout/toolbar_chatroom"
         android:id="@+id/mCustomToolbarChat"/>
 
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/mCustomToolbarChat">
-
-        <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:id="@+id/comment_list"
-            android:layout_marginBottom="55dp">
-
-        </android.support.v7.widget.RecyclerView>
-
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:id="@+id/typing_bar"
-            android:layout_alignParentBottom="true"
-            android:background="#fff">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mCustomToolbarChat">
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginLeft="12dp"
-                android:id="@+id/emoji_btn"
-                android:layout_centerVertical="true"
-                android:scaleType="fitXY"
-                android:src="@drawable/ic_smiley"/>
-
-            <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
-                android:id="@+id/emojicon_edit_text"
+            <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="43dp"
-                android:layout_toEndOf="@+id/emoji_btn"
-                android:layout_marginBottom="3dp"
-                android:layout_toStartOf="@+id/ic_audio"
-                android:background="#00ffffff"
-                android:hint="Message"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="5dp"
-                android:padding="5dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:id="@+id/comment_list"
+                android:layout_marginBottom="55dp">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal"
+                android:id="@+id/typing_bar"
                 android:layout_alignParentBottom="true"
-                android:layout_toRightOf="@id/emoji_btn"
-                emojicon:emojiconSize="28sp" />
+                android:background="#fff">
 
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:id="@+id/ic_audio"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/quickShot"
-                android:layout_marginRight="20dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_record"/>
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginLeft="12dp"
+                    android:id="@+id/emoji_btn"
+                    android:layout_centerVertical="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/ic_smiley"/>
 
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="26dp"
-                android:id="@+id/quickShot"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/sendBtn"
-                android:layout_marginRight="18dp"
+                <hani.momanii.supernova_emoji_library.Helper.EmojiconEditText
+                    android:id="@+id/emojicon_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:layout_toEndOf="@+id/emoji_btn"
+                    android:layout_marginBottom="3dp"
+                    android:layout_toStartOf="@+id/ic_audio"
+                    android:background="#00ffffff"
+                    android:hint="Message"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="5dp"
+                    android:padding="5dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_toRightOf="@id/emoji_btn"
+                    emojicon:emojiconSize="28sp" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:id="@+id/ic_audio"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/quickShot"
+                    android:layout_marginRight="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/gamepad"/>
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:id="@+id/quickShot"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/sendBtn"
+                    android:layout_marginRight="18dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_takeshot_"/>
+
+
+                <ImageView
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/sendBtn"
+                    android:visibility="gone"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="18dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_sendy_"/>
+
+            </RelativeLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="370dp"
+                android:layout_gravity="bottom|end"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:visibility="invisible"
+                app:backgroundTint="#cc173b"
+                android:layout_above="@+id/typing_bar"
                 android:layout_alignParentRight="true"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_takeshot"/>
+                app:elevation="6dp"
+                app:pressedTranslationZ="12dp"
+                android:src="@drawable/ic_videogame" />
 
-
-            <ImageView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:layout_centerVertical="true"
-                android:id="@+id/sendBtn"
-                android:visibility="gone"
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="300dp"
+                android:layout_gravity="bottom|end"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:visibility="invisible"
+                app:backgroundTint="#17ccab"
+                android:layout_above="@+id/typing_bar"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/ic_sendy_"/>
+                app:elevation="6dp"
+                app:pressedTranslationZ="12dp"
+                android:src="@drawable/ic_videocam_" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="230dp"
+                android:layout_gravity="bottom|end"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:visibility="invisible"
+                app:backgroundTint="#cc7b17"
+                android:layout_above="@+id/typing_bar"
+                android:layout_alignParentRight="true"
+                app:elevation="6dp"
+                app:pressedTranslationZ="12dp"
+                android:src="@drawable/ic_audiotrack_" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="160dp"
+                android:layout_gravity="bottom|end"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:visibility="invisible"
+                app:backgroundTint="@color/colorFAB2"
+                android:layout_above="@+id/typing_bar"
+                android:layout_alignParentRight="true"
+                app:elevation="6dp"
+                app:pressedTranslationZ="12dp"
+                android:src="@drawable/ic_insert_photo" />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="90dp"
+                android:layout_gravity="bottom|end"
+                android:layout_marginRight="@dimen/fab_margin"
+                android:visibility="invisible"
+                app:elevation="6dp"
+                app:backgroundTint="@color/colorFAB1"
+                android:layout_above="@+id/typing_bar"
+                android:layout_alignParentRight="true"
+                app:pressedTranslationZ="12dp"
+                android:src="@drawable/ic_camera_black" />
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                app:elevation="6dp"
+                app:backgroundTint="#FFF"
+                app:pressedTranslationZ="12dp"
+                android:layout_alignParentRight="true"
+                android:layout_above="@+id/typing_bar"
+                android:layout_margin="@dimen/fab_margin"
+                android:src="@drawable/ic_add_black_" />
+
 
         </RelativeLayout>
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="370dp"
-            android:layout_gravity="bottom|end"
-            android:layout_marginRight="@dimen/fab_margin"
-            android:visibility="invisible"
-            app:backgroundTint="#cc173b"
-            android:layout_above="@+id/typing_bar"
-            android:layout_alignParentRight="true"
-            app:elevation="6dp"
-            app:pressedTranslationZ="12dp"
-            android:src="@drawable/ic_videogame" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="300dp"
-            android:layout_gravity="bottom|end"
-            android:layout_marginRight="@dimen/fab_margin"
-            android:visibility="invisible"
-            app:backgroundTint="#17ccab"
-            android:layout_above="@+id/typing_bar"
-            android:layout_alignParentRight="true"
-            app:elevation="6dp"
-            app:pressedTranslationZ="12dp"
-            android:src="@drawable/ic_videocam_" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="230dp"
-            android:layout_gravity="bottom|end"
-            android:layout_marginRight="@dimen/fab_margin"
-            android:visibility="invisible"
-            app:backgroundTint="#cc7b17"
-            android:layout_above="@+id/typing_bar"
-            android:layout_alignParentRight="true"
-            app:elevation="6dp"
-            app:pressedTranslationZ="12dp"
-            android:src="@drawable/ic_audiotrack_" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="160dp"
-            android:layout_gravity="bottom|end"
-            android:layout_marginRight="@dimen/fab_margin"
-            android:visibility="invisible"
-            app:backgroundTint="@color/colorFAB2"
-            android:layout_above="@+id/typing_bar"
-            android:layout_alignParentRight="true"
-            app:elevation="6dp"
-            app:pressedTranslationZ="12dp"
-            android:src="@drawable/ic_insert_photo" />
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="90dp"
-            android:layout_gravity="bottom|end"
-            android:layout_marginRight="@dimen/fab_margin"
-            android:visibility="invisible"
-            app:elevation="6dp"
-            app:backgroundTint="@color/colorFAB1"
-            android:layout_above="@+id/typing_bar"
-            android:layout_alignParentRight="true"
-            app:pressedTranslationZ="12dp"
-            android:src="@drawable/ic_camera_black" />
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            app:elevation="6dp"
-            app:backgroundTint="#FFF"
-            app:pressedTranslationZ="12dp"
-            android:layout_alignParentRight="true"
-            android:layout_above="@+id/typing_bar"
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_add_black_" />
-
-
-    </RelativeLayout>
-
-
-</RelativeLayout>
+</LinearLayout>

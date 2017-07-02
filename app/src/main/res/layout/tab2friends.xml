@@ -37,7 +37,7 @@
         android:id="@+id/noPostChat"
         android:layout_above="@+id/noPostTxt"
         android:visibility="gone"
-        android:src="@drawable/no_chats"/>
+        android:src="@drawable/no_chat"/>
     <com.sema.sema.CustonFont
         android:layout_width="250dp"
         android:layout_height="wrap_content"

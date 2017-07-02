@@ -54,7 +54,7 @@ public class TrendsActivity extends AppCompatActivity {
         });
 
         mAuth = FirebaseAuth.getInstance();
-        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Hashtag");
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("all_hashtags");
         mDatabaseViews = FirebaseDatabase.getInstance().getReference().child("hash_views");
         mQueryMembers = mDatabaseUsers.orderByChild("hashtag").startAt(mPostKey);
         mQueryTrends = mDatabaseUsers.orderByChild("trends").limitToLast(10);

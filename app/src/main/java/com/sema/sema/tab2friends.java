@@ -48,7 +48,7 @@ public class tab2friends extends Fragment {
     private ImageView mNoPostImg;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private DatabaseReference mDatabaseUsers, mDatabaseBlockThisUser, mDatabaseUnread,  mDatabaseNotification;
-    private DatabaseReference mDatabaseChatroom, mDatabaseChatroomsShot;
+    private DatabaseReference mDatabaseChatroom, mDatabaseChatroomsShot, mDatabaseLatestMessage;
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
     private Query mQueryPostChats;
@@ -80,6 +80,7 @@ public class tab2friends extends Fragment {
 
 
         mDatabaseBlockThisUser = FirebaseDatabase.getInstance().getReference().child("BlockThisUser");
+        mDatabaseLatestMessage = FirebaseDatabase.getInstance().getReference().child("latest_messages");
         mDatabaseNotification = FirebaseDatabase.getInstance().getReference().child("Notifications");
         mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
         mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
@@ -89,7 +90,7 @@ public class tab2friends extends Fragment {
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar2);
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        mQueryPostChats = mDatabaseChatroom.orderByChild("sender_uid").equalTo(mAuth.getCurrentUser().getUid());
+        mQueryPostChats = mDatabaseLatestMessage.orderByChild("sender_uid").equalTo(mAuth.getCurrentUser().getUid());
         mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMembersList.setHasFixedSize(true);
@@ -99,8 +100,9 @@ public class tab2friends extends Fragment {
         mDatabaseUnread.keepSynced(true);
         mDatabaseNotification.keepSynced(true);
         mQueryPostChats.keepSynced(true);
+        mDatabaseLatestMessage.keepSynced(true);
 
-        mQueryPostChats.addValueEventListener(new ValueEventListener() {
+        mDatabaseLatestMessage.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() == null){
@@ -134,7 +136,7 @@ public class tab2friends extends Fragment {
                 People.class,
                 R.layout.member3_row,
                 LetterViewHolder.class,
-                mQueryPostChats
+                mDatabaseLatestMessage.child(mAuth.getCurrentUser().getUid())
 
 
         ) {

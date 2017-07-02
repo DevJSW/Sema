@@ -48,7 +48,7 @@ public class tab1hashtag extends Fragment {
     private ImageView mNoPostImg;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private DatabaseReference mDatabaseUsers, mDatabaseBlockThisUser, mDatabaseUnread, mDatabaseNotification, mDatabaseViews;
-    private DatabaseReference mDatabaseChatroom, mDatabaseHashtag, mDatabase;
+    private DatabaseReference mDatabaseChatroom, mDatabaseHashtag, mDatabase,  mDatabaseJoinedHashtag;
     private FirebaseAuth mAuth;
     private RecyclerView mMembersList;
     private Query mQueryPostChats;
@@ -77,11 +77,12 @@ public class tab1hashtag extends Fragment {
 
         mStartBtn = (Button) v.findViewById(R.id.startChat);
         mViewPager = (ViewPager) v.findViewById(R.id.container);
-
+        mAuth = FirebaseAuth.getInstance();
         mDatabaseBlockThisUser = FirebaseDatabase.getInstance().getReference().child("BlockThisUser");
         mDatabaseNotification = FirebaseDatabase.getInstance().getReference().child("Notifications");
+        mDatabaseJoinedHashtag = FirebaseDatabase.getInstance().getReference().child("joined_hashtags").child(mAuth.getCurrentUser().getUid());
         mDatabaseViews = FirebaseDatabase.getInstance().getReference().child("hash_views");
-        mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
+        mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("all_hashtags");
         mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
         mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
        // mQueryParticipants =mDatabaseChatroom.orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
@@ -89,7 +90,6 @@ public class tab1hashtag extends Fragment {
         mNoPostTxt = (TextView) v.findViewById(R.id.noPostTxt);
         mDatabaseChatroom = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar2);
-        mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mQueryPostChats = mDatabaseHashtag.orderByChild(mAuth.getCurrentUser().getUid()).equalTo(mAuth.getCurrentUser().getUid());
         mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
@@ -102,6 +102,7 @@ public class tab1hashtag extends Fragment {
         mDatabaseHashtag.keepSynced(true);
         mDatabaseNotification.keepSynced(true);
         mQueryPostChats.keepSynced(true);
+        mDatabaseJoinedHashtag.keepSynced(true);
 
         mQueryPostChats.addValueEventListener(new ValueEventListener() {
             @Override
@@ -137,7 +138,7 @@ public class tab1hashtag extends Fragment {
                 People.class,
                 R.layout.hashtag_row,
                 LetterViewHolder.class,
-                mQueryPostChats
+                mDatabaseJoinedHashtag
 
 
         ) {

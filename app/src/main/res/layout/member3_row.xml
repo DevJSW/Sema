@@ -15,7 +15,6 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
             android:id="@+id/rely_img"
             android:orientation="vertical">
 
@@ -50,7 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/post_name2"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/rely_img"
             android:orientation="horizontal">
 
@@ -96,7 +95,7 @@
                 android:visibility="gone"
                 android:id="@+id/counter"
                 android:layout_marginTop="1dp"
-                android:background="@drawable/green_counter"
+                android:background="@drawable/card"
                 android:layout_marginRight="10dp">
 
                 <com.sema.sema.CustonFont
@@ -130,7 +129,6 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_toRightOf="@+id/rely_img"
-            android:layout_marginTop="5dp"
             android:layout_below="@+id/rely_img"
             android:layout_marginRight="10dp"
             android:background="#cecccc"/>

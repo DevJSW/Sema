@@ -68,19 +68,14 @@
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_location_white"/>
 
-            <com.sema.sema.CustonFont
+            <!--<com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
                 android:layout_marginLeft="1dp"
                 android:text="city"
-                android:id="@+id/post_city"/>
+                android:id="@+id/post_city"/>-->
 
-            <com.sema.sema.CustonFont
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="11dp"
-                android:text=", "/>
 
             <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
