@@ -45,7 +45,7 @@ public class SendPhotoActivity extends AppCompatActivity {
     private RecyclerView mCommentList;
     private DatabaseReference mDatabase;
     private DatabaseReference mDatabasePostUser;
-    private DatabaseReference mDatabaseComment;
+    private DatabaseReference mDatabaseComment, mDatabaseLatestMessage;
     private DatabaseReference mDatabaseUser;
     private DatabaseReference mDatabasePostComments;
     private Query mQueryPostComment;
@@ -83,6 +83,7 @@ public class SendPhotoActivity extends AppCompatActivity {
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
         mDatabasePostComments = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
+        mDatabaseLatestMessage = FirebaseDatabase.getInstance().getReference().child("latest_messages");
         mQueryPostComment = mDatabasePostComments.orderByChild("post_key").equalTo(mPostKey);
 
         mCurrentUser = mAuth.getCurrentUser();
@@ -137,8 +138,8 @@ public class SendPhotoActivity extends AppCompatActivity {
 
                     final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
-                    final DatabaseReference newPostTap = mDatabaseComment.child(mPostKey);
-                    final DatabaseReference newPostTab2 = mDatabaseComment.child(mAuth.getCurrentUser().getUid());
+                    final DatabaseReference newPostReceiverLatestMsg = mDatabaseLatestMessage.child(mPostKey).child(mAuth.getCurrentUser().getUid());
+                    final DatabaseReference newPostSenderLatestMsg = mDatabaseLatestMessage.child(mAuth.getCurrentUser().getUid()).child(mPostKey);
 
                     final DatabaseReference newPost = mDatabaseComment.child(mPostKey).child(mCurrentUser.getUid()).push();
                     final DatabaseReference newPost2 =mDatabaseComment.child(mCurrentUser.getUid()).child(mPostKey).push();
@@ -160,25 +161,24 @@ public class SendPhotoActivity extends AppCompatActivity {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
 
                                     // reciever chat
-                                    newPostTap.child("message").setValue("Photo: " + caption_val);
-                                    newPostTap.child("uid").setValue(mCurrentUser.getUid());
-                                    newPostTap.child("name").setValue(reciever_name);
-                                    newPostTap.child("image").setValue(reciever_image);
-                                    newPostTap.child("sender_uid").setValue(mCurrentUser.getUid());
-                                    newPostTap.child("date").setValue(stringDate);
-                                    newPostTap.child("post_key").setValue(mPostKey);
+                                    newPostReceiverLatestMsg.child("message").setValue(caption_val);
+                                    newPostReceiverLatestMsg.child("uid").setValue(mCurrentUser.getUid());
+                                    newPostReceiverLatestMsg.child("photo").setValue(downloadUrl.toString());
+                                    newPostReceiverLatestMsg.child("name").setValue(dataSnapshot.child("name").getValue());
+                                    newPostReceiverLatestMsg.child("image").setValue(dataSnapshot.child("image").getValue());
+                                    newPostReceiverLatestMsg.child("sender_uid").setValue(mCurrentUser.getUid());
+                                    newPostReceiverLatestMsg.child("date").setValue(dataSnapshot.child("date").getValue());
+                                    newPostReceiverLatestMsg.child("post_key").setValue(mPostKey);
 
-                                    // unread
-                                    // newPost2Unread.child("message").setValue(message_val);
 
-                                    newPostTab2.child("message").setValue("Photo: " + caption_val);
-                                    newPostTab2.child("uid").setValue(mCurrentUser.getUid());
-                                    newPostTab2.child("name").setValue(dataSnapshot.child("name").getValue());
-                                    newPostTab2.child("image").setValue(dataSnapshot.child("image").getValue());
-                                    newPostTab2.child("sender_uid").setValue(mPostKey);
-                                    newPostTab2.child("date").setValue(stringDate);
-                                    newPostTab2.child("post_key").setValue(mPostKey);
-
+                                    newPostSenderLatestMsg.child("message").setValue(caption_val);
+                                    newPostSenderLatestMsg.child("photo").setValue(downloadUrl.toString());
+                                    newPostSenderLatestMsg.child("uid").setValue(mCurrentUser.getUid());
+                                    newPostSenderLatestMsg.child("name").setValue(reciever_name);
+                                    newPostSenderLatestMsg.child("image").setValue(reciever_image);
+                                    newPostSenderLatestMsg.child("sender_uid").setValue(mPostKey);
+                                    newPostSenderLatestMsg.child("date").setValue(dataSnapshot.child("date").getValue());
+                                    newPostSenderLatestMsg.child("post_key").setValue(mPostKey);
 
                                     newPost.child("message").setValue(caption_val);
                                     newPost.child("photo").setValue(downloadUrl.toString());

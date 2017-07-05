@@ -15,7 +15,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import static com.facebook.login.widget.ProfilePictureView.TAG;
+/*import static com.facebook.login.widget.ProfilePictureView.TAG;*/
 
 /**
  * Created by shephard on 6/27/17.
@@ -102,7 +102,7 @@ public class BaseActivity extends AppCompatActivity {
         onlineRef = onlinePresenceReference.child(".info/connected");
         currentUserRef = onlinePresenceReference.child("/users_online/" + getUid());
 
-        onlineRef.addValueEventListener(new ValueEventListener() {
+       /* onlineRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 Log.d(TAG, "onDataChange:" + dataSnapshot);
@@ -116,7 +116,7 @@ public class BaseActivity extends AppCompatActivity {
             public void onCancelled(final DatabaseError databaseError) {
                 Log.d(TAG, "onCancelled:" + databaseError);
             }
-        });
+        });*/
 
         /*final DatabaseReference onlineViewersCountRef = onlinePresenceReference.child("/presence");
         onlineViewersCountRef.addValueEventListener(new ValueEventListener() {

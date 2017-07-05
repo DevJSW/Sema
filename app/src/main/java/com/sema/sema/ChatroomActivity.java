@@ -102,7 +102,7 @@ public class ChatroomActivity extends AppCompatActivity {
     private FirebaseUser mCurrentUser;
     private StorageReference mStorage;
     private FirebaseAuth mAuth;
-    private ImageView mSendBtn;
+    private ImageView mSendBtn, mGame;
     private EditText mCommentField;
     private Uri audioUri = null;
     private Uri videoUri = null;
@@ -434,6 +434,15 @@ public class ChatroomActivity extends AppCompatActivity {
             }
         });
 
+        ImageView gameBtn = (ImageView) findViewById(R.id.ic_game);
+        gameBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cardonClick = new Intent(ChatroomActivity.this, GameStudioActivity.class);
+                cardonClick.putExtra("heartraise_id", mPostKey );
+                startActivity(cardonClick);
+            }
+        });
 
         mDatabaseUser2.child(mPostKey).child("location").addValueEventListener(new ValueEventListener() {
             @Override

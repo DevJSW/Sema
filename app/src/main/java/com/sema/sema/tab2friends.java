@@ -134,7 +134,7 @@ public class tab2friends extends Fragment {
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
 
                 People.class,
-                R.layout.member3_row,
+                R.layout.member_item,
                 LetterViewHolder.class,
                 mDatabaseLatestMessage.child(mAuth.getCurrentUser().getUid())
 

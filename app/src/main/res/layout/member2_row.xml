@@ -36,7 +36,7 @@
                 android:id="@+id/post_name"
                 android:layout_marginTop="15dp"
                 android:layout_toRightOf="@+id/rely_img"
-                android:textSize="14dp"
+                android:textSize="13dp"
                 android:scaleType="fitXY"
                 android:textStyle="bold"
                 android:text="username"/>
@@ -44,7 +44,7 @@
             <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="14dp"
+                android:textSize="13dp"
                 android:layout_marginTop="3dp"
                 android:layout_marginRight="10dp"
                 android:layout_toRightOf="@+id/rely_img"
@@ -95,9 +95,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_toRightOf="@+id/rely_img"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="5dp"
             android:layout_below="@+id/liny_loc"
-            android:layout_marginRight="10dp"
             android:background="#cecccc"/>
 
 

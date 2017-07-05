@@ -74,7 +74,7 @@ public class HashSendPhotoActivity extends AppCompatActivity {
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
         mDatabasePostComments = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
-        mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
+        mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("all_hashtags");
         mQueryPostComment = mDatabasePostComments.orderByChild("post_key").equalTo(mPostKey);
 
         mCurrentUser = mAuth.getCurrentUser();
@@ -129,7 +129,6 @@ public class HashSendPhotoActivity extends AppCompatActivity {
                     final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
                     final DatabaseReference newPost = mDatabaseHashtag.child(mPostKey).child("Chats").push();
-                    //final DatabaseReference newPost = mDatabaseHashtag.child(mPostKey);
 
                     mDatabasePostUser.child(mPostKey).addValueEventListener(new ValueEventListener() {
                         @Override
@@ -148,7 +147,7 @@ public class HashSendPhotoActivity extends AppCompatActivity {
                                 public void onDataChange(DataSnapshot dataSnapshot) {
 
 
-                                    newPost.child("message").setValue(caption_val);
+                                    newPost.child("message").setValue("Photo" +caption_val);
                                     newPost.child("photo").setValue(downloadUrl.toString());
                                     newPost.child("uid").setValue(mCurrentUser.getUid());
                                     newPost.child("name").setValue(dataSnapshot.child("name").getValue());

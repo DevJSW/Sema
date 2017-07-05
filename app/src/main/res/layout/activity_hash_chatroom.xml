@@ -63,8 +63,8 @@
                 emojicon:emojiconSize="28sp" />
 
             <ImageView
-                android:layout_width="23dp"
-                android:layout_height="23dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:id="@+id/ic_audio"
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/quickShot"

@@ -53,55 +53,17 @@
             android:layout_margin="9dp"
             android:text="date"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@+id/rely_img"
-            android:layout_marginTop="15dp"
-            android:id="@+id/hash_liny"
-            android:orientation="horizontal">
-
-            <com.sema.sema.CustonFont
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12dp"
-                android:text="#"/>
-
-            <com.sema.sema.CustonFont
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/post_hashtag"
-                android:layout_toRightOf="@+id/rely_img"
-                android:textSize="13dp"
-                android:scaleType="fitXY"
-                android:textStyle="bold"
-                android:text="hashtag"/>
-        </LinearLayout>
-
-        <com.sema.sema.CustonFont
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/post_nam"
-            android:layout_below="@+id/hash_liny"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="2dp"
-            android:textColor="@color/colorPrimary"
-            android:layout_toRightOf="@+id/rely_img"
-            android:textSize="10dp"
-            android:scaleType="fitXY"
-            android:textStyle="bold"
-            android:text="By: "/>
             <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/post_name"
-                android:layout_marginTop="2dp"
-                android:layout_below="@+id/hash_liny"
-                android:layout_toRightOf="@+id/post_nam"
-                android:textSize="10dp"
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@+id/rely_img"
+                android:textSize="13dp"
                 android:scaleType="fitXY"
                 android:textStyle="bold"
-                android:text="username"/>
+                android:text="name"/>
+
 
             <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
@@ -111,7 +73,6 @@
                 android:layout_toRightOf="@+id/rely_img"
                 android:layout_below="@+id/post_name"
                 android:layout_marginRight="10dp"
-                android:layout_marginLeft="2dp"
                 android:singleLine="true"
                 android:id="@+id/post_message"
                 android:text="message"/>

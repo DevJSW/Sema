@@ -64,7 +64,7 @@
                 <ImageView
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:id="@+id/ic_audio"
+                    android:id="@+id/ic_game"
                     android:layout_centerVertical="true"
                     android:layout_toLeftOf="@+id/quickShot"
                     android:layout_marginRight="20dp"

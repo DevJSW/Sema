@@ -140,7 +140,7 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
 
         <receiver
             android:name=".ConnectivityReceiver"
@@ -150,6 +150,7 @@
             </intent-filter>
         </receiver>
 
+        <activity android:name=".GameStudioActivity"></activity>
     </application>
 
 </manifest>

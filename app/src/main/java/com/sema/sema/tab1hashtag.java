@@ -84,7 +84,7 @@ public class tab1hashtag extends Fragment {
         mDatabaseViews = FirebaseDatabase.getInstance().getReference().child("hash_views");
         mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("all_hashtags");
         mDatabaseUnread = FirebaseDatabase.getInstance().getReference().child("Unread");
-        mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
+        mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("hashtag_likes");
        // mQueryParticipants =mDatabaseChatroom.orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
         mNoPostImg = (ImageView) v.findViewById(R.id.noPostChat);
         mNoPostTxt = (TextView) v.findViewById(R.id.noPostTxt);
@@ -104,7 +104,7 @@ public class tab1hashtag extends Fragment {
         mQueryPostChats.keepSynced(true);
         mDatabaseJoinedHashtag.keepSynced(true);
 
-        mQueryPostChats.addValueEventListener(new ValueEventListener() {
+        mDatabaseJoinedHashtag.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() == null){

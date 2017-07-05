@@ -273,7 +273,7 @@ public class HashChatroomActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mPostKey = getIntent().getExtras().getString("heartraise_id");
-        mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
+        mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("hashtag_likes");
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mDatabaseJoinedHashtag = FirebaseDatabase.getInstance().getReference().child("joined_hashtags");
@@ -568,6 +568,7 @@ public class HashChatroomActivity extends AppCompatActivity {
                                     String hashtag_date = (String) dataSnapshot.child("date").getValue();
                                     String creator_name = (String) dataSnapshot.child("name").getValue();
                                     String creator_uid = (String) dataSnapshot.child("uid").getValue();
+                                    String photo = (String) dataSnapshot.child("photo").getValue();
 
                                     newPost2.child("hashtag").setValue(hashtag_name);
                                     newPost2.child("image").setValue(hashtag_image);
@@ -576,6 +577,7 @@ public class HashChatroomActivity extends AppCompatActivity {
                                     newPost2.child("uid").setValue(creator_uid);
                                     newPost2.child("post_key").setValue(mPostKey);
                                     newPost2.child("message").setValue(message_val);
+                                    newPost2.child("photo").setValue(photo);
                                 }
 
                                 @Override
