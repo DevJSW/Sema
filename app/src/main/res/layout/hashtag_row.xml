@@ -149,7 +149,6 @@
             android:layout_marginTop="6dp"
             android:layout_below="@+id/rely_img"
             android:background="#cecccc"/>
-
     </RelativeLayout>
 
 

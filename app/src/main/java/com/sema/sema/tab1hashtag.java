@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -50,8 +51,9 @@ public class tab1hashtag extends Fragment {
     private DatabaseReference mDatabaseUsers, mDatabaseBlockThisUser, mDatabaseUnread, mDatabaseNotification, mDatabaseViews;
     private DatabaseReference mDatabaseChatroom, mDatabaseHashtag, mDatabase,  mDatabaseJoinedHashtag;
     private FirebaseAuth mAuth;
-    private RecyclerView mMembersList;
-    private Query mQueryPostChats;
+    private RecyclerView mMembersList, mHashList;
+    private LinearLayoutManager topHashtagLayoutManager;
+    private Query mQueryPostChats, mQueryTrends;
     private ProgressBar mProgressBar;
     private Boolean mProcessLike = false;
     private DatabaseReference mDatabaseLike;
@@ -92,9 +94,15 @@ public class tab1hashtag extends Fragment {
         mProgressBar = (ProgressBar) v.findViewById(R.id.progressBar2);
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mQueryPostChats = mDatabaseHashtag.orderByChild(mAuth.getCurrentUser().getUid()).equalTo(mAuth.getCurrentUser().getUid());
+        mQueryTrends = mDatabaseHashtag.orderByChild("trends").limitToLast(10);
         mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
         mMembersList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMembersList.setHasFixedSize(true);
+
+        mHashList = (RecyclerView) v.findViewById(R.id.hash_list);
+        topHashtagLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        mHashList.setLayoutManager(topHashtagLayoutManager);
+
         mDatabaseChatroom.keepSynced(true);
         mDatabaseUsers.keepSynced(true);
         mDatabaseLike.keepSynced(true);
@@ -131,6 +139,46 @@ public class tab1hashtag extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+        FirebaseRecyclerAdapter<People, topHashViewHolder> firebaseRecyclerAdapter2 = new  FirebaseRecyclerAdapter<People, topHashViewHolder>(
+
+                People.class,
+                R.layout.hashtags_grid,
+                topHashViewHolder.class,
+                mQueryTrends
+
+
+        ) {
+            @Override
+            protected void populateViewHolder(final topHashViewHolder viewHolder, final People model, int position) {
+
+                final String post_key = getRef(position).getKey();
+                final String PostKey = getRef(position).getKey();
+
+                viewHolder.setHashtag(model.getHashtag());
+                viewHolder.setImage(getContext(), model.getImage());
+
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mDatabaseViews.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
+                        mDatabaseUnread.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                        mDatabaseNotification.child(mAuth.getCurrentUser().getUid()).removeValue();
+
+                        // open hashtag chatroom
+                        Intent cardonClick = new Intent(getActivity(), HashChatroomActivity.class);
+                        cardonClick.putExtra("heartraise_id", post_key);
+                        startActivity(cardonClick);
+                    }
+                });
+
+            }
+
+
+
+        };
+
+        mHashList.setAdapter(firebaseRecyclerAdapter2);
 
 
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
@@ -294,7 +342,6 @@ public class tab1hashtag extends Fragment {
                 });
 
 
-
                 viewHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
 
                     @Override
@@ -354,7 +401,7 @@ public class tab1hashtag extends Fragment {
                                         public void onClick(DialogInterface dialog, int whichButton) {
                                             //your deleting code
 
-                                            mDatabaseHashtag.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                                            mDatabaseHashtag.child(post_key).removeValue();
                                             dialog.dismiss();
                                         }
 
@@ -528,6 +575,109 @@ public class tab1hashtag extends Fragment {
             post_name.setText(name);
         }
 
+
+
+        public void setMessage(String message) {
+
+            TextView post_message = (TextView) mView.findViewById(R.id.post_message);
+            post_message.setText(message);
+        }
+
+        public void setHashtag(String hashtag) {
+
+            TextView post_hashtag = (TextView) mView.findViewById(R.id.post_hashtag);
+            post_hashtag.setText(hashtag);
+        }
+        public void setImage(final Context ctx, final String image) {
+
+            final CircleImageView civ = (CircleImageView) mView.findViewById(R.id.post_image);
+
+            Picasso.with(ctx).load(image).networkPolicy(NetworkPolicy.OFFLINE).into(civ, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError() {
+
+
+                    Picasso.with(ctx).load(image).into(civ);
+                }
+            });
+        }
+
+    }
+
+    public static class topHashViewHolder extends RecyclerView.ViewHolder {
+
+        View mView;
+
+        CircleImageView mPostImg;
+        ImageView mLikeBtn, groupIcon;
+        TextView mUnreadTxt, txname, txhash, txdate, txmessage;
+        DatabaseReference mDatabaseLike;
+        RelativeLayout counterTxt;
+        FirebaseAuth mAuth;
+        ProgressBar mProgressBar;
+
+        public topHashViewHolder(View itemView) {
+            super(itemView);
+
+            mView = itemView;
+
+            mProgressBar = (ProgressBar) mView.findViewById(R.id.progressBar);
+            txname = (TextView) mView.findViewById(R.id.post_name);
+            txdate = (TextView) mView.findViewById(R.id.post_date);
+            txhash = (TextView) mView.findViewById(R.id.post_hashtag);
+            txmessage = (TextView) mView.findViewById(R.id.post_message);
+            mPostImg = (CircleImageView) mView.findViewById(R.id.post_image);
+            mDatabaseLike = FirebaseDatabase.getInstance().getReference().child("Likes");
+            mUnreadTxt = (TextView) mView.findViewById(R.id.unreadCounter);
+            mAuth = FirebaseAuth.getInstance();
+            counterTxt = (RelativeLayout) mView.findViewById(R.id.counter);
+            mLikeBtn = (ImageView) mView.findViewById(R.id.favourite);
+            mDatabaseLike.keepSynced(true);
+            Query mQueryPostChats;
+
+        }
+
+        public void setLikeBtn(final String post_key) {
+
+            mDatabaseLike.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+
+                        mLikeBtn.setVisibility(View.VISIBLE);
+
+                    } else {
+
+                        mLikeBtn.setVisibility(View.GONE);
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+
+        public void setDate(String date) {
+
+            TextView post_date = (TextView) mView.findViewById(R.id.post_date);
+            post_date.setText(date);
+        }
+
+        public void setName(String name) {
+
+            TextView post_name = (TextView) mView.findViewById(R.id.post_name);
+            post_name.setText(name);
+        }
 
 
         public void setMessage(String message) {

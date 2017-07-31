@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_screen2">
+    android:background="@color/colorPrimary">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -16,13 +16,13 @@
             android:layout_height="80dp"
             android:scaleType="fitXY"
             android:layout_marginBottom="40dp"
-            android:src="@drawable/hashtag_white" />
+            android:src="@drawable/wel_location" />
 
         <com.sema.sema.CustonFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="HASHTAGS"
-            android:textSize="17dp"
+            android:text="LOCATION"
+            android:textSize="19dp"
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textStyle="bold" />
@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:textSize="14dp"
+            android:textSize="15dp"
             android:gravity="center"
             android:text="@string/slide_2_desc"
             android:textAlignment="center"

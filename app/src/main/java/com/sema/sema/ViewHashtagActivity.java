@@ -34,6 +34,7 @@ public class ViewHashtagActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseUsers, mDatabaseChatroom, mDatabase, mDatabaseLastSeen, mDatabaseViews, mDatabaseLike, mDatabaseHashtag;
     private FirebaseAuth mAuth;
     private ImageView searchBtn, mGroupIcon;
+    private LinearLayoutManager mediaLayoutManager;
     private EditText searchInput;
     private Query mQueryMembers;
     private RecyclerView mMediaList;
@@ -62,19 +63,18 @@ public class ViewHashtagActivity extends AppCompatActivity {
         mDatabaseLastSeen.keepSynced(true);
         mDatabaseChatroom.keepSynced(true);
 
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-
         mMediaList = (RecyclerView) findViewById(R.id.media_list);
-        mMediaList.setLayoutManager(layoutManager);
         mMediaList.setHasFixedSize(true);
+
+        mediaLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mMediaList.setLayoutManager(mediaLayoutManager);
 
 
         collapsingToolbarLayout= (CollapsingToolbarLayout) findViewById(R.id.cardInfo_collapsing);
-        mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
+        mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("all_hashtags");
         mQueryMembers = mDatabaseHashtag.orderByChild("photo");
         mDatabaseHashtag.keepSynced(true);
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Hashtag");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("all_hashtags");
         mDatabase.child(mPostKey).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -163,7 +163,7 @@ public class ViewHashtagActivity extends AppCompatActivity {
                 Chat.class,
                 R.layout.media_row,
                 CommentViewHolder.class,
-                mDatabaseHashtag
+                mDatabaseHashtag.child(mPostKey).child("Media")
 
 
         ) {

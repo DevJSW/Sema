@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.daimajia.slider.library.SliderLayout;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +38,8 @@ public class TrendsActivity extends AppCompatActivity {
     private Query mQueryMembers, mQueryTrends;
     private RecyclerView mMembersList;
     private LinearLayoutManager mLayoutManager;
+
+    private SliderLayout mDemoSlider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,9 @@ public class TrendsActivity extends AppCompatActivity {
         mMembersList.setHasFixedSize(true);
 
         mDatabaseUsers.keepSynced(true);
+
+        //the slider or image carousel
+        mDemoSlider = (SliderLayout) findViewById(R.id.slider);
 
     }
     void refreshItems() {

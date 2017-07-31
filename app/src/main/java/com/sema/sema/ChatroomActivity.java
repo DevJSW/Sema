@@ -1,5 +1,7 @@
 package com.sema.sema;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -36,6 +38,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -72,9 +75,13 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import hani.momanii.supernova_emoji_library.Actions.EmojIconActions;
@@ -86,13 +93,17 @@ import static com.sema.sema.R.id.container;
 public class ChatroomActivity extends AppCompatActivity {
 
     private static final String TAG = ChatroomActivity.class.getSimpleName();
+
+    Button b1, b2, b3, b4, b5, b6, b7, b8, b9;
+    int turn;
+
     private String mPostKey = null;
     private TextView mNoPostTxt;
     private ImageView cameraBtn;
     SwipeRefreshLayout mSwipeRefreshLayout;
     private ProgressDialog mProgress;
     private RecyclerView mCommentList;
-    private DatabaseReference mDatabase;
+    private DatabaseReference mDatabase, mDatabaseUsersTyping;
     private DatabaseReference mDatabaseComment,  mDatabaseUsers, mDatabaseChatroom, mDatabaseUnread, mDatabaseNotification,  mDatabaseLastSeen, mDatabaseTyping, mDatabaseTick;
     private DatabaseReference mDatabaseUser, mDatabaseLatestMessage;
     private DatabaseReference mDatabaseUser2;
@@ -136,12 +147,13 @@ public class ChatroomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chatroom);
         Toolbar my_toolbar = (Toolbar) findViewById(R.id.mCustomToolbarChat);
+        setSupportActionBar(my_toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //keep layout on top of keyboard
 
         // SETTING UP FONTS
         final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Aller_Rg.ttf");
-
-        setSupportActionBar(my_toolbar);
 
 
 
@@ -153,117 +165,6 @@ public class ChatroomActivity extends AppCompatActivity {
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         }
 
-        fab = (FloatingActionButton)findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                animateFAB();
-            }
-        });
-        fab1 = (FloatingActionButton)findViewById(R.id.fab1);
-        fab1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                fab.startAnimation(rotate_backward);
-                fab1.startAnimation(fab_close);
-                fab2.startAnimation(fab_close);
-                fab3.startAnimation(fab_close);
-                fab4.startAnimation(fab_close);
-                fab5.startAnimation(fab_close);
-                fab1.setClickable(false);
-                fab2.setClickable(false);
-                fab3.setClickable(false);
-                fab4.setClickable(false);
-                fab5.setClickable(false);
-                isFabOpen = false;
-
-                Intent cardonClick = new Intent(ChatroomActivity.this, SendCameraActivity.class);
-                cardonClick.putExtra("heartraise_id", mPostKey );
-                startActivity(cardonClick);
-            }
-        });
-        fab2 = (FloatingActionButton)findViewById(R.id.fab2);
-        fab2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                fab.startAnimation(rotate_backward);
-                fab1.startAnimation(fab_close);
-                fab2.startAnimation(fab_close);
-                fab3.startAnimation(fab_close);
-                fab4.startAnimation(fab_close);
-                fab5.startAnimation(fab_close);
-                fab1.setClickable(false);
-                fab2.setClickable(false);
-                fab3.setClickable(false);
-                fab4.setClickable(false);
-                fab5.setClickable(false);
-                isFabOpen = false;
-
-                Intent cardonClick = new Intent(ChatroomActivity.this, SendPhotoActivity.class);
-                cardonClick.putExtra("heartraise_id", mPostKey );
-                startActivity(cardonClick);
-            }
-        });
-
-        fab3 = (FloatingActionButton)findViewById(R.id.fab3);
-        fab3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                fab.startAnimation(rotate_backward);
-                fab1.startAnimation(fab_close);
-                fab2.startAnimation(fab_close);
-                fab3.startAnimation(fab_close);
-                fab4.startAnimation(fab_close);
-                fab5.startAnimation(fab_close);
-                fab1.setClickable(false);
-                fab2.setClickable(false);
-                fab3.setClickable(false);
-                fab4.setClickable(false);
-                fab5.setClickable(false);
-                isFabOpen = false;
-
-                Intent audioIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                audioUri = Uri.fromFile(new File("path/to/audio.mp3"));
-                audioIntent.setType("audio/mpeg");
-                startActivityForResult(audioIntent, AUDIO_REQUEST);
-            }
-        });
-
-        fab4 = (FloatingActionButton)findViewById(R.id.fab4);
-        fab4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                fab.startAnimation(rotate_backward);
-                fab1.startAnimation(fab_close);
-                fab2.startAnimation(fab_close);
-                fab3.startAnimation(fab_close);
-                fab4.startAnimation(fab_close);
-                fab5.startAnimation(fab_close);
-                fab1.setClickable(false);
-                fab2.setClickable(false);
-                fab3.setClickable(false);
-                fab4.setClickable(false);
-                fab5.setClickable(false);
-                isFabOpen = false;
-
-                Intent intent = new Intent();
-                intent.setType("video/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,"Select Video"),REQUEST_TAKE_GALLERY_VIDEO);
-            }
-        });
-
-        fab4 = (FloatingActionButton)findViewById(R.id.fab4);
-        fab5 = (FloatingActionButton)findViewById(R.id.fab5);
-
-        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
-        fab_close = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
-        rotate_forward = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_forward);
-        rotate_backward = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_backward);
 
         mStorage = FirebaseStorage.getInstance().getReference();
         mProgress = new ProgressDialog(this);
@@ -295,6 +196,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
+        mDatabaseUsersTyping = FirebaseDatabase.getInstance().getReference().child("users_typing");
         mDatabaseLatestMessage = FirebaseDatabase.getInstance().getReference().child("latest_messages");
         mDatabaseTyping = FirebaseDatabase.getInstance().getReference().child("Typing");
         mDatabaseLastSeen = FirebaseDatabase.getInstance().getReference().child("Last_Seen");
@@ -333,22 +235,13 @@ public class ChatroomActivity extends AppCompatActivity {
             }
         });
 
-        // toolbar back button
-        ImageView toolbar_back = (ImageView) findViewById(R.id.toolbar_back);
-        toolbar_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ChatroomActivity.this.finish();
-            }
-        });
-
-        mDatabaseUser2.child(mPostKey).addValueEventListener(new ValueEventListener() {
+        mDatabaseUser2.child(mPostKey);
+        mDatabaseUser2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 final String userimg = (String) dataSnapshot.child("image").getValue();
                 final String username = (String) dataSnapshot.child("name").getValue();
-                final String last_seen_date = (String) dataSnapshot.child("last_active_date").getValue();
                 final CircleImageView civ = (CircleImageView) findViewById(R.id.post_image);
                 final TextView name = (TextView) findViewById(R.id.post_name);
 
@@ -362,13 +255,17 @@ public class ChatroomActivity extends AppCompatActivity {
                 toolbar_username.setTypeface(custom_font);
 
 
-                mDatabaseUser.child("last_seen").addValueEventListener(new ValueEventListener() {
+                mDatabaseUser.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        String date = (String) dataSnapshot.child("last_seen").getValue();
+                        String date = (String) dataSnapshot.child("last_seen").getValue().toString();
 
-                        TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
-                        toolbar_last_seen.setText(date);
+                       /* TextView toolbar_last_seen = (TextView) findViewById(R.id.toolbar_last_seen_date);
+                        toolbar_last_seen.setText(date);*/
+
+                        RelativeTimeTextView toolbar_last_seen = (RelativeTimeTextView) findViewById(R.id.toolbar_last_seen_date);
+                        toolbar_last_seen.setReferenceTime(Long.parseLong(date));
+                        /*toolbar_last_seen.setReferenceTime(Long.parseLong(String.valueOf(date)));*/
                         toolbar_last_seen.setTypeface(custom_font);
 
                     }
@@ -438,9 +335,190 @@ public class ChatroomActivity extends AppCompatActivity {
         gameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent cardonClick = new Intent(ChatroomActivity.this, GameStudioActivity.class);
+                /*Intent cardonClick = new Intent(ChatroomActivity.this, GameStudioActivity.class);
                 cardonClick.putExtra("heartraise_id", mPostKey );
-                startActivity(cardonClick);
+                startActivity(cardonClick);*/
+
+                final Context context = ChatroomActivity.this;
+
+                // custom dialog
+                final Dialog dialog = new Dialog(context);
+                dialog.setContentView(R.layout.gamestudio_dialog);
+                dialog.setTitle("Game");
+
+                b1 = (Button)  dialog.findViewById(R.id.b1);
+                b2 = (Button)  dialog.findViewById(R.id.b2);
+                b3 = (Button)  dialog.findViewById(R.id.b3);
+                b4 = (Button)  dialog.findViewById(R.id.b4);
+                b5 = (Button)  dialog.findViewById(R.id.b5);
+                b6 = (Button)  dialog.findViewById(R.id.b6);
+                b7 = (Button)  dialog.findViewById(R.id.b7);
+                b8 = (Button)  dialog.findViewById(R.id.b8);
+                b9 = (Button)  dialog.findViewById(R.id.b9);
+
+                turn = 1;
+
+                b1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (b1.getText().toString().equals("")) {
+
+                            if (turn == 1) {
+                                turn = 2;
+                                b1.setText("X");
+                            } else if (turn == 2) {
+                                turn = 1;
+                                b1.setText("O");
+                            }
+                        }
+                        endGame();
+                    }
+                });
+                b2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (b2.getText().toString().equals("")) {
+
+                            if (turn == 1) {
+                                turn = 2;
+                                b2.setText("X");
+                            } else if (turn == 2) {
+                                turn = 1;
+                                b2.setText("O");
+                            }
+                        }
+                        endGame();
+
+                    }
+                });
+                b3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (b3.getText().toString().equals("")) {
+
+                            if (turn == 1) {
+                                turn = 2;
+                                b3.setText("X");
+                            } else if (turn == 2) {
+                                turn = 1;
+                                b3.setText("O");
+                            }
+                        }
+                        endGame();
+                    }
+                });
+                b4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (b4.getText().toString().equals("")) {
+
+                            if (turn == 1) {
+                                turn = 2;
+                                b4.setText("X");
+                            } else if (turn == 2) {
+                                turn = 1;
+                                b4.setText("O");
+                            }
+                        }
+                        endGame();
+                    }
+                });
+                b5.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (b5.getText().toString().equals("")) {
+
+                            if (turn == 1) {
+                                turn = 2;
+                                b5.setText("X");
+                            } else if (turn == 2) {
+                                turn = 1;
+                                b5.setText("O");
+                            }
+                        }
+                        endGame();
+                    }
+                });
+                b6.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (b6.getText().toString().equals("")) {
+
+                            if (turn == 1) {
+                                turn = 2;
+                                b6.setText("X");
+                            } else if (turn == 2) {
+                                turn = 1;
+                                b6.setText("O");
+                            }
+                        }
+                        endGame();
+                    }
+                });
+                b7.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (b7.getText().toString().equals("")) {
+
+                            if (turn == 1) {
+                                turn = 2;
+                                b7.setText("X");
+                            } else if (turn == 2) {
+                                turn = 1;
+                                b7.setText("O");
+                            }
+                        }
+                        endGame();
+                    }
+                });
+                b8.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (b8.getText().toString().equals("")) {
+
+                            if (turn == 1) {
+                                turn = 2;
+                                b8.setText("X");
+                            } else if (turn == 2) {
+                                turn = 1;
+                                b8.setText("O");
+                            }
+                        }
+                        endGame();
+                    }
+                });
+                b9.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if (b9.getText().toString().equals("")) {
+
+                            if (turn == 1) {
+                                turn = 2;
+                                b9.setText("X");
+                            } else if (turn == 2) {
+                                turn = 1;
+                                b9.setText("O");
+                            }
+                        }
+                        endGame();
+                    }
+
+                });
+
+
+                // if button is clicked, close the custom dialog
+
+                dialog.show();
+
             }
         });
 
@@ -531,39 +609,120 @@ public class ChatroomActivity extends AppCompatActivity {
 
     }
 
-    public void animateFAB(){
+    private void endGame() {
 
-        if(isFabOpen){
+        String a, b, c, d, e, f, g, h, i;
+        Boolean end = false;
 
-            fab.startAnimation(rotate_backward);
-            fab1.startAnimation(fab_close);
-            fab2.startAnimation(fab_close);
-            fab3.startAnimation(fab_close);
-            fab4.startAnimation(fab_close);
-            fab5.startAnimation(fab_close);
-            fab1.setClickable(false);
-            fab2.setClickable(false);
-            fab3.setClickable(false);
-            fab4.setClickable(false);
-            fab5.setClickable(false);
-            isFabOpen = false;
+        a = b1.getText().toString();
+        b = b2.getText().toString();
+        c = b3.getText().toString();
 
-        } else {
+        d = b4.getText().toString();
+        e = b5.getText().toString();
+        f = b6.getText().toString();
 
-            fab.startAnimation(rotate_forward);
-            fab1.startAnimation(fab_open);
-            fab2.startAnimation(fab_open);
-            fab3.startAnimation(fab_open);
-            fab4.startAnimation(fab_open);
-            fab5.startAnimation(fab_open);
-            fab1.setClickable(true);
-            fab2.setClickable(true);
-            fab3.setClickable(true);
-            fab4.setClickable(true);
-            fab5.setClickable(true);
-            isFabOpen = true;
+        g = b7.getText().toString();
+        h = b8.getText().toString();
+        i = b9.getText().toString();
 
+        if(a.equals("X") && b.equals("X") && c.equals("X")) {
+
+            Toast.makeText(ChatroomActivity.this, "Winner player X!", Toast.LENGTH_LONG).show();
+            end = true;
         }
+
+        if(a.equals("X") && e.equals("X") && i.equals("X")) {
+
+            Toast.makeText(ChatroomActivity.this, "Winner player X!", Toast.LENGTH_LONG).show();
+            end = true;
+        }
+
+        if(a.equals("X") && d.equals("X") && g.equals("X")) {
+
+            Toast.makeText(ChatroomActivity.this, "Winner player X!", Toast.LENGTH_LONG).show();
+            end = true;
+        }
+
+        if(b.equals("X") && e.equals("X") && h.equals("X")) {
+
+            Toast.makeText(ChatroomActivity.this, "Winner player X!", Toast.LENGTH_LONG).show();
+            end = true;
+        }
+        if(c.equals("X") && f.equals("X") && i.equals("X")) {
+
+            Toast.makeText(ChatroomActivity.this, "Winner player X!", Toast.LENGTH_LONG).show();
+            end = true;
+        }
+
+        if(d.equals("X") && e.equals("X") && f.equals("X")) {
+
+            Toast.makeText(ChatroomActivity.this, "Winner player X!", Toast.LENGTH_LONG).show();
+            end = true;
+        }
+
+        if(g.equals("X") && h.equals("X") && i.equals("X")) {
+
+            Toast.makeText(ChatroomActivity.this, "Winner player X!", Toast.LENGTH_LONG).show();
+            end = true;
+        }
+
+
+
+        if(a.equals("O") && b.equals("O") && c.equals("O")) {
+
+            Toast.makeText(ChatroomActivity.this, "Winner player O!", Toast.LENGTH_LONG).show();
+            end = true;
+        }
+
+        if(a.equals("O") && e.equals("O") && i.equals("O")) {
+
+            Toast.makeText(ChatroomActivity.this, "Winner player O!", Toast.LENGTH_LONG).show();
+            end = true;
+        }
+
+        if(a.equals("O") && d.equals("O") && g.equals("O")) {
+
+            Toast.makeText(ChatroomActivity.this, "Winner player O!", Toast.LENGTH_LONG).show();
+            end = true;
+        }
+
+        if(b.equals("O") && e.equals("O") && h.equals("O")) {
+
+            Toast.makeText(ChatroomActivity.this, "Winner player O!", Toast.LENGTH_LONG).show();
+            end = true;
+        }
+        if(c.equals("O") && f.equals("O") && i.equals("O")) {
+
+            Toast.makeText(ChatroomActivity.this, "Winner player O!", Toast.LENGTH_LONG).show();
+            end = true;
+        }
+
+        if(d.equals("O") && e.equals("O") && f.equals("O")) {
+
+            Toast.makeText(ChatroomActivity.this, "Winner player O!", Toast.LENGTH_LONG).show();
+            end = true;
+        }
+
+        if(g.equals("O") && h.equals("O") && i.equals("O")) {
+
+            Toast.makeText(ChatroomActivity.this, "Winner player O!", Toast.LENGTH_LONG).show();
+            end = true;
+        }
+
+
+        if (end) {
+            b1.setEnabled(false);
+            b2.setEnabled(false);
+            b3.setEnabled(false);
+            b4.setEnabled(false);
+            b5.setEnabled(false);
+            b6.setEnabled(false);
+            b7.setEnabled(false);
+            b8.setEnabled(false);
+            b9.setEnabled(false);
+        }
+
     }
 
     private void addToLastSeen() {
@@ -571,7 +730,7 @@ public class ChatroomActivity extends AppCompatActivity {
         Date date = new Date();
         final String stringDate = DateFormat.getDateTimeInstance().format(date);
 
-        mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).child("last_seen").setValue(stringDate);
+        mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).child("last_seen").setValue(System.currentTimeMillis());
     }
 
     private void startPosting() {
@@ -605,8 +764,6 @@ public class ChatroomActivity extends AppCompatActivity {
 
             // post last active date to user data
             final DatabaseReference newPost4 = mDatabaseUser;*/
-
-
 
 
 
@@ -718,7 +875,14 @@ public class ChatroomActivity extends AppCompatActivity {
 
 
         ) {
-            
+
+
+            @Override
+            public int getItemViewType(int position) {
+                final String post_key = getRef(position).getKey();
+
+                return super.getItemViewType(position);
+            }
 
             @Override
             public void onBindViewHolder(final CommentViewHolder holder, int position, List<Object> payloads) {
@@ -786,8 +950,8 @@ public class ChatroomActivity extends AppCompatActivity {
                 viewHolder.setMessage(model.getMessage());
                 viewHolder.setDate(model.getDate());
                 viewHolder.setPhoto(getApplicationContext(), model.getPhoto());
-               // viewHolder.setName(model.getName());
-               // viewHolder.setImage(getApplicationContext(), model.getImage());
+                // viewHolder.setName(model.getName());
+                // viewHolder.setImage(getApplicationContext(), model.getImage());
 
 
                 // delete unread listener
@@ -845,6 +1009,7 @@ public class ChatroomActivity extends AppCompatActivity {
         });
 
 
+
         final long delay = 1000; // 1 seconds after user stops typing
         final long[] last_text_edit = {0};
         final Handler handler = new Handler();
@@ -867,93 +1032,125 @@ public class ChatroomActivity extends AppCompatActivity {
         };
 
 
-                    //checking if a user is typing
-                    EditText editText = (EditText) findViewById(R.id.emojicon_edit_text);
-                    editText.addTextChangedListener(new TextWatcher() {
-                                                        @Override
-                                                        public void beforeTextChanged (CharSequence s,int start, int count,
-                                                                                       int after){
-                                                        }
-                                                        @Override
-                                                        public void onTextChanged ( final CharSequence s, int start, int before,
-                                                                                    int count){
-                                                            //You need to remove this to run only once
-                                                            handler.removeCallbacks(input_finish_checker);
+        //checking if a user is typing
+        EditText editText = (EditText) findViewById(R.id.emojicon_edit_text);
+        editText.addTextChangedListener(new TextWatcher() {
+                                            @Override
+                                            public void beforeTextChanged (CharSequence s,int start, int count,
+                                                                           int after){
+                                            }
+                                            @Override
+                                            public void onTextChanged ( final CharSequence s, int start, int before,
+                                                                        int count){
+                                                //You need to remove this to run only once
+                                                handler.removeCallbacks(input_finish_checker);
 
-                                                        }
-                                                        @Override
-                                                        public void afterTextChanged ( final Editable s){
-                                                            //avoid triggering event when text is empty
-                                                            if (s.length() > 0) {
-                                                                last_text_edit[0] = System.currentTimeMillis();
-                                                                handler.postDelayed(input_finish_checker, delay);
+                                            }
+                                            @Override
+                                            public void afterTextChanged ( final Editable s){
+                                                //avoid triggering event when text is empty
+                                                if (s.length() > 0) {
+                                                    last_text_edit[0] = System.currentTimeMillis();
+                                                    handler.postDelayed(input_finish_checker, delay);
 
-                                                                // HIDE AUDIO BUTTON WHILE USER IS TYPING
-                                                                ImageView audio = (ImageView) findViewById(R.id.ic_audio);
-                                                                audio.setVisibility(View.GONE);
+                                                    // HIDE AUDIO BUTTON WHILE USER IS TYPING
+                                                    ImageView game = (ImageView) findViewById(R.id.ic_game);
+                                                    game.setVisibility(View.GONE);
 
-                                                                ImageView camera = (ImageView) findViewById(R.id.quickShot);
-                                                                camera.setVisibility(View.GONE);
+                                                    ImageView camera = (ImageView) findViewById(R.id.quickShot);
+                                                    camera.setVisibility(View.GONE);
 
-                                                                ImageView sendy = (ImageView) findViewById(R.id.sendBtn);
-                                                                sendy.setVisibility(View.VISIBLE);
+                                                    ImageView sendy = (ImageView) findViewById(R.id.sendBtn);
+                                                    sendy.setVisibility(View.VISIBLE);
 
 
-                                                            } else {
+                                                } else {
 
-                                                                Date date = new Date();
+                                                                /*Date date = new Date();
                                                                 final String stringDate = DateFormat.getDateTimeInstance().format(date);
-
-                                                                //hide/ remove typing
-                                                                mDatabaseTyping.child(mAuth.getCurrentUser().getUid()).removeValue();
-                                                                // show last seen
-                                                                mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).child("last_seen").setValue(stringDate);
-
-                                                                // SHOW AUDIO BUTTON WHILE USER IS TYPING
-                                                                ImageView audio = (ImageView) findViewById(R.id.ic_audio);
-                                                                audio.setVisibility(View.VISIBLE);
-
-                                                                ImageView camera = (ImageView) findViewById(R.id.quickShot);
-                                                                camera.setVisibility(View.VISIBLE);
-
-                                                                ImageView sendy = (ImageView) findViewById(R.id.sendBtn);
-                                                                sendy.setVisibility(View.GONE);
-
-                                                            }
-                                                        }
+*/
+                                                    SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+                                                    String dateInString = "22-01-2015 10:20:56";
+                                                    try {
+                                                        Date date = sdf.parse(dateInString);
+                                                        mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).child("last_seen").setValue(date);
+                                                    } catch (ParseException e) {
+                                                        e.printStackTrace();
                                                     }
 
-                    );
+                                                    //hide/ remove typing
+                                                    mDatabaseTyping.child(mAuth.getCurrentUser().getUid()).removeValue();
+                                                    // show last seen
+                                                              /*  mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).child("last_seen").setValue(date);*/
+
+                                                    // SHOW AUDIO BUTTON WHILE USER IS TYPING
+                                                    ImageView game = (ImageView) findViewById(R.id.ic_game);
+                                                    game.setVisibility(View.VISIBLE);
+
+                                                    ImageView camera = (ImageView) findViewById(R.id.quickShot);
+                                                    camera.setVisibility(View.VISIBLE);
+
+                                                    ImageView sendy = (ImageView) findViewById(R.id.sendBtn);
+                                                    sendy.setVisibility(View.GONE);
+
+                                                }
+                                            }
+                                        }
+
+        );
 
 
+        EditText editText2 = (EditText) findViewById(R.id.emojicon_edit_text);
+        editText2.addTextChangedListener(new TextWatcher() {
 
-        // if recyclerview is at the bottom, clear any unread messages
-        final boolean[] loading = {true};
-        final int[] pastVisiblesItems = new int[1];
-        final int[] visibleItemCount = new int[1];
-        final int[] totalItemCount = new int[1];
+            boolean isTyping = false;
 
-        mCommentList.addOnScrollListener(new RecyclerView.OnScrollListener()
-        {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
-            {
-                if(dy > 0) //check for scroll down
-                {
-                    visibleItemCount[0] = mLayoutManager.getChildCount();
-                    totalItemCount[0] = mLayoutManager.getItemCount();
-                    pastVisiblesItems[0] = mLayoutManager.findFirstVisibleItemPosition();
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
-                    if (loading[0])
-                    {
-                        if ( (visibleItemCount[0] + pastVisiblesItems[0]) >= totalItemCount[0])
-                        {
-                            loading[0] = false;
-                            Log.v("...", "Last Item Wow !");
-                            mDatabaseUnread.child(mPostKey).child(mAuth.getCurrentUser().getUid()).removeValue();
+            private Timer timer = new Timer();
+            private final long DELAY = 500; // milliseconds
+
+            @Override
+            public void afterTextChanged(final Editable s) {
+                Log.d("", "");
+                if(!isTyping) {
+                    Log.d(TAG, "started typing");
+                    // Send notification for start typing event
+                    mDatabaseUsersTyping.child(mAuth.getCurrentUser().getUid()).setValue("isTyping");
+
+                    mDatabaseUsersTyping.child(mPostKey).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            RelativeTimeTextView  toolbar_last_seen = (RelativeTimeTextView)findViewById(R.id.toolbar_last_seen_date);
+                            toolbar_last_seen.setText("is Typing...");
                         }
-                    }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                    isTyping = true;
                 }
+                timer.cancel();
+                timer = new Timer();
+                timer.schedule(
+                        new TimerTask() {
+                            @Override
+                            public void run() {
+                                isTyping = false;
+                                Log.d(TAG, "stopped typing");
+                                //send notification for stopped typing event
+                                mDatabaseUsersTyping.child(mAuth.getCurrentUser().getUid()).removeValue();
+
+                            }
+                        },
+                        DELAY
+                );
+
             }
         });
 
@@ -988,7 +1185,7 @@ public class ChatroomActivity extends AppCompatActivity {
             mCardPhoto2 = (LinearLayout) mView.findViewById(R.id.chat_image2);
             min_lay2 = (RelativeLayout) mView.findViewById(R.id.chat_balloon);
             mImage2 = (ImageView) mView.findViewById(R.id.post_image2);
-          //  groupIcon = (ImageView) mView.findViewById(R.id.group_icon);
+            //  groupIcon = (ImageView) mView.findViewById(R.id.group_icon);
             liny = (LinearLayout) mView.findViewById(R.id.liny);
             rely = (RelativeLayout) mView.findViewById(R.id.rely);
             mDoubleTick = (ImageView)mView.findViewById(R.id.double_tick);

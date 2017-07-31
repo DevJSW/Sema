@@ -43,7 +43,8 @@
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="Email" />
+            android:label="Email"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".SignupActivity"
             android:label="Signup" />
@@ -150,7 +151,11 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".GameStudioActivity"></activity>
+        <activity android:name=".GameStudioActivity" />
+        <activity
+            android:name=".ViewImageActivity"
+            android:label="Photo"
+            android:theme="@style/AppTheme.ActionBar.Transparent"/>
     </application>
 
 </manifest>

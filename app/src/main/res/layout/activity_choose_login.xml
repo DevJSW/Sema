@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorPrimary"
     tools:context="com.sema.sema.ChooseLoginActivity">
 
 
@@ -35,33 +34,34 @@
             android:text="Sema Messenger"/>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="50dp"
             android:orientation="vertical"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="55dp">
 
                 <Button
-                    android:layout_width="200dp"
+                    android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:id="@+id/signIn"
+                    android:textColor="#fff"
                     android:background="@drawable/button_bg"
                     android:layout_centerHorizontal="true"
                     android:layout_alignParentBottom="true"
-                    android:textColor="#fff"
                     android:layout_marginBottom="15dp"
                     android:text="Login with Google"
                     android:textAllCaps="false"/>
 
             <Button
-                android:layout_width="200dp"
+                android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:id="@+id/emailLogin"
+                android:textColor="#fff"
                 android:background="@drawable/button_bg"
                 android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
-                android:textColor="#fff"
                 android:text="Login with Email"
                 android:textAllCaps="false"/>
 

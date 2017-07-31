@@ -56,7 +56,7 @@ public class ConnectivityReceiver extends BroadcastReceiver {
             DatabaseReference mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users");
             DatabaseReference mDatabaseUsersOnline = FirebaseDatabase.getInstance().getReference().child("users_online");
             mAuth = FirebaseAuth.getInstance();
-            mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).setValue("isOnline");
+           /* mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).setValue("isOnline");*/
             mDatabaseUser.child(mAuth.getCurrentUser().getUid()).child("last_seen").setValue(stringDate);
         }
     }

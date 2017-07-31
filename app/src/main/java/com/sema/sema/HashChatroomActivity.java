@@ -121,6 +121,8 @@ public class HashChatroomActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hash_chatroom);
         Toolbar my_toolbar = (Toolbar) findViewById(R.id.mCustomToolbarHash);
+        setSupportActionBar(my_toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //keep layout on top of keyboard
 
         Window window = HashChatroomActivity.this.getWindow();
@@ -133,119 +135,6 @@ public class HashChatroomActivity extends AppCompatActivity {
 
         // Font path
         final Typeface custom_font = Typeface.createFromAsset(getAssets(), "fonts/Aller_Rg.ttf");
-
-        fab = (FloatingActionButton)findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                animateFAB();
-            }
-        });
-        fab1 = (FloatingActionButton)findViewById(R.id.fab1);
-        fab1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                fab.startAnimation(rotate_backward);
-                fab1.startAnimation(fab_close);
-                fab2.startAnimation(fab_close);
-                fab3.startAnimation(fab_close);
-                fab4.startAnimation(fab_close);
-                fab1.setClickable(false);
-                fab2.setClickable(false);
-                fab3.setClickable(false);
-                fab4.setClickable(false);
-                isFabOpen = false;
-
-                Intent cardonClick = new Intent(HashChatroomActivity.this, SendCameraActivity.class);
-                cardonClick.putExtra("heartraise_id", mPostKey );
-                startActivity(cardonClick);
-            }
-        });
-        fab2 = (FloatingActionButton)findViewById(R.id.fab2);
-        fab2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                fab.startAnimation(rotate_backward);
-                fab1.startAnimation(fab_close);
-                fab2.startAnimation(fab_close);
-                fab3.startAnimation(fab_close);
-                fab4.startAnimation(fab_close);
-                fab1.setClickable(false);
-                fab2.setClickable(false);
-                fab3.setClickable(false);
-                fab4.setClickable(false);
-                isFabOpen = false;
-
-                Intent cardonClick = new Intent(HashChatroomActivity.this, HashSendPhotoActivity.class);
-                cardonClick.putExtra("heartraise_id", mPostKey );
-                startActivity(cardonClick);
-            }
-        });
-
-        fab3 = (FloatingActionButton)findViewById(R.id.fab3);
-        fab3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                fab.startAnimation(rotate_backward);
-                fab1.startAnimation(fab_close);
-                fab2.startAnimation(fab_close);
-                fab3.startAnimation(fab_close);
-                fab4.startAnimation(fab_close);
-                fab1.setClickable(false);
-                fab2.setClickable(false);
-                fab3.setClickable(false);
-                fab4.setClickable(false);
-                isFabOpen = false;
-
-                Intent audioIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                audioUri = Uri.fromFile(new File("path/to/audio.mp3"));
-                audioIntent.setType("audio/mpeg");
-                startActivityForResult(audioIntent, AUDIO_REQUEST);
-            }
-        });
-
-        fab4 = (FloatingActionButton)findViewById(R.id.fab4);
-        fab4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                fab.startAnimation(rotate_backward);
-                fab1.startAnimation(fab_close);
-                fab2.startAnimation(fab_close);
-                fab3.startAnimation(fab_close);
-                fab4.startAnimation(fab_close);
-                fab1.setClickable(false);
-                fab2.setClickable(false);
-                fab3.setClickable(false);
-                fab4.setClickable(false);
-                isFabOpen = false;
-
-                Intent intent = new Intent();
-                intent.setType("video/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent,"Select Video"),REQUEST_TAKE_GALLERY_VIDEO);
-            }
-        });
-
-        fab4 = (FloatingActionButton)findViewById(R.id.fab4);
-
-        ImageView camera = (ImageView) findViewById(R.id.quickShot);
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent cardonClick = new Intent(HashChatroomActivity.this, SendCameraActivity.class);
-                cardonClick.putExtra("heartraise_id", mPostKey );
-                startActivity(cardonClick);
-            }
-        });
-
-        fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
-        fab_close = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.fab_close);
-        rotate_forward = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_forward);
-        rotate_backward = AnimationUtils.loadAnimation(getApplicationContext(),R.anim.rotate_backward);
 
         mStorage = FirebaseStorage.getInstance().getReference();
         setSupportActionBar(my_toolbar);
@@ -305,7 +194,7 @@ public class HashChatroomActivity extends AppCompatActivity {
         mDatabaseViews.keepSynced(true);
         mDatabaseJoinedHashtag.keepSynced(true);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference().child("Hashtag").child(mPostKey).child("Chats");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("all_hashtags").child(mPostKey).child("Chats");
         mDatabase.keepSynced(true);
         mQueryInAscending = mDatabase.orderByChild("date").startAt(-1 * new Date().getTime());
         mSendBtn = (ImageView) findViewById(R.id.sendBtn);
@@ -316,14 +205,6 @@ public class HashChatroomActivity extends AppCompatActivity {
             }
         });
 
-        // toolbar back button
-        ImageView toolbar_back = (ImageView) findViewById(R.id.toolbar_back);
-        toolbar_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                HashChatroomActivity.this.finish();
-            }
-        });
 
         mDatabaseHashtag.child(mPostKey).addValueEventListener(new ValueEventListener() {
             @Override
@@ -418,11 +299,23 @@ public class HashChatroomActivity extends AppCompatActivity {
 
                     ImageView star_icon = (ImageView) findViewById(R.id.star_icon);
                     star_icon.setImageResource(R.drawable.ic_star_white);
+
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        ImageView camera = (ImageView) findViewById(R.id.quickShot);
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cardonClick = new Intent(HashChatroomActivity.this, HashSendPhotoActivity.class);
+                cardonClick.putExtra("heartraise_id", mPostKey );
+                startActivity(cardonClick);
 
             }
         });
@@ -435,6 +328,7 @@ public class HashChatroomActivity extends AppCompatActivity {
                 Intent cardonClick = new Intent(HashChatroomActivity.this, ViewHashtagActivity.class);
                 cardonClick.putExtra("heartraise_id", mPostKey );
                 startActivity(cardonClick);
+
             }
         });
 
@@ -443,36 +337,6 @@ public class HashChatroomActivity extends AppCompatActivity {
 
     }
 
-    public void animateFAB(){
-
-        if(isFabOpen){
-
-            fab.startAnimation(rotate_backward);
-            fab1.startAnimation(fab_close);
-            fab2.startAnimation(fab_close);
-            fab3.startAnimation(fab_close);
-            fab4.startAnimation(fab_close);
-            fab1.setClickable(false);
-            fab2.setClickable(false);
-            fab3.setClickable(false);
-            fab4.setClickable(false);
-            isFabOpen = false;
-
-        } else {
-
-            fab.startAnimation(rotate_forward);
-            fab1.startAnimation(fab_open);
-            fab2.startAnimation(fab_open);
-            fab3.startAnimation(fab_open);
-            fab4.startAnimation(fab_open);
-            fab1.setClickable(true);
-            fab2.setClickable(true);
-            fab3.setClickable(true);
-            fab4.setClickable(true);
-            isFabOpen = true;
-
-        }
-    }
 
     private void addToLastSeen() {
 
@@ -618,7 +482,6 @@ public class HashChatroomActivity extends AppCompatActivity {
                 R.layout.hash_row,
                 CommentViewHolder.class,
                 mDatabase
-
 
         ) {
             @Override
@@ -928,8 +791,8 @@ public class HashChatroomActivity extends AppCompatActivity {
                                                                 handler.postDelayed(input_finish_checker, delay);
 
                                                                 // HIDE AUDIO BUTTON WHILE USER IS TYPING
-                                                                ImageView audio = (ImageView) findViewById(R.id.ic_audio);
-                                                                audio.setVisibility(View.GONE);
+                                                                ImageView photo = (ImageView) findViewById(R.id.cameraShot);
+                                                                photo.setVisibility(View.GONE);
 
                                                                 ImageView camera = (ImageView) findViewById(R.id.quickShot);
                                                                 camera.setVisibility(View.GONE);

@@ -44,6 +44,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -200,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
         mDatabaseIncomingNotification = FirebaseDatabase.getInstance().getReference().child("IncomingNotification");
         mDatabaseVibrate = FirebaseDatabase.getInstance().getReference().child("IncomingVibrate");
         mDatabaseLastSeen = FirebaseDatabase.getInstance().getReference().child("Last_Seen");
-        mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("Hashtag");
+        mDatabaseHashtag = FirebaseDatabase.getInstance().getReference().child("all_hashtags");
         mDatabaseNotification.keepSynced(true);
         mDatabaseJoinedHashtag.keepSynced(true);
         mDatabaseHashtag.keepSynced(true);
@@ -329,11 +330,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void addToLastSeen() {
 
-        long date = new Date().getTime();
-        final String stringDate = DateFormat.getDateTimeInstance().format(date);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String dateInString = "22-01-2015 10:20:56";
 
-
-        mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("last_seen").setValue(stringDate);
+        mDatabaseUsers.child(auth.getCurrentUser().getUid()).child("last_seen").setValue(timestamp);
     }
 
     private void checkForNotifications() {

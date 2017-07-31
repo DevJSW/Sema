@@ -2,10 +2,12 @@ package com.sema.sema;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -67,10 +69,22 @@ public class FriendsActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mMembersList = (RecyclerView) findViewById(R.id.Members_list);
-        mMembersList.setLayoutManager(new LinearLayoutManager(this));
         mMembersList.setHasFixedSize(true);
 
         mDatabaseUsers.keepSynced(true);
+        isTabOrPhone();
+
+    }
+
+    private void isTabOrPhone() {
+        boolean tab = getResources().getConfiguration().screenLayout >= Configuration.SCREENLAYOUT_SIZE_XLARGE;
+        if (tab) {
+            //Tablet
+            mMembersList.setLayoutManager(new GridLayoutManager(this, 3));
+        } else {
+            //Phone
+            mMembersList.setLayoutManager(new GridLayoutManager(this, 2));
+        }
 
     }
 
@@ -100,7 +114,7 @@ public class FriendsActivity extends AppCompatActivity {
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
 
                 People.class,
-                R.layout.member2_row,
+                R.layout.users_grid,
                 LetterViewHolder.class,
                 mDatabaseUsers
 
@@ -113,8 +127,7 @@ public class FriendsActivity extends AppCompatActivity {
 
                 viewHolder.setName(model.getName());
                 viewHolder.setStatus(model.getStatus());
-                viewHolder.setCity(model.getCity());
-                viewHolder.setCountry(model.getCountry());
+                viewHolder.setAddress(model.getAddress());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
                 // open chatroom activity
@@ -191,23 +204,13 @@ public class FriendsActivity extends AppCompatActivity {
             post_name.setText(name);
         }
 
-        public void setCountry(String country) {
+        public void setAddress(String address) {
 
-            TextView post_country = (TextView) mView.findViewById(R.id.post_country);
-            post_country.setText(country);
-
-
-        }
-
-        public void setCity(String city) {
-
-            TextView post_city = (TextView) mView.findViewById(R.id.post_city);
-            post_city.setText(city);
+            TextView post_address = (TextView) mView.findViewById(R.id.post_address);
+            post_address.setText(address);
 
 
         }
-
-
 
         public void setStatus(String status) {
 
@@ -217,7 +220,7 @@ public class FriendsActivity extends AppCompatActivity {
 
         public void setImage(final Context ctx, final String image) {
 
-            final CircleImageView civ = (CircleImageView) mView.findViewById(R.id.post_image);
+            final ImageView civ = (ImageView) mView.findViewById(R.id.post_image);
 
             Picasso.with(ctx).load(image).networkPolicy(NetworkPolicy.OFFLINE).into(civ, new Callback() {
                 @Override

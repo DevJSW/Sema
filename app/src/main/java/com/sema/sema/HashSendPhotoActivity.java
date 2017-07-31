@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -129,6 +130,7 @@ public class HashSendPhotoActivity extends AppCompatActivity {
                     final Uri downloadUrl = taskSnapshot.getDownloadUrl();
 
                     final DatabaseReference newPost = mDatabaseHashtag.child(mPostKey).child("Chats").push();
+                    final DatabaseReference newPost2 = mDatabaseHashtag.child(mPostKey).child("Media").push();
 
                     mDatabasePostUser.child(mPostKey).addValueEventListener(new ValueEventListener() {
                         @Override
@@ -139,7 +141,6 @@ public class HashSendPhotoActivity extends AppCompatActivity {
                             final String reciever_image = (String) dataSnapshot.child("image").getValue();
 
                             final String reciever_uid = (String) dataSnapshot.child("uid").getValue();
-
 
                             mDatabaseUser.addValueEventListener(new ValueEventListener() {
 
@@ -157,6 +158,16 @@ public class HashSendPhotoActivity extends AppCompatActivity {
                                     newPost.child("post_key").setValue(mPostKey);
                                     newPost.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
 
+                                    //send photo to media child
+                                    newPost2.child("message").setValue(caption_val);
+                                    newPost2.child("photo").setValue(downloadUrl.toString());
+                                    newPost2.child("uid").setValue(mCurrentUser.getUid());
+                                    newPost2.child("name").setValue(dataSnapshot.child("name").getValue());
+                                    newPost2.child("image").setValue(dataSnapshot.child("image").getValue());
+                                    newPost2.child("sender_uid").setValue(mCurrentUser.getUid());
+                                    newPost2.child("date").setValue(stringDate);
+                                    newPost2.child("post_key").setValue(mPostKey);
+
 
                                 }
 
@@ -173,15 +184,18 @@ public class HashSendPhotoActivity extends AppCompatActivity {
 
                         }
                     });
-                    AlertDialog.Builder builder = new AlertDialog.Builder(HashSendPhotoActivity.this);
+                   /* AlertDialog.Builder builder = new AlertDialog.Builder(HashSendPhotoActivity.this);
                     builder.setTitle("Post Alert!");
-                    builder.setMessage("Your comment has been posted SUCCESSFULLY!")
+                    builder.setMessage("Your photo has been posted SUCCESSFULLY!")
                             .setCancelable(true)
                             .setPositiveButton("OK", null);
                     AlertDialog dialog = builder.create();
                     dialog.show();
-
+*/
                     mProgress.dismiss();
+                    Toast.makeText(getApplicationContext(), "Your photo has been posted SUCCESSFULLY!", Toast.LENGTH_LONG).show();
+
+                    finish();
 
 
                 }

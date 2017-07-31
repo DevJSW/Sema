@@ -1,20 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary"
     app:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:id="@+id/toolbar_back"
-        android:src="@drawable/ic_arrow_back"/>
+
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:id="@+id/toolbarImg" />
 
     <LinearLayout
@@ -43,8 +40,9 @@
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
                 android:maxLines="1"
-                app:relative_time_prefix="Last Seen "
-                android:id="@+id/toolbar_last_seen_date"/>
+                android:ellipsize="marquee"
+                app:relative_time_prefix="Last Active "
+                android:id="@+id/toolbar_last_seen_date" />
 
             <com.sema.sema.CustonFont
                 android:layout_width="wrap_content"
