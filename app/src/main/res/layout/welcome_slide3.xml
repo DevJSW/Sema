@@ -17,7 +17,7 @@
             android:layout_marginBottom="40dp"
             android:src="@drawable/wel_send" />
 
-        <com.sema.sema.CustonFont
+        <com.sema.sema.fonts.CustonFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="INSTANT MESSAGING"
@@ -25,7 +25,7 @@
             android:textColor="@android:color/white"
             android:textStyle="bold" />
 
-        <com.sema.sema.CustonFont
+        <com.sema.sema.fonts.CustonFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"

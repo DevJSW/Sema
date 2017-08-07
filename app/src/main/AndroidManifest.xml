@@ -17,6 +17,7 @@
     <application
         android:allowBackup="true"
         android:icon="@drawable/splash"
+        android:name=".models.sema"
         android:installLocation="auto"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -24,7 +25,7 @@
         <uses-library android:name="com.google.android.maps" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:icon="@drawable/splash2"
             android:label="Sema"
             android:theme="@style/AppTheme.NoActionBar">
@@ -34,7 +35,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".Splashscreen">
+        <activity
+            android:name=".auth.Splashscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,73 +44,73 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".auth.LoginActivity"
             android:label="Email"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SignupActivity"
+            android:name=".auth.SignupActivity"
             android:label="Signup" />
         <activity
-            android:name=".EditProfileActivity"
+            android:name=".activities.EditProfileActivity"
             android:label="Edit" />
-        <activity android:name=".SettingsActivity" />
+        <activity android:name=".auth.SettingsActivity" />
         <activity
-            android:name=".ChatroomActivity"
+            android:name=".chatrooms.ChatroomActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SendPhotoActivity"
+            android:name=".activities.SendPhotoActivity"
             android:label="Send photo"
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
-            android:name=".CreateHashtagActivity"
+            android:name=".activities.CreateHashtagActivity"
             android:label="Create hashtag" />
         <activity
-            android:name=".FriendsActivity"
+            android:name=".activities.FriendsActivity"
             android:label="@string/title_activity_friends"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".HashChatroomActivity"
+            android:name=".chatrooms.HashChatroomActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".WelcomeActivity"
+            android:name=".auth.WelcomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".HashSendPhotoActivity"
+            android:name=".activities.HashSendPhotoActivity"
             android:label="Send photo"
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <activity
             android:name=".DiscoverHashtagActivity"
             android:label="Hashtags" />
         <activity
-            android:name=".SelectInterestActivity"
+            android:name=".activities.SelectInterestActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".AddFriendsActivity"
+            android:name=".activities.AddFriendsActivity"
             android:label="Start chat" />
         <activity
-            android:name=".NotificationActivity"
+            android:name=".activities.NotificationActivity"
             android:label="Notifications &amp; Sounds" />
         <activity
             android:name=".TrendsActivity"
             android:label="Trends" />
         <activity
-            android:name=".ViewHashtagActivity"
+            android:name=".activities.ViewHashtagActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ViewProfileActivity"
+            android:name=".activities.ViewProfileActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SearchNearbyFriendsActivity"
+            android:name=".activities.SearchNearbyFriendsActivity"
             android:label="Search by address" />
-        <activity android:name=".ContactListsActivity" />
-        <activity android:name=".PhonebookListActivity" />
+        <activity android:name=".activities.ContactListsActivity" />
+        <activity android:name=".activities.PhonebookListActivity" />
         <activity
-            android:name=".ChooseLoginActivity"
+            android:name=".activities.ChooseLoginActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
@@ -118,13 +120,13 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value=" AIzaSyDhw2qd0QgJQoMs2FA0PyDtbro0MEx2qk0 " />
 
-        <activity android:name=".ShowMapActivity" />
+        <activity android:name=".activities.ShowMapActivity" />
         <activity
-            android:name=".ChatActivity"
+            android:name=".chatrooms.ChatActivity"
             android:label="@string/title_activity_chat"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SendCameraActivity"
+            android:name=".activities.SendCameraActivity"
             android:label="Send photo"
             android:theme="@style/AppTheme.ActionBar.Transparent" />
         <!--
@@ -140,22 +142,26 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".activities.MapsActivity"
             android:label="@string/title_activity_maps" />
 
         <receiver
-            android:name=".ConnectivityReceiver"
+            android:name=".utilis.ConnectivityReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
 
-        <activity android:name=".GameStudioActivity" />
+        <activity android:name=".activities.GameStudioActivity" />
         <activity
-            android:name=".ViewImageActivity"
+            android:name=".activities.ViewImageActivity"
             android:label="Photo"
-            android:theme="@style/AppTheme.ActionBar.Transparent"/>
+            android:theme="@style/AppTheme.ActionBar.Transparent" />
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

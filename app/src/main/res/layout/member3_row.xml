@@ -41,7 +41,7 @@
             android:layout_toRightOf="@+id/rely_img"
             android:orientation="horizontal">
 
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/post_name"
@@ -63,7 +63,7 @@
             android:layout_below="@+id/post_name2"
             android:orientation="horizontal">
 
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13dp"
@@ -86,7 +86,7 @@
                 android:background="@drawable/card"
                 android:layout_marginRight="10dp">
 
-                <com.sema.sema.CustonFont
+                <com.sema.sema.fonts.CustonFont
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -104,7 +104,7 @@
 
         </RelativeLayout>
 
-        <com.sema.sema.CustonFont
+        <com.sema.sema.fonts.CustonFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/post_date"

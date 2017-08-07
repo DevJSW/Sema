@@ -1,26 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.sema.sema.MainActivity">
+    tools:context="com.sema.sema.activities.MainActivity">
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_add_group"
-        android:orderInCategory="100"
-        android:title="Join hashtags"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_trending"
-        android:orderInCategory="100"
-        android:icon="@drawable/ic_trending_"
-        android:title="hashtag"
-        app:showAsAction="always" />
-
-
 
 </menu>

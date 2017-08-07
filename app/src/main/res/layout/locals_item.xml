@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_margin="3dp"
+    android:layout_width="158dp"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/grid_background"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_margin="4dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/placeholder_image"
+            android:layout_height="108dp"
+            android:id="@+id/post_image"/>
+
+
+        <com.sema.sema.fonts.CustonFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="name"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:textColor="@color/colorPrimary"
+            android:textSize="11dp"
+            android:layout_marginBottom="3dp"
+            android:id="@+id/post_name"/>
+     <!--<View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#cac7c7"/>-->
+
+       <!--!com.sema.sema.fonts.CustonFontFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Category"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="1dp"
+            android:textSize="9dp"
+            android:id="@+id/store_cat"/>&ndash;&gt;-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="13dp"
+                android:src="@drawable/location_red"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginBottom="1dp"
+                android:textSize="9dp"
+                android:id="@+id/txtView3"/>
+            <com.sema.sema.fonts.CustonFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Opens "
+                android:layout_marginBottom="2dp"
+                android:maxLines="1"
+                android:textSize="10dp"
+                android:id="@+id/post_address"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</GridLayout>

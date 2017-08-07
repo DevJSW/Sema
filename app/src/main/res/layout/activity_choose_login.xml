@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="com.sema.sema.ChooseLoginActivity">
+    tools:context="com.sema.sema.activities.ChooseLoginActivity">
 
 
     <RelativeLayout
@@ -24,7 +24,7 @@
                 android:layout_marginBottom="10dp"
                 android:scaleType="fitXY" />
 
-        <com.sema.sema.CustonFont
+        <com.sema.sema.fonts.CustonFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/topImg"

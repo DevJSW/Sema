@@ -20,7 +20,7 @@
         android:id="@+id/open_view"
         android:orientation="vertical">
 
-        <com.sema.sema.CustonFont
+        <com.sema.sema.fonts.CustonFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14dp"
@@ -41,10 +41,10 @@
                 android:textSize="11dp"
                 android:maxLines="1"
                 android:ellipsize="marquee"
-                app:relative_time_prefix="Last Active "
+                app:relative_time_prefix="Last Seen "
                 android:id="@+id/toolbar_last_seen_date" />
 
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
@@ -66,16 +66,16 @@
                 android:layout_marginTop="2dp"
                 android:src="@drawable/ic_location_white"/>
 
-            <!--<com.sema.sema.CustonFont
+            <!--<com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"
                 android:layout_marginLeft="1dp"
                 android:text="city"
-                android:id="@+id/post_city"/>-->
+                android:id="@+id/post_city"/>&ndash;&gt;-->
 
 
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="11dp"

@@ -6,7 +6,7 @@
     android:layout_gravity="center"
     android:gravity="center"
     android:id="@+id/lin_lay"
-    tools:context="com.sema.sema.Splashscreen">
+    tools:context="com.sema.sema.auth.Splashscreen">
 
     <LinearLayout
         android:layout_width="wrap_content"

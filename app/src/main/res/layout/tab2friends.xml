@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.sema.sema.MainActivity$PlaceholderFragment">
+    tools:context="com.sema.sema.activities.MainActivity$PlaceholderFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +38,7 @@
         android:layout_above="@+id/noPostTxt"
         android:visibility="gone"
         android:src="@drawable/no_chat"/>
-    <com.sema.sema.CustonFont
+    <com.sema.sema.fonts.CustonFont
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text="You've no chats. Tap + at the top of your screen or search for other hashtags."

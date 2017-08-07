@@ -44,7 +44,7 @@
 
         </RelativeLayout>
 
-        <com.sema.sema.CustonFont
+        <com.sema.sema.fonts.CustonFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/post_date"
@@ -53,7 +53,7 @@
             android:layout_margin="9dp"
             android:text="date"/>
 
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/post_name"
@@ -65,7 +65,7 @@
                 android:text="name"/>
 
 
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="13dp"
@@ -88,7 +88,7 @@
             android:background="@drawable/green_counter"
             android:layout_marginRight="10dp">
 
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

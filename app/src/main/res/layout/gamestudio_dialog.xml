@@ -8,7 +8,7 @@
     android:layout_centerInParent="true"
     android:orientation="vertical"
     android:weightSum="3"
-    tools:context="com.sema.sema.GameStudioActivity">
+    tools:context="com.sema.sema.activities.GameStudioActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

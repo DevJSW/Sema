@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.sema.sema.FriendsActivity"
+    tools:context="com.sema.sema.activities.FriendsActivity"
     tools:showIn="@layout/activity_friends">
 
     <LinearLayout
@@ -55,7 +55,7 @@
         android:visibility="gone"
         android:layout_above="@+id/noPostTxt"
         android:src="@drawable/gps"/>
-    <com.sema.sema.CustonFont
+    <com.sema.sema.fonts.CustonFont
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:text="Please enable your gps so that we can connect you with people around your location and country."

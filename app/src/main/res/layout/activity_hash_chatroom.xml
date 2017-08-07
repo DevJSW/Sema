@@ -8,7 +8,7 @@
     android:orientation="vertical"
     android:background="@drawable/sema_wallpaper"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.sema.sema.ChatroomActivity">
+    tools:context="com.sema.sema.chatrooms.ChatroomActivity">
 
     <include layout="@layout/toolbar_hashchatroom"
         android:id="@+id/mCustomToolbarHash"/>

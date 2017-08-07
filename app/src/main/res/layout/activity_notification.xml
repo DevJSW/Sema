@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="10dp"
-    tools:context="com.sema.sema.NotificationActivity">
+    tools:context="com.sema.sema.activities.NotificationActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Message notifications"
@@ -36,14 +36,14 @@
             android:layout_marginTop="15dp"
             android:orientation="vertical">
 
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/notifications_text"
                 android:textStyle="bold"
                 android:textSize="16dp"
                 android:text="Conversations tones"/>
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/playsound_txt"
@@ -74,14 +74,14 @@
             android:layout_marginTop="15dp"
             android:orientation="vertical">
 
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/notifications_text2"
                 android:textStyle="bold"
                 android:textSize="16dp"
                 android:text="Notification tone"/>
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/playsound_txt2"
@@ -112,14 +112,14 @@
             android:layout_marginTop="15dp"
             android:orientation="vertical">
 
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/notifications_text3"
                 android:textStyle="bold"
                 android:textSize="16dp"
                 android:text="Vibrate"/>
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/playsound_txt3"
@@ -150,7 +150,7 @@
             android:layout_marginTop="15dp"
             android:orientation="vertical">
 
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/notifications_text4"
@@ -177,7 +177,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:orientation="vertical">
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hashtag notifications"
@@ -197,14 +197,14 @@
             android:layout_marginTop="15dp"
             android:orientation="vertical">
 
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/notifications_text5"
                 android:textStyle="bold"
                 android:textSize="16dp"
                 android:text="Conversations tones"/>
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/playsound_txt5"

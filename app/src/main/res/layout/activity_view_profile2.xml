@@ -51,7 +51,7 @@
             android:orientation="vertical">
 
 
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="About"
@@ -75,7 +75,7 @@
                         android:orientation="horizontal"
                         android:id="@+id/top_liny3">
 
-                        <com.sema.sema.CustonFont
+                        <com.sema.sema.fonts.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"
@@ -86,7 +86,7 @@
                             android:layout_marginTop="10dp"
                             android:text="Status: "/>
 
-                        <com.sema.sema.CustonFont
+                        <com.sema.sema.fonts.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"
@@ -108,7 +108,7 @@
                         android:orientation="horizontal"
                         android:id="@+id/top_liny5">
 
-                        <com.sema.sema.CustonFont
+                        <com.sema.sema.fonts.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"
@@ -119,7 +119,7 @@
                             android:layout_marginTop="10dp"
                             android:text="Last seen: "/>
 
-                        <com.sema.sema.CustonFont
+                        <com.sema.sema.fonts.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"
@@ -140,7 +140,7 @@
                         android:orientation="horizontal"
                         android:id="@+id/top_liny2">
 
-                        <com.sema.sema.CustonFont
+                        <com.sema.sema.fonts.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"
@@ -151,7 +151,7 @@
                             android:layout_marginTop="10dp"
                             android:text="Joined: "/>
 
-                        <com.sema.sema.CustonFont
+                        <com.sema.sema.fonts.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"
@@ -168,7 +168,7 @@
 
             </android.support.v7.widget.CardView>
 
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Location"
@@ -192,7 +192,7 @@
                         android:orientation="horizontal"
                         android:id="@+id/top_liny34">
 
-                        <com.sema.sema.CustonFont
+                        <com.sema.sema.fonts.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"
@@ -203,7 +203,7 @@
                             android:layout_marginTop="10dp"
                             android:text="Country: "/>
 
-                        <com.sema.sema.CustonFont
+                        <com.sema.sema.fonts.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"
@@ -225,7 +225,7 @@
                         android:orientation="horizontal"
                         android:id="@+id/top_liny54">
 
-                        <com.sema.sema.CustonFont
+                        <com.sema.sema.fonts.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"
@@ -236,7 +236,7 @@
                             android:layout_marginTop="10dp"
                             android:text="City: "/>
 
-                        <com.sema.sema.CustonFont
+                        <com.sema.sema.fonts.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"
@@ -257,7 +257,7 @@
                         android:orientation="horizontal"
                         android:id="@+id/top_liny24">
 
-                        <com.sema.sema.CustonFont
+                        <com.sema.sema.fonts.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"
@@ -268,7 +268,7 @@
                             android:layout_marginTop="10dp"
                             android:text="Currently at: "/>
 
-                        <com.sema.sema.CustonFont
+                        <com.sema.sema.fonts.CustonFont
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="15dp"

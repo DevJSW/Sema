@@ -3,24 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.sema.sema.MainActivity$PlaceholderFragment">
+    tools:context="com.sema.sema.activities.MainActivity$PlaceholderFragment">
 
 
-        <com.sema.sema.CustonFont
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvTrends"
-            android:layout_margin="8dp"
-            android:text="Whats Trending..."/>
-            <android.support.v7.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:background="#fdf1efef"
-                android:layout_below="@+id/tvTrends"
-                android:layout_marginBottom="10dp"
-                android:id="@+id/hash_list">
-
-            </android.support.v7.widget.RecyclerView>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -67,7 +52,7 @@
                 android:layout_above="@+id/noPostTxt"
                 android:visibility="gone"
                 android:src="@drawable/no_hashtags"/>
-            <com.sema.sema.CustonFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="250dp"
                 android:layout_height="wrap_content"
                 android:text="You've no hashtags. Tap + at the top of your screen or search for other hashtags."

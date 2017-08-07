@@ -19,7 +19,7 @@
         android:id="@+id/relly"
         android:layout_height="wrap_content">
 
-        <com.sema.sema.CustonFont
+        <com.sema.sema.fonts.CustonFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"

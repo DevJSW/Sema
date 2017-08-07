@@ -8,7 +8,7 @@
     android:background="@drawable/ic_wallpaper"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.sema.sema.ChatroomActivity">
+    tools:context="com.sema.sema.chatrooms.ChatroomActivity">
 
 
     <RelativeLayout
