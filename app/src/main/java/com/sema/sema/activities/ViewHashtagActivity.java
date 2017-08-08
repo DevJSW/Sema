@@ -53,9 +53,11 @@ public class ViewHashtagActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_hashtag);
       /*  getSupportActionBar().setDisplayHomeAsUpEnabled(true);*/
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.cardInfo_appbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Window window = ViewHashtagActivity.this.getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

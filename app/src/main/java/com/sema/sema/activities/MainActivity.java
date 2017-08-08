@@ -292,6 +292,11 @@ public class MainActivity extends AppCompatActivity {
                         fabHash.hide();
                         break;
 
+                   /* case 2:
+                        fabPerson.hide();
+                        fabHash.hide();
+                        break;*/
+
                     default:
                         fabHash.hide();
                         fabPerson.hide();

@@ -72,21 +72,21 @@ public class tab3explore extends Fragment {
         mQueryTrends = mDatabaseHashtag.orderByChild("trends").limitToLast(10);
 
         mHashList = (RecyclerView) v.findViewById(R.id.hash_list);
-        topHashtagLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        topHashtagLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mHashList.setLayoutManager(topHashtagLayoutManager);
 
-        mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
+      /*  mMembersList = (RecyclerView) v.findViewById(R.id.Members_list);
         memberLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-       /* mMembersList.setLayoutManager(new GridLayoutManager(getActivity(), 3));*/
-        mMembersList.setLayoutManager(memberLayoutManager);
+       *//* mMembersList.setLayoutManager(new GridLayoutManager(getActivity(), 3));*//*
+        mMembersList.setLayoutManager(memberLayoutManager);*/
 
-        mDemoSlider = (SliderLayout) v.findViewById(R.id.slider);
+       /* mDemoSlider = (SliderLayout) v.findViewById(R.id.slider);
         setUpDemoSlider();
-
+*/
         return v;
     }
 
-    private void setUpDemoSlider() {
+  /*  private void setUpDemoSlider() {
         HashMap<String,Integer> file_maps = new HashMap<String, Integer>();
         file_maps.put("If you do,build a great experience", R.drawable.slider1);
         file_maps.put("Learn from your competitor,never copy.", R.drawable.slider2);
@@ -113,7 +113,7 @@ public class tab3explore extends Fragment {
         mDemoSlider.setCustomAnimation(new DescriptionAnimation());
         mDemoSlider.setDuration(4000);
     }
-
+*/
 
     @Override
     public void onStart() {
@@ -122,7 +122,7 @@ public class tab3explore extends Fragment {
         FirebaseRecyclerAdapter<People, tab3explore.topHashViewHolder> firebaseRecyclerAdapter2 = new  FirebaseRecyclerAdapter<People, tab3explore.topHashViewHolder>(
 
                 People.class,
-                R.layout.hashtags_grid,
+                R.layout.tag_row,
                 tab3explore.topHashViewHolder.class,
                 mQueryTrends
 
@@ -135,7 +135,8 @@ public class tab3explore extends Fragment {
                 final String PostKey = getRef(position).getKey();
 
                 viewHolder.setHashtag(model.getHashtag());
-                viewHolder.setImage(getContext(), model.getImage());
+                viewHolder.setDate(model.getDate());
+               /* viewHolder.setImage(getContext(), model.getImage());*/
 
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -160,7 +161,7 @@ public class tab3explore extends Fragment {
        /* topHashtagLayoutManager.setReverseLayout(true);*/
         mHashList.setAdapter(firebaseRecyclerAdapter2);
 
-        FirebaseRecyclerAdapter<People, tab3explore.LocalsViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, tab3explore.LocalsViewHolder>(
+       /* FirebaseRecyclerAdapter<People, tab3explore.LocalsViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, tab3explore.LocalsViewHolder>(
 
                 People.class,
                 R.layout.locals_item,
@@ -193,10 +194,10 @@ public class tab3explore extends Fragment {
 
 
         };
-
-       /* topHashtagLayoutManager.setReverseLayout(true);*/
+*//*
+       *//* topHashtagLayoutManager.setReverseLayout(true);*//*
         mMembersList.setAdapter(firebaseRecyclerAdapter);
-
+*/
     }
 
     public static class topHashViewHolder extends RecyclerView.ViewHolder {
@@ -239,6 +240,12 @@ public class tab3explore extends Fragment {
             post_name.setText(name);
         }
 
+        public void setDate(String date) {
+
+            TextView post_date = (TextView) mView.findViewById(R.id.post_date);
+            post_date.setText(date);
+        }
+
         public void setAddress(String address) {
 
             TextView post_address = (TextView) mView.findViewById(R.id.post_address);
@@ -272,7 +279,7 @@ public class tab3explore extends Fragment {
 
     }
 
-    public static class LocalsViewHolder extends RecyclerView.ViewHolder {
+   /* public static class LocalsViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
 
@@ -322,7 +329,7 @@ public class tab3explore extends Fragment {
             });
         }
 
-    }
+    }*/
 
 
 }

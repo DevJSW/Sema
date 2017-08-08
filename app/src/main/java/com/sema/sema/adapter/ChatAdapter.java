@@ -9,6 +9,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.sema.sema.R;
+import com.sema.sema.chatrooms.ChatroomActivity;
+import com.sema.sema.fragments.tab1hashtag;
 import com.sema.sema.models.Chat;
 import com.sema.sema.realm.models.Tag;
 
@@ -23,6 +25,12 @@ public class ChatAdapter extends BaseAdapter
 
     Context context;
     ArrayList<Chat> chats;
+
+    public ChatAdapter (ChatroomActivity context, ArrayList<Chat> chats)
+    {
+        this.context = context;
+        this.chats = chats;
+    }
 
     @Override
     public int getCount()
@@ -61,15 +69,17 @@ public class ChatAdapter extends BaseAdapter
         final Chat c = (Chat) this.getItem(position);
 
         message.setText(c.getMessage());
+        message2.setText(c.getMessage());
         name.setText(c.getName());
+        name2.setText(c.getName());
         date.setText(c.getDate());
+        date2.setText(c.getDate());
 
         view.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-
                 Toast.makeText(context, c.getHashtag(), Toast.LENGTH_LONG).show();
             }
         });

@@ -1,17 +1,23 @@
 package com.sema.sema.models;
 
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Application;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.sema.sema.services.GPSTracker;
 import com.sema.sema.services.OnlineStatusService;
 import com.sema.sema.utilis.ConnectivityReceiver;
+import com.squareup.picasso.OkHttpDownloader;
+import com.squareup.picasso.Picasso;
 
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -42,6 +48,18 @@ public class sema extends Application {
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
+        if (!FirebaseApp.getApps(this).isEmpty()) {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        }
+
+        Picasso.Builder builder = new Picasso.Builder(this);
+        builder.downloader(new OkHttpDownloader(this, Integer.MAX_VALUE));
+        Picasso built = builder.build();
+        built.setIndicatorsEnabled(false);
+        built.setLoggingEnabled(true);
+        Picasso.setSingletonInstance(built);
+
+
         //SET UP REALM
         Realm.init(this);
         RealmConfiguration config = new RealmConfiguration.Builder().build();
@@ -56,17 +74,27 @@ public class sema extends Application {
         mDatabaseUsersOnline = FirebaseDatabase.getInstance().getReference().child("users_online");
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mAuth = FirebaseAuth.getInstance();
+
     }
+
+   /* public boolean isForeground(sema) {
+        ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> runningTaskInfo = manager.getRunningTasks(1);
+        ComponentName componentInfo = runningTaskInfo.get(0).topActivity;
+        return componentInfo.getPackageName().equals(myPackage);
+    }*/
 
     sema.ActivityLifecycleCallbacks activityCallbacks = new sema.ActivityLifecycleCallbacks() {
 
         @Override
         public void onActivityCreated(Activity activity, Bundle bundle) {
-            mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).setValue("isOnline");
+           /* mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).setValue("isOnline");*/
         }
         @Override
         public void onActivityStarted(Activity activity) {
-            mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).setValue("isOnline");
+            if (mAuth.getCurrentUser() != null) {
+                mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).setValue("isOnline");
+            }
 
         }
 
@@ -75,7 +103,9 @@ public class sema extends Application {
 
             if (wasInBackground) {
                 //Do app-wide came-here-from-background code
-                mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).setValue("isOnline");
+                if (mAuth.getCurrentUser() != null) {
+                    mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).setValue("isOnline");
+                }
             }
             stopActivityTransitionTimer();
         }
@@ -87,8 +117,10 @@ public class sema extends Application {
 
         @Override
         public void onActivityStopped(Activity activity) {
-            mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).removeValue();
-            addToLastSeen();
+            if (mAuth.getCurrentUser() != null) {
+                mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).removeValue();
+                addToLastSeen();
+            }
 
         }
 
@@ -99,8 +131,10 @@ public class sema extends Application {
 
         @Override
         public void onActivityDestroyed(Activity activity) {
-            mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).removeValue();
-            addToLastSeen();
+            if (mAuth.getCurrentUser() != null) {
+                mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).removeValue();
+                addToLastSeen();
+            }
 
         }
 
@@ -141,8 +175,8 @@ public class sema extends Application {
         }
 
         this.wasInBackground = false;
-    }
 
+    }
 
     private void addToLastSeen() {
 

@@ -26,8 +26,6 @@
                     android:id="@+id/post_image"
                     android:layout_margin="5dp"
                     android:layout_centerVertical="true"
-                    app:civ_border_width="1dp"
-                    app:civ_border_color="#fff"
                     android:src="@drawable/placeholder_image"/>
 
 
@@ -46,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/post_name"
                 android:layout_toRightOf="@+id/rely_img"
-                android:textSize="13dp"
+                android:textSize="14dp"
                 android:scaleType="fitXY"
                 android:layout_marginTop="8dp"
                 android:textStyle="bold"
@@ -66,7 +64,7 @@
             <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13dp"
+                android:textSize="14dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="3dp"
                 android:layout_toLeftOf="@+id/counter"
@@ -108,7 +106,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/post_date"
-            android:textSize="9dp"
+            android:textSize="10dp"
             android:layout_alignParentRight="true"
             android:layout_margin="10dp"
             android:text="date"/>

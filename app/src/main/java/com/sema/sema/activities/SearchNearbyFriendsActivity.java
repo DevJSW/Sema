@@ -98,7 +98,7 @@ public class SearchNearbyFriendsActivity extends AppCompatActivity implements Se
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
 
                 People.class,
-                R.layout.member2_row,
+                R.layout.tag_row,
                 LetterViewHolder.class,
                 mDatabaseUsers.orderByChild("location").equalTo(mAuth.getCurrentUser().getUid())
 
@@ -239,10 +239,9 @@ public class SearchNearbyFriendsActivity extends AppCompatActivity implements Se
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<People, LetterViewHolder>(
 
                 People.class,
-                R.layout.member2_row,
+                R.layout.tag_row,
                 LetterViewHolder.class,
                 mDatabaseUsers.orderByChild("address").startAt(newText.toUpperCase())
-
 
         ) {
             @Override

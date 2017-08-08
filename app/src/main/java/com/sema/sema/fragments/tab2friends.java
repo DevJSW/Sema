@@ -68,15 +68,6 @@ public class tab2friends extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.tab2friends, container, false);
 
-        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipeRefreshLayout);
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Refresh items
-                refreshItems();
-            }
-        });
-
 
         mStartBtn = (Button) v.findViewById(R.id.startChat);
         mViewPager = (ViewPager) v.findViewById(R.id.container);

@@ -7,6 +7,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
@@ -26,8 +28,7 @@ import com.squareup.picasso.Picasso;
 
 public class ProfileActivity extends AppCompatActivity {
 
-
-    private String mPostKey = null;
+    /*private String mPostKey = null;*/
     SwipeRefreshLayout mSwipeRefreshLayout;
     private DatabaseReference mDatabaseUsers, mDatabaseChatroom, mDatabase, mDatabaseLastSeen;
     private FirebaseAuth mAuth;
@@ -44,9 +45,12 @@ public class ProfileActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_new_profile);
 
-        android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.detail_toolbar);
+        /*android.support.v7.widget.Toolbar toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.detail_toolbar);*/
+        Toolbar toolbar = (Toolbar) findViewById(R.id.detail_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         Window window = ProfileActivity.this.getWindow();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -57,15 +61,14 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
 
-        mPostKey = getIntent().getExtras().getString("heartraise_id");
-       // mAuth = FirebaseAuth.getInstance();
+       /* mPostKey = getIntent().getExtras().getString("heartraise_id");*/
+        mAuth = FirebaseAuth.getInstance();
         mGroupIcon = (ImageView) findViewById(R.id.user_avator);
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        mDatabaseChatroom = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(mPostKey).child("members");
+      /*  mDatabaseChatroom = FirebaseDatabase.getInstance().getReference().child("Chatrooms").child(mPostKey).child("members");*/
         mDatabaseLastSeen = FirebaseDatabase.getInstance().getReference().child("Last_Seen");
         mDatabaseUsers.keepSynced(true);
         mDatabaseLastSeen.keepSynced(true);
-        mDatabaseChatroom.keepSynced(true);
 
         collapsingToolbarLayout= (CollapsingToolbarLayout) findViewById(R.id.cardInfo_collapsing);
 
@@ -98,7 +101,7 @@ public class ProfileActivity extends AppCompatActivity {
         });*/
 
 
-        mDatabaseUsers.child(mPostKey).addValueEventListener(new ValueEventListener() {
+        mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -134,6 +137,13 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
     @Override

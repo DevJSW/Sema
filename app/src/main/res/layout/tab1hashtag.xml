@@ -5,18 +5,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.sema.sema.activities.MainActivity$PlaceholderFragment">
 
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/hash_list"
                 android:orientation="vertical">
-
-                <android.support.v4.widget.SwipeRefreshLayout
-                    android:id="@+id/swipeRefreshLayout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
 
                     <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
@@ -27,8 +20,6 @@
                         android:id="@+id/Members_list">
 
                     </android.support.v7.widget.RecyclerView>
-
-                </android.support.v4.widget.SwipeRefreshLayout>
 
 
             </LinearLayout>

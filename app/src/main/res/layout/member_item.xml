@@ -25,8 +25,6 @@
                     android:layout_marginRight="5dp"
                     android:id="@+id/post_image"
                     android:layout_margin="5dp"
-                    app:civ_border_width="1dp"
-                    app:civ_border_color="#fff"
                     android:src="@drawable/placeholder_image"/>
 
             <ImageView
@@ -48,18 +46,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/post_date"
-            android:textSize="10dp"
+            android:textSize="11dp"
             android:layout_alignParentRight="true"
             android:layout_margin="9dp"
             android:text="date"/>
 
-            <com.sema.sema.fonts.CustonFont
+            <com.sema.sema.fonts.CustonBoldFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/post_name"
                 android:layout_marginTop="20dp"
                 android:layout_toRightOf="@+id/rely_img"
-                android:textSize="13dp"
+                android:textSize="14dp"
                 android:scaleType="fitXY"
                 android:textStyle="bold"
                 android:text="name"/>
@@ -68,7 +66,7 @@
             <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13dp"
+                android:textSize="14dp"
                 android:layout_marginTop="2dp"
                 android:layout_toRightOf="@+id/rely_img"
                 android:layout_below="@+id/post_name"

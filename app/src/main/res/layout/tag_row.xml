@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+
+        <com.sema.sema.fonts.CustonFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/post_date"
+            android:textSize="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="9dp"
+            android:text="date"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="15dp"
+            android:id="@+id/hash_liny"
+            android:orientation="horizontal">
+
+            <com.sema.sema.fonts.CustonFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17dp"
+                android:text="#"/>
+
+            <com.sema.sema.fonts.CustonFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/post_hashtag"
+                android:layout_toRightOf="@+id/rely_img"
+                android:textSize="17dp"
+                android:scaleType="fitXY"
+                android:textStyle="bold"
+                android:text="hashtag"/>
+        </LinearLayout>
+
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_toRightOf="@+id/rely_img"
+            android:layout_marginTop="6dp"
+            android:layout_alignParentBottom="true"
+            android:background="#cecccc"/>
+    </RelativeLayout>
+
+
+</LinearLayout>
+

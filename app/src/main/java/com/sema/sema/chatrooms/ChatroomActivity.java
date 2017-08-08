@@ -1,5 +1,6 @@
 package com.sema.sema.chatrooms;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -33,6 +35,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -60,6 +63,7 @@ import com.sema.sema.R;
 import com.sema.sema.activities.SendCameraActivity;
 import com.sema.sema.activities.SendPhotoActivity;
 import com.sema.sema.activities.ViewProfileActivity;
+import com.sema.sema.adapter.ChatAdapter;
 import com.sema.sema.models.Chat;
 import com.sema.sema.services.GPSTracker;
 import com.squareup.picasso.Callback;
@@ -98,7 +102,7 @@ public class ChatroomActivity extends AppCompatActivity {
     private RecyclerView mCommentList;
     private DatabaseReference mDatabase, mDatabaseUsersTyping;
     private DatabaseReference mDatabaseComment,  mDatabaseUsers, mDatabaseChatroom, mDatabaseUnread, mDatabaseNotification,  mDatabaseLastSeen, mDatabaseTyping, mDatabaseTick;
-    private DatabaseReference mDatabaseUser, mDatabaseLatestMessage;
+    private DatabaseReference mDatabaseUser, mDatabaseLatestMessage,  mDatabaseUsersOnline;
     private DatabaseReference mDatabaseUser2;
     private DatabaseReference mDatabasePostChats;
     private Query mQueryPostChats;
@@ -132,6 +136,9 @@ public class ChatroomActivity extends AppCompatActivity {
     private FloatingActionButton fab,fab1,fab2,fab3,fab4,fab5;
     private Animation fab_open,fab_close,rotate_forward,rotate_backward;
 
+    ChatAdapter chatAdapter;
+    ListView chatList;
+
 
     /** Called when the activity is first created. */
 
@@ -162,6 +169,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mStorage = FirebaseStorage.getInstance().getReference();
         mProgress = new ProgressDialog(this);
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+        mDatabaseUsersOnline = FirebaseDatabase.getInstance().getReference().child("users_online");
         rootView = findViewById(R.id.root_view);
         emojiImageView = (ImageView) findViewById(R.id.emoji_btn);
         emojiconEditText = (EmojiconEditText) findViewById(R.id.emojicon_edit_text);
@@ -184,10 +192,12 @@ public class ChatroomActivity extends AppCompatActivity {
         //final RelativeLayout hello = (RelativeLayout) findViewById(R.id.hello);
 
 
-        initUserStatusIndicator();
+        /*initUserStatusIndicator();*/
 
         mAuth = FirebaseAuth.getInstance();
         mPostKey = getIntent().getExtras().getString("heartraise_id");
+
+        mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).setValue("isOnline");
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mDatabaseUsersTyping = FirebaseDatabase.getInstance().getReference().child("users_typing");
@@ -333,11 +343,12 @@ public class ChatroomActivity extends AppCompatActivity {
         gameBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*Intent cardonClick = new Intent(ChatroomActivity.this, GameStudioActivity.class);
-                cardonClick.putExtra("heartraise_id", mPostKey );
-                startActivity(cardonClick);*/
 
-                final Context context = ChatroomActivity.this;
+                Intent cardonClick = new Intent(ChatroomActivity.this, SendPhotoActivity.class);
+                cardonClick.putExtra("heartraise_id", mPostKey );
+                startActivity(cardonClick);
+
+               /* final Context context = ChatroomActivity.this;
 
                 // custom dialog
                 final Dialog dialog = new Dialog(context);
@@ -516,7 +527,7 @@ public class ChatroomActivity extends AppCompatActivity {
                 // if button is clicked, close the custom dialog
 
                 dialog.show();
-
+*/
             }
         });
 
@@ -601,9 +612,6 @@ public class ChatroomActivity extends AppCompatActivity {
 
 
         mDatabaseComment.keepSynced(true);
-        addToLastSeen();
-
-
 
     }
 
@@ -640,8 +648,7 @@ public class ChatroomActivity extends AppCompatActivity {
                     RelativeTimeTextView toolbar_last_seen = (RelativeTimeTextView) findViewById(R.id.toolbar_last_seen_date);
                     toolbar_last_seen.setText("is Online");
                 } else {
-                    RelativeTimeTextView toolbar_last_seen = (RelativeTimeTextView) findViewById(R.id.toolbar_last_seen_date);
-                    toolbar_last_seen.setReferenceTime(Long.parseLong(dataSnapshot.getValue().toString()));
+
                 }
             }
 
@@ -1199,6 +1206,15 @@ public class ChatroomActivity extends AppCompatActivity {
 
     }
 
+   /* private void initListView() {
+
+        chatList = (ListView) findViewById(R.id.chat_list);
+        chatAdapter = new ChatAdapter(
+
+        );
+        chatList.setAdapter(chatAdapter);
+    }*/
+
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
 
         View mView;
@@ -1355,6 +1371,14 @@ public class ChatroomActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+
+        mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).setValue("isOnline");
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1433,6 +1457,5 @@ public class ChatroomActivity extends AppCompatActivity {
 
         }
     }
-
 
 }

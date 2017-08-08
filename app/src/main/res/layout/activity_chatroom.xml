@@ -28,6 +28,13 @@
 
         </android.support.v7.widget.RecyclerView>
 
+       <!-- <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/chat_list">
+
+        </ListView>-->
+
         <RelativeLayout
             android:id="@+id/typing_bar"
             android:layout_width="match_parent"
@@ -71,7 +78,7 @@
                 android:layout_marginRight="20dp"
                 android:layout_toLeftOf="@+id/quickShot"
                 android:scaleType="fitXY"
-                android:src="@drawable/ic_gamepad" />
+                android:src="@drawable/gallery_" />
 
             <ImageView
                 android:id="@+id/quickShot"

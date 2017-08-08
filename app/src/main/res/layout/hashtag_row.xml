@@ -25,8 +25,6 @@
                     android:layout_marginRight="5dp"
                     android:id="@+id/post_image"
                     android:layout_margin="5dp"
-                    app:civ_border_width="1dp"
-                    app:civ_border_color="#fff"
                     android:src="@drawable/placeholder_image"/>
 
             <ImageView
@@ -48,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/post_date"
-            android:textSize="10dp"
+            android:textSize="11dp"
             android:layout_alignParentRight="true"
             android:layout_margin="9dp"
             android:text="date"/>
@@ -61,18 +59,18 @@
             android:id="@+id/hash_liny"
             android:orientation="horizontal">
 
-            <com.sema.sema.fonts.CustonFont
+            <com.sema.sema.fonts.CustonBoldFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12dp"
+                android:textSize="13dp"
                 android:text="#"/>
 
-            <com.sema.sema.fonts.CustonFont
+            <com.sema.sema.fonts.CustonBoldFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/post_hashtag"
                 android:layout_toRightOf="@+id/rely_img"
-                android:textSize="13dp"
+                android:textSize="14dp"
                 android:scaleType="fitXY"
                 android:textStyle="bold"
                 android:text="hashtag"/>
@@ -87,7 +85,7 @@
             android:layout_marginTop="2dp"
             android:textColor="@color/colorPrimary"
             android:layout_toRightOf="@+id/rely_img"
-            android:textSize="10dp"
+            android:textSize="11dp"
             android:scaleType="fitXY"
             android:textStyle="bold"
             android:text="By: "/>
@@ -98,7 +96,7 @@
                 android:layout_marginTop="2dp"
                 android:layout_below="@+id/hash_liny"
                 android:layout_toRightOf="@+id/post_nam"
-                android:textSize="10dp"
+                android:textSize="11dp"
                 android:scaleType="fitXY"
                 android:textStyle="bold"
                 android:text="username"/>
@@ -106,7 +104,7 @@
             <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13dp"
+                android:textSize="14dp"
                 android:layout_marginTop="2dp"
                 android:layout_toRightOf="@+id/rely_img"
                 android:layout_below="@+id/post_name"
