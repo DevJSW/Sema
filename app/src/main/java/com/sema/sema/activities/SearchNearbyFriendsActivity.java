@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -65,8 +66,9 @@ public class SearchNearbyFriendsActivity extends AppCompatActivity implements Se
         mAuth = FirebaseAuth.getInstance();
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mMembersList = (RecyclerView) findViewById(R.id.Members_list);
-        mMembersList.setLayoutManager(new LinearLayoutManager(this));
+       /* mMembersList.setLayoutManager(new LinearLayoutManager(this));*/
         mMembersList.setHasFixedSize(true);
+        mMembersList.setLayoutManager(new GridLayoutManager(this, 3));
 
         mDatabaseUsers.keepSynced(true);
 
@@ -98,7 +100,7 @@ public class SearchNearbyFriendsActivity extends AppCompatActivity implements Se
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
 
                 People.class,
-                R.layout.tag_row,
+                R.layout.users_grid,
                 LetterViewHolder.class,
                 mDatabaseUsers.orderByChild("location").equalTo(mAuth.getCurrentUser().getUid())
 
@@ -110,7 +112,7 @@ public class SearchNearbyFriendsActivity extends AppCompatActivity implements Se
                 final String  post_key = getRef(position).getKey();
 
                 viewHolder.setName(model.getName());
-                viewHolder.setStatus(model.getStatus());
+                viewHolder.setAddress(model.getAddress());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
 
                 // open chatroom activity
@@ -152,10 +154,11 @@ public class SearchNearbyFriendsActivity extends AppCompatActivity implements Se
 
         }
 
-        public void setStatus(String status) {
+        public void setAddress(String address) {
 
-            TextView post_status = (TextView) mView.findViewById(R.id.status);
-            post_status.setText(status);
+            TextView post_address = (TextView) mView.findViewById(R.id.post_address);
+            post_address.setText(address);
+
         }
 
         public void setName(String name) {
@@ -167,7 +170,7 @@ public class SearchNearbyFriendsActivity extends AppCompatActivity implements Se
 
         public void setImage(final Context ctx, final String image) {
 
-            final CircleImageView civ = (CircleImageView) mView.findViewById(R.id.post_image);
+            final ImageView civ = (ImageView) mView.findViewById(R.id.post_image);
 
             Picasso.with(ctx).load(image).networkPolicy(NetworkPolicy.OFFLINE).into(civ, new Callback() {
                 @Override
@@ -182,22 +185,6 @@ public class SearchNearbyFriendsActivity extends AppCompatActivity implements Se
                     Picasso.with(ctx).load(image).into(civ);
                 }
             });
-        }
-
-        public void setCountry(String country) {
-
-            TextView post_country = (TextView) mView.findViewById(R.id.post_country);
-            post_country.setText(country);
-
-
-        }
-
-        public void setCity(String city) {
-
-            TextView post_city = (TextView) mView.findViewById(R.id.post_city);
-            post_city.setText(city);
-
-
         }
 
 
@@ -239,7 +226,7 @@ public class SearchNearbyFriendsActivity extends AppCompatActivity implements Se
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<People, LetterViewHolder>(
 
                 People.class,
-                R.layout.tag_row,
+                R.layout.users_grid,
                 LetterViewHolder.class,
                 mDatabaseUsers.orderByChild("address").startAt(newText.toUpperCase())
 
@@ -249,10 +236,10 @@ public class SearchNearbyFriendsActivity extends AppCompatActivity implements Se
                 final String post_key = getRef(position).getKey();
 
                 viewHolder.setName(model.getName());
-                viewHolder.setStatus(model.getStatus());
+                viewHolder.setAddress(model.getAddress());
                 viewHolder.setImage(getApplicationContext(), model.getImage());
-                viewHolder.setCity(model.getCity());
-                viewHolder.setCountry(model.getCountry());
+               /* viewHolder.setCity(model.getCity());
+                viewHolder.setCountry(model.getCountry());*/
 
                 // open chatroom activity
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -295,7 +282,6 @@ public class SearchNearbyFriendsActivity extends AppCompatActivity implements Se
         };
         mMembersList.setAdapter(firebaseRecyclerAdapter);
         return false;
-
 
     }
 

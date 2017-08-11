@@ -14,48 +14,54 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/heading"
+            android:layout_margin="15dp"
+            android:orientation="horizontal">
+
+            <com.sema.sema.fonts.CustonBoldFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="12dp"
+                android:textSize="17dp"
+                android:text="Add to Album."/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#b3b0b0"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/deleteLiny"
             android:layout_margin="10dp"
             android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/delete"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_delete_icon" />
 
             <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="12dp"
-                android:textSize="16dp"
-                android:text="Remove hashtag."/>
+                android:textSize="17dp"
+                android:text="Camera."/>
         </LinearLayout>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="#b3b0b0"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:id="@+id/blockLiny"
             android:orientation="horizontal">
-            <ImageView
-                android:id="@+id/block"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/ic_block_icon" />
 
             <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="12dp"
-                android:textSize="16dp"
-                android:text="Block this user."/>
+                android:textSize="17dp"
+                android:text="Gallery."/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"

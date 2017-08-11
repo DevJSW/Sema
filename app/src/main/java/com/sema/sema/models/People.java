@@ -5,13 +5,13 @@ package com.sema.sema.models;
  */
 public class People {
 
-    private String name, image, date, message, status, hashtag, city, address, country;
+    private String name, image, date, message, status, hashtag, city, address, country, photo;
 
     public People() {
 
     }
 
-    public People(String name, String image, String date, String message, String status, String hashtag, String city, String address, String country) {
+    public People(String name, String image, String date, String message, String status, String hashtag, String city, String address, String country, String photo) {
         this.name = name;
 
         this.image = image;
@@ -22,6 +22,7 @@ public class People {
         this.city = city;
         this.address = address;
         this.country = country;
+        this.photo = photo;
     }
 
     public String getName() {
@@ -94,5 +95,13 @@ public class People {
 
     public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

@@ -259,7 +259,6 @@ public class SendPhotoActivity extends AppCompatActivity {
             mAddPhoto.setImageURI(mImageUri);
 
 
-
         }
     }
 

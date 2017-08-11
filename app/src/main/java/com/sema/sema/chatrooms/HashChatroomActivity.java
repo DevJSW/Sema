@@ -55,6 +55,7 @@ import com.google.firebase.storage.UploadTask;
 import com.sema.sema.R;
 import com.sema.sema.activities.ViewHashtagActivity;
 import com.sema.sema.activities.HashSendPhotoActivity;
+import com.sema.sema.activities.ViewProfileActivity;
 import com.sema.sema.models.Chat;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
@@ -704,7 +705,7 @@ public class HashChatroomActivity extends AppCompatActivity {
 
                                 String uid = dataSnapshot.child("uid").getValue().toString();
 
-                                Intent cardonClick = new Intent(HashChatroomActivity.this, ViewHashtagActivity.class);
+                                Intent cardonClick = new Intent(HashChatroomActivity.this, ViewProfileActivity.class);
                                 cardonClick.putExtra("heartraise_id", uid );
                                 startActivity(cardonClick);
 

@@ -59,7 +59,6 @@
                 android:layout_toRightOf="@+id/rely_img"
                 android:textSize="14dp"
                 android:scaleType="fitXY"
-                android:textStyle="bold"
                 android:text="name"/>
 
 

@@ -190,10 +190,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
        // Toast.makeText(mContext, String.valueOf(latitude + longitude),Toast.LENGTH_LONG).show();
 
 
