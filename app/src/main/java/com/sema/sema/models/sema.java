@@ -9,8 +9,11 @@ import android.os.Bundle;
 
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.sema.sema.services.GPSTracker;
 import com.sema.sema.services.OnlineStatusService;
 import com.sema.sema.utilis.ConnectivityReceiver;
@@ -71,10 +74,31 @@ public class sema extends Application {
         startService(new Intent(this, OnlineStatusService.class));
 
         //database
-        mDatabaseUsersOnline = FirebaseDatabase.getInstance().getReference().child("users_online");
-        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mAuth = FirebaseAuth.getInstance();
+        mDatabaseUsersOnline = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid()).child("isOnline");
+        mDatabaseUsersOnline.setValue("true");
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
 
+        isUserConnected();
+
+    }
+
+    private void isUserConnected() {
+
+        mDatabaseUsersOnline.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+
+                    mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).onDisconnect().setValue("false");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
    /* public boolean isForeground(sema) {
@@ -93,7 +117,7 @@ public class sema extends Application {
         @Override
         public void onActivityStarted(Activity activity) {
             if (mAuth.getCurrentUser() != null) {
-                mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).setValue("isOnline");
+               /* mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).setValue("isOnline");*/
             }
 
         }
@@ -119,6 +143,7 @@ public class sema extends Application {
         public void onActivityStopped(Activity activity) {
             if (mAuth.getCurrentUser() != null) {
                 mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).removeValue();
+                mDatabaseUsers.child("Users").child(mAuth.getCurrentUser().getUid()).child("isOnline").removeValue();
                 addToLastSeen();
             }
 
@@ -132,7 +157,7 @@ public class sema extends Application {
         @Override
         public void onActivityDestroyed(Activity activity) {
             if (mAuth.getCurrentUser() != null) {
-                mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).removeValue();
+                mDatabaseUsers.child("Users").child(mAuth.getCurrentUser().getUid()).child("isOnline").removeValue();
                 addToLastSeen();
             }
 
