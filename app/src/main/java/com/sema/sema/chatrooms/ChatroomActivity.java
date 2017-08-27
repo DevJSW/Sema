@@ -76,6 +76,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -105,6 +106,7 @@ public class ChatroomActivity extends AppCompatActivity {
     private DatabaseReference mDatabaseUser, mDatabaseLatestMessage,  mDatabaseUsersOnline;
     private DatabaseReference mDatabaseUser2;
     private DatabaseReference mDatabasePostChats;
+    private DatabaseReference mDatabaseChatNotification;
     private Query mQueryPostChats;
     private Query mQueryInAscending;
     private FirebaseUser mCurrentUser;
@@ -170,6 +172,7 @@ public class ChatroomActivity extends AppCompatActivity {
         mProgress = new ProgressDialog(this);
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mDatabaseUsersOnline = FirebaseDatabase.getInstance().getReference().child("users_online");
+        mDatabaseChatNotification = FirebaseDatabase.getInstance().getReference().child("chat_notifications");
         rootView = findViewById(R.id.root_view);
         emojiImageView = (ImageView) findViewById(R.id.emoji_btn);
         emojiconEditText = (EmojiconEditText) findViewById(R.id.emojicon_edit_text);
@@ -880,6 +883,17 @@ public class ChatroomActivity extends AppCompatActivity {
                                 newPost3.child("post_key").setValue(mPostKey);
                                 newPost3.child("change_chat_icon").setValue(mPostKey);
                                 newPost3.child("unread_listener").setValue(mPostKey);
+
+
+                                //SEND NOTIFICATION
+                                HashMap<String, String> NotificationData = new HashMap<>();
+                                NotificationData.put("from", mCurrentUser.getUid());
+                                NotificationData.put("message", message_val);
+                                NotificationData.put("sent_date", stringDate);
+                                NotificationData.put("post_key", mPostKey);
+
+                                mDatabaseChatNotification.child(mPostKey).setValue(NotificationData);
+
 
                                 //clear edit text after message has been sent
                                 EditText edit = (EditText) findViewById(R.id.emojicon_edit_text);

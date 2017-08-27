@@ -63,8 +63,10 @@ repositories {
     maven { url "https://jitpack.io" }
     maven { url "https://dl.bintray.com/hani-momanii/maven" }
     maven { url 'https://github.com/leonardocardoso/mvn-repo/raw/master/maven-deploy' }
+    maven { url 'https://mvnrepository.com/artifact/com.squareup.okhttp/okhttp' }
+    maven { url "https://maven.google.com" }
     mavenCentral()
-    jcenter()
+
 }
 
 dependencies {
@@ -105,6 +107,8 @@ dependencies {
     compile 'com.github.clans:fab:1.6.2'
     compile 'com.google.android.gms:play-services-maps:11.0.2'
     compile 'com.daimajia.slider:library:1.1.5@aar'
+
+    compile "com.android.support:support-core-utils:25.4.0"
     testCompile 'junit:junit:4.12'
 }
 apply plugin: 'com.google.gms.google-services'

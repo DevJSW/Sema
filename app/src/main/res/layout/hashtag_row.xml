@@ -14,18 +14,18 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="2dp"
             android:id="@+id/rely_img"
             android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="2dp"
-                    android:layout_marginRight="5dp"
-                    android:id="@+id/post_image"
-                    android:layout_margin="5dp"
-                    android:src="@drawable/placeholder_image"/>
+                android:layout_width="63dp"
+                android:layout_height="63dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="5dp"
+                android:id="@+id/post_image"
+                android:layout_margin="5dp"
+                android:src="@drawable/placeholder_image"/>
 
             <ImageView
                 android:layout_width="20dp"
@@ -55,62 +55,62 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/rely_img"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="17dp"
             android:id="@+id/hash_liny"
             android:orientation="horizontal">
 
-            <com.sema.sema.fonts.CustonBoldFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13dp"
+                android:textSize="16dp"
+                android:layout_marginLeft="5dp"
                 android:text="#"/>
 
-            <com.sema.sema.fonts.CustonBoldFont
+            <com.sema.sema.fonts.CustonFont
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/post_hashtag"
                 android:layout_toRightOf="@+id/rely_img"
-                android:textSize="14dp"
+                android:textSize="17dp"
                 android:text="hashtag"/>
         </LinearLayout>
 
-        <com.sema.sema.fonts.CustonFont
+        <com.sema.sema.fonts.CustonBoldFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/post_nam"
             android:layout_below="@+id/hash_liny"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="2dp"
-            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="1dp"
             android:layout_toRightOf="@+id/rely_img"
             android:textSize="11dp"
             android:scaleType="fitXY"
             android:textStyle="bold"
             android:text="By: "/>
-            <com.sema.sema.fonts.CustonFont
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/post_name"
-                android:layout_marginTop="2dp"
-                android:layout_below="@+id/hash_liny"
-                android:layout_toRightOf="@+id/post_nam"
-                android:textSize="11dp"
-                android:scaleType="fitXY"
-                android:textStyle="bold"
-                android:text="username"/>
+        <com.sema.sema.fonts.CustonFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/post_name"
+            android:layout_marginTop="1dp"
+            android:layout_below="@+id/hash_liny"
+            android:layout_toRightOf="@+id/post_nam"
+            android:textSize="11dp"
+            android:scaleType="fitXY"
+            android:textStyle="bold"
+            android:text="username"/>
 
-            <com.sema.sema.fonts.CustonFont
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="14dp"
-                android:layout_marginTop="2dp"
-                android:layout_toRightOf="@+id/rely_img"
-                android:layout_below="@+id/post_name"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="2dp"
-                android:singleLine="true"
-                android:id="@+id/post_message"
-                android:text="message"/>
+        <!-- <com.sema.sema.fonts.CustonFont
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textSize="14dp"
+             android:layout_marginTop="2dp"
+             android:layout_toRightOf="@+id/rely_img"
+             android:layout_below="@+id/post_name"
+             android:layout_marginRight="10dp"
+             android:layout_marginLeft="2dp"
+             android:singleLine="true"
+             android:id="@+id/post_message"
+             android:text="message"/>-->
 
         <RelativeLayout
             android:layout_width="20dp"
@@ -143,6 +143,7 @@
             android:layout_height="1dp"
             android:layout_toRightOf="@+id/rely_img"
             android:layout_marginTop="6dp"
+            android:layout_marginLeft="5dp"
             android:layout_below="@+id/rely_img"
             android:background="#cecccc"/>
     </RelativeLayout>

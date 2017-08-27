@@ -34,9 +34,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.sema.sema.chatrooms.HashChatroomActivity;
 import com.sema.sema.models.People;
 import com.sema.sema.R;
-import com.sema.sema.realm.RealmHelper;
-import com.sema.sema.realm.adapters.TagAdapter;
-import com.sema.sema.realm.models.Tag;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -65,10 +62,6 @@ public class tab1hashtag extends Fragment {
     private DatabaseReference mDatabaseLike;
     private FloatingActionButton fabHash, fabPerson;
     private Query mQueryParticipants;
-
-    // Realm
-    Realm realm;
-    TagAdapter tagAdapter;
 
     private ViewPager mViewPager;
 
@@ -137,7 +130,6 @@ public class tab1hashtag extends Fragment {
     public void onStart() {
 
         // SAVE TO REALM DB
-        syncWithRealmDB();
 
         super.onStart();
         FirebaseRecyclerAdapter<People, LetterViewHolder> firebaseRecyclerAdapter = new  FirebaseRecyclerAdapter<People, LetterViewHolder>(
@@ -159,16 +151,12 @@ public class tab1hashtag extends Fragment {
 
                 viewHolder.setName(model.getName());
                 viewHolder.setDate(model.getDate());
-                viewHolder.setMessage(model.getMessage());
+               /* viewHolder.setMessage(model.getMessage());*/
                 viewHolder.setHashtag(model.getHashtag());
                 viewHolder.setImage(getContext(), model.getImage());
                 viewHolder.setLikeBtn(post_key);
 
                 final Typeface custom_font = Typeface.createFromAsset(getActivity().getAssets(), "fonts/Aller_Rg.ttf");
-                viewHolder.txname.setTypeface(custom_font);
-                viewHolder.txhash.setTypeface(custom_font);
-                viewHolder.txmessage.setTypeface(custom_font);
-                viewHolder.txdate.setTypeface(custom_font);
 
                 //IF USER HAS NO UNREAD MESSAGE, MAKE COUNTER GONE
                 mDatabaseUnread.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -425,22 +413,6 @@ public class tab1hashtag extends Fragment {
 */
     }
 
-    private void syncWithRealmDB()
-    {
-
-        //SET UP REALM
-        realm = Realm.getDefaultInstance();
-        RealmHelper helper = new RealmHelper(realm);
-
-
-        //RETRIEVE FROM DB
-        helper.retrieveFromRealmDB();
-
-        //SET UP ADAPTER
-       /* TagAdapter adapter = new TagAdapter(this, helper.justRefresh());
-        mMembersList.setAdapter(adapter);*/
-    }
-
     private void checkUserExists()
     {
 
@@ -575,23 +547,18 @@ public class tab1hashtag extends Fragment {
             TextView post_name = (TextView) mView.findViewById(R.id.post_name);
             post_name.setText(name);
 
-            //ASSIGN TO TAG
-            Tag t = new Tag();
-            t.setName(name);
         }
 
 
 
-        public void setMessage(String message)
+      /*  public void setMessage(String message)
         {
 
             TextView post_message = (TextView) mView.findViewById(R.id.post_message);
             post_message.setText(message);
 
-            //ASSIGN TO TAG
-            Tag t = new Tag();
-            t.setName(message);
-        }
+
+        }*/
 
         public void setHashtag(String hashtag)
         {
@@ -599,9 +566,6 @@ public class tab1hashtag extends Fragment {
             TextView post_hashtag = (TextView) mView.findViewById(R.id.post_hashtag);
             post_hashtag.setText(hashtag);
 
-            //ASSIGN TO TAG
-            Tag t = new Tag();
-            t.setName(hashtag);
 
         }
         public void setImage(final Context ctx, final String image) {
@@ -611,6 +575,7 @@ public class tab1hashtag extends Fragment {
             Picasso.with(ctx)
                     .load(image)
                     .networkPolicy(NetworkPolicy.OFFLINE)
+                    .placeholder(R.drawable.placeholder_image)
                     .into(civ, new Callback()
             {
                 @Override

@@ -15,13 +15,14 @@ import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -31,7 +32,10 @@ import com.squareup.picasso.Picasso;
 import java.text.DateFormat;
 import java.util.Date;
 
+
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.app.Activity.RESULT_OK;
 
 public class EditProfileActivity extends AppCompatActivity {
     private Menu menu;
@@ -77,9 +81,34 @@ public class EditProfileActivity extends AppCompatActivity {
             }
         });
 
-        mDatabaseUsers.child(auth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+        /*mDatabaseUsers.child(auth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                String post_name = (String) dataSnapshot.child("name").getValue();
+                String post_image = (String) dataSnapshot.child("image").getValue();
+                String post_status = (String) dataSnapshot.child("status").getValue();
+
+                mPostName.setText(post_name);
+                mPostStatus.setText(post_status);
+
+                Picasso.with(EditProfileActivity.this).load(post_image).into(mPostUserimg);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        */
+        mDatabaseUsers.child(auth.getCurrentUser().getUid()).addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+            @Override
+            public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
 
                 String post_name = (String) dataSnapshot.child("name").getValue();
                 String post_image = (String) dataSnapshot.child("image").getValue();
@@ -98,6 +127,7 @@ public class EditProfileActivity extends AppCompatActivity {
         });
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -183,7 +213,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
                     }
-
 
 
                 }

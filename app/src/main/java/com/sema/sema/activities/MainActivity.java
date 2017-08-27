@@ -490,7 +490,7 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "HASHTAGS";
+                    return "TAGS";
                 case 1:
                     return "CHATS";
                 case 2:

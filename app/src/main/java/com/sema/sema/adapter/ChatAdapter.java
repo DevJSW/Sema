@@ -12,7 +12,6 @@ import com.sema.sema.R;
 import com.sema.sema.chatrooms.ChatroomActivity;
 import com.sema.sema.fragments.tab1hashtag;
 import com.sema.sema.models.Chat;
-import com.sema.sema.realm.models.Tag;
 
 import java.util.ArrayList;
 
