@@ -152,6 +152,21 @@ public class tab2friends extends Fragment {
                 viewHolder.txmessage.setTypeface(custom_font);
                 viewHolder.txdate.setTypeface(custom_font);
 
+                mDatabaseUsers.child(post_key).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChild("isOnline")){
+                            Boolean userOnline = (Boolean) dataSnapshot.child("isOnline").getValue();
+                            viewHolder.setUserOnline(userOnline);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
                 //IF USER HAS NO UNREAD MESSAGE, MAKE COUNTER GONE
                 mDatabaseUnread.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -519,6 +534,19 @@ public class tab2friends extends Fragment {
                     Picasso.with(ctx).load(image).into(civ);
                 }
             });
+        }
+
+        public void setUserOnline(Boolean online_status) {
+
+            ImageView userOnlineView = (ImageView) mView.findViewById(R.id.online_status_icon);
+            if (online_status == true) {
+
+                userOnlineView.setVisibility(View.VISIBLE);
+            } else {
+                userOnlineView.setVisibility(View.GONE);
+            }
+
+
         }
 
     }

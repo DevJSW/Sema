@@ -75,8 +75,8 @@ public class sema extends Application {
 
         //database
         mAuth = FirebaseAuth.getInstance();
-        mDatabaseUsersOnline = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid()).child("isOnline");
-        mDatabaseUsersOnline.setValue("true");
+        mDatabaseUsersOnline = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        mDatabaseUsersOnline.child("isOnline").setValue("true");
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
 
         isUserConnected();
@@ -90,7 +90,8 @@ public class sema extends Application {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(mAuth.getCurrentUser().getUid())) {
 
-                    mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).onDisconnect().setValue("false");
+                    mDatabaseUsersOnline.child("isOnline").onDisconnect().setValue(false);
+                    mDatabaseUsersOnline.child("isOnline").setValue(true);
                 }
             }
 
@@ -128,7 +129,7 @@ public class sema extends Application {
             if (wasInBackground) {
                 //Do app-wide came-here-from-background code
                 if (mAuth.getCurrentUser() != null) {
-                    mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).setValue("isOnline");
+                    /*mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).child("isOnline").setValue(true);*/
                 }
             }
             stopActivityTransitionTimer();
@@ -142,8 +143,7 @@ public class sema extends Application {
         @Override
         public void onActivityStopped(Activity activity) {
             if (mAuth.getCurrentUser() != null) {
-                mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).removeValue();
-                mDatabaseUsers.child("Users").child(mAuth.getCurrentUser().getUid()).child("isOnline").removeValue();
+                mDatabaseUsersOnline.child("isOnline").setValue(false);
                 addToLastSeen();
             }
 
@@ -157,7 +157,7 @@ public class sema extends Application {
         @Override
         public void onActivityDestroyed(Activity activity) {
             if (mAuth.getCurrentUser() != null) {
-                mDatabaseUsers.child("Users").child(mAuth.getCurrentUser().getUid()).child("isOnline").removeValue();
+                mDatabaseUsersOnline.child("isOnline").setValue(false);
                 addToLastSeen();
             }
 

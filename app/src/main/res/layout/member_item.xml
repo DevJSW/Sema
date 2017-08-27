@@ -51,25 +51,49 @@
             android:layout_margin="9dp"
             android:text="date"/>
 
-        <com.sema.sema.fonts.CustonBoldFont
+
+
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/post_name"
+            android:layout_height="17dp"
+            android:id="@+id/liny"
+            android:orientation="horizontal"
             android:layout_marginTop="17dp"
             android:layout_marginLeft="5dp"
-            android:layout_toRightOf="@+id/rely_img"
-            android:textSize="16dp"
-            android:scaleType="fitXY"
-            android:text="name"/>
+            android:layout_toRightOf="@+id/rely_img">
+
+            <com.sema.sema.fonts.CustonBoldFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/post_name"
+                android:layout_gravity="top"
+                android:layout_marginLeft="5dp"
+                android:textSize="16dp"
+                android:scaleType="fitXY"
+                android:text="name "/>
+
+            <ImageView
+                android:layout_width="5dp"
+                android:layout_height="5dp"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="1dp"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/online_status_icon"
+                android:visibility="gone"
+                android:layout_toRightOf="@+id/post_name"
+                android:src="@drawable/spot"/>
+
+        </LinearLayout>
+
 
 
         <com.sema.sema.fonts.CustonFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="15dp"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="5dp"
             android:layout_toRightOf="@+id/rely_img"
-            android:layout_below="@+id/post_name"
+            android:layout_below="@+id/liny"
             android:layout_marginRight="10dp"
             android:layout_marginLeft="5dp"
             android:singleLine="true"
