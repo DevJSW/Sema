@@ -47,6 +47,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -75,6 +76,7 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -139,7 +141,8 @@ public class ChatroomActivity extends AppCompatActivity {
     private Animation fab_open,fab_close,rotate_forward,rotate_backward;
 
     ChatAdapter chatAdapter;
-    ListView chatList;
+    private final List<Chat> commentList = new ArrayList<>();
+    LinearLayoutManager mLinearlayout;
 
 
     /** Called when the activity is first created. */
@@ -171,7 +174,6 @@ public class ChatroomActivity extends AppCompatActivity {
         mStorage = FirebaseStorage.getInstance().getReference();
         mProgress = new ProgressDialog(this);
         mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
-        mDatabaseUsersOnline = FirebaseDatabase.getInstance().getReference().child("users_online");
         mDatabaseChatNotification = FirebaseDatabase.getInstance().getReference().child("chat_notifications");
         rootView = findViewById(R.id.root_view);
         emojiImageView = (ImageView) findViewById(R.id.emoji_btn);
@@ -194,13 +196,12 @@ public class ChatroomActivity extends AppCompatActivity {
         //mNoPostTxt = (TextView) findViewById(R.id.noPostTxt);
         //final RelativeLayout hello = (RelativeLayout) findViewById(R.id.hello);
 
-
         /*initUserStatusIndicator();*/
 
         mAuth = FirebaseAuth.getInstance();
         mPostKey = getIntent().getExtras().getString("heartraise_id");
 
-        mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).setValue("isOnline");
+        /*mDatabaseUsersOnline.child(mAuth.getCurrentUser().getUid()).setValue("isOnline");*/
 
         mDatabasePostChats = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mDatabaseUsersTyping = FirebaseDatabase.getInstance().getReference().child("users_typing");
@@ -216,12 +217,20 @@ public class ChatroomActivity extends AppCompatActivity {
         mCurrentUser = mAuth.getCurrentUser();
         mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
         mDatabaseUser2 = FirebaseDatabase.getInstance().getReference().child("Users");
+
         mCommentList = (RecyclerView) findViewById(R.id.comment_list);
+        mLinearlayout = new LinearLayoutManager(ChatroomActivity.this);
         mCommentList.setHasFixedSize(true);
+        mCommentList.setLayoutManager(mLinearlayout);
+        chatAdapter = new ChatAdapter(commentList);
+
         // clear unread messages
         mDatabaseUnread.child(mPostKey).child(mAuth.getCurrentUser().getUid()).removeValue();
 
-        mCommentList.setLayoutManager(new LinearLayoutManager(this));
+      /*  mCommentList.setLayoutManager(new LinearLayoutManager(this));*/
+
+
+
         mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mDatabaseComment.keepSynced(true);
         mDatabaseChatroom = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
@@ -266,6 +275,7 @@ public class ChatroomActivity extends AppCompatActivity {
                         String date = (String) dataSnapshot.child("last_seen").getValue().toString();
                         final String userimg = (String) dataSnapshot.child("image").getValue();
                         final String username = (String) dataSnapshot.child("name").getValue();
+                        Boolean userOnline = (Boolean) dataSnapshot.child("isOnline").getValue();
 
                         // load image on toolbar
                         CircleImageView userImgToolbar = (CircleImageView) findViewById(R.id.toolbarImg);
@@ -276,8 +286,21 @@ public class ChatroomActivity extends AppCompatActivity {
                         toolbar_username.setText(username);
 
                         RelativeTimeTextView toolbar_last_seen = (RelativeTimeTextView) findViewById(R.id.toolbar_last_seen_date);
-                        toolbar_last_seen.setReferenceTime(Long.parseLong(date));
+                       /* toolbar_last_seen.setReferenceTime(Long.parseLong(date));*/
                         toolbar_last_seen.setTypeface(custom_font);
+
+                        if (dataSnapshot.hasChild("isOnline")) {
+                             if (userOnline == true) {
+
+                                 toolbar_last_seen.setText("Online");
+
+                             } else {
+                                 toolbar_last_seen.setReferenceTime(Long.parseLong(date));
+                             }
+                        } else {
+                            toolbar_last_seen.setReferenceTime(Long.parseLong(date));
+                        }
+
 
                     }
 
@@ -538,13 +561,11 @@ public class ChatroomActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                if (/*dataSnapshot.hasChild("city") ||*/ dataSnapshot.hasChild("address")) {
+                if (dataSnapshot.hasChild("address")) {
 
                     String txt_city = dataSnapshot.child("city").getValue().toString();
                     String txt_locality = dataSnapshot.child("address").getValue().toString();
 
-                    /*TextView city = (TextView) findViewById(R.id.post_city);
-                    city.setText(txt_city);*/
 
                     TextView locality = (TextView) findViewById(R.id.post_locality);
                     locality.setText(txt_locality);
@@ -612,12 +633,59 @@ public class ChatroomActivity extends AppCompatActivity {
             // Ask user to enable GPS/network in settings
         }
 
-
+        mDatabaseUsersOnline = FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
+        mDatabaseUsersOnline.child("isOnline").setValue(true);
 
         mDatabaseComment.keepSynced(true);
 
     }
 
+    private void LoadMessage() {
+        mDatabase.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                Chat message = dataSnapshot.getValue(Chat.class);
+
+                commentList.add(message);
+                chatAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mDatabaseUsersOnline.child("isOnline").setValue(false);
+    }
+
+   /* @Override
+    protected void onStop() {
+        super.onStop();
+        mDatabaseUsersOnline.child("isOnline").setValue(false);
+    }*/
     private void initOnlineListener()
     {
         DatabaseReference mDatabaseUsersOnline = FirebaseDatabase.getInstance().getReference().child("users_online");
@@ -929,8 +997,10 @@ public class ChatroomActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        LoadMessage();
+        mDatabaseUsersOnline.child("isOnline").setValue(true);
 
-        final FirebaseRecyclerAdapter<Chat, CommentViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Chat, CommentViewHolder>(
+      /*  final FirebaseRecyclerAdapter<Chat, CommentViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Chat, CommentViewHolder>(
 
                 Chat.class,
                 R.layout.chat_row,
@@ -1024,11 +1094,10 @@ public class ChatroomActivity extends AppCompatActivity {
 
 
             }
-        };
+        };*/
         final LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(this);
-        mCommentList.setAdapter(firebaseRecyclerAdapter);
-        // mLinearLayoutManager.setReverseLayout(false);
-        //mLinearLayoutManager.setStackFromEnd(true);
+       /* mCommentList.setAdapter(firebaseRecyclerAdapter);*/
+
 
         mLayoutManager = new LinearLayoutManager(ChatroomActivity.this);
         // mLayoutManager.setReverseLayout(false);
@@ -1051,7 +1120,7 @@ public class ChatroomActivity extends AppCompatActivity {
         });
 
 
-        firebaseRecyclerAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+        /*firebaseRecyclerAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
 
             @Override
             public void onItemRangeInserted(int positionStart, int itemCount) {
@@ -1072,7 +1141,7 @@ public class ChatroomActivity extends AppCompatActivity {
             }
         });
 
-
+*/
 
         final long delay = 1000; // 1 seconds after user stops typing
         final long[] last_text_edit = {0};

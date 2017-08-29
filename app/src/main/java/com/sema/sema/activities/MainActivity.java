@@ -14,6 +14,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -311,7 +312,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        mDatabaseUsersOnline = FirebaseDatabase.getInstance().getReference().child("Users").child(auth.getCurrentUser().getUid());
+        mDatabaseUsersOnline.child("isOnline").setValue(true);
 
         checkForNotifications();
        /* addToLastSeen();*/
@@ -320,8 +322,29 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mDatabaseUsersOnline.child("isOnline").setValue(true);
+    }
 
-   /* private void addToLastSeen() {
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        mDatabaseUsersOnline.child("isOnline").setValue(true);
+    }
+
+
+    /*@Override
+    protected void onStop() {
+        super.onStop();
+
+        mDatabaseUsersOnline.child("isOnline").setValue(false);
+
+    }*/
+
+    /* private void addToLastSeen() {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
