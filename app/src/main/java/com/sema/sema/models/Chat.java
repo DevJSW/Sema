@@ -6,16 +6,24 @@ package com.sema.sema.models;
 public class Chat {
 
     // AIzaSyBF2bupjfqKdp-d_cpa5XsJpOVbErmqr0g
-    private String name, image, photo, date, message, hashtag, city, address;
+    private String name;
+    private String image;
+    private String photo;
+    private String date;
+    private String message;
+    private String hashtag;
+    private String city;
+    private String address;
+    private String uid;
 
     public Chat() {
 
     }
 
-    public Chat(String name, String photo, String image, String date, String message, String hashtag, String city, String address) {
+    public Chat(String name, String photo, String image, String date, String message, String hashtag, String city, String address, String uid) {
         this.name = name;
         this.image = image;
-
+        this.uid = uid;
         this.photo = photo;
         this.date = date;
         this.message = message;
@@ -86,5 +94,13 @@ public class Chat {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }

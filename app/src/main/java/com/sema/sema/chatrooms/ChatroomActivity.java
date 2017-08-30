@@ -128,7 +128,7 @@ public class ChatroomActivity extends AppCompatActivity {
     Geocoder geocoder;
     List<Address> addresses;
 
-    private LinearLayoutManager mLayoutManager;
+   /* private LinearLayoutManager mLayoutManager;*/
     EmojiconEditText emojiconEditText;
     EmojiconTextView textView;
     ImageView emojiImageView;
@@ -218,18 +218,20 @@ public class ChatroomActivity extends AppCompatActivity {
         mDatabaseUser = FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid());
         mDatabaseUser2 = FirebaseDatabase.getInstance().getReference().child("Users");
 
+        chatAdapter = new ChatAdapter(commentList);
+
         mCommentList = (RecyclerView) findViewById(R.id.comment_list);
         mLinearlayout = new LinearLayoutManager(ChatroomActivity.this);
+
         mCommentList.setHasFixedSize(true);
         mCommentList.setLayoutManager(mLinearlayout);
-        chatAdapter = new ChatAdapter(commentList);
+
+        mCommentList.setAdapter(chatAdapter);
 
         // clear unread messages
         mDatabaseUnread.child(mPostKey).child(mAuth.getCurrentUser().getUid()).removeValue();
 
       /*  mCommentList.setLayoutManager(new LinearLayoutManager(this));*/
-
-
 
         mDatabaseComment = FirebaseDatabase.getInstance().getReference().child("Chatrooms");
         mDatabaseComment.keepSynced(true);
@@ -1099,13 +1101,13 @@ public class ChatroomActivity extends AppCompatActivity {
        /* mCommentList.setAdapter(firebaseRecyclerAdapter);*/
 
 
-        mLayoutManager = new LinearLayoutManager(ChatroomActivity.this);
+      /*  mLayoutManager = new LinearLayoutManager(ChatroomActivity.this);
         // mLayoutManager.setReverseLayout(false);
         mLayoutManager.setStackFromEnd(true);
 
         // Now set the layout manager and the adapter to the RecyclerView
         mCommentList.setLayoutManager(mLayoutManager);
-
+*/
         //mRecycler.smoothScrollToPosition(mMessagesAdapter.getItemCount() - 1);
         mCommentList.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
