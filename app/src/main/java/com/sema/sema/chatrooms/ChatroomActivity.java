@@ -278,6 +278,7 @@ public class ChatroomActivity extends AppCompatActivity {
                         final String userimg = (String) dataSnapshot.child("image").getValue();
                         final String username = (String) dataSnapshot.child("name").getValue();
                         Boolean userOnline = (Boolean) dataSnapshot.child("isOnline").getValue();
+                        Boolean user_typing = (Boolean) dataSnapshot.child("Typing").getValue();
 
                         // load image on toolbar
                         CircleImageView userImgToolbar = (CircleImageView) findViewById(R.id.toolbarImg);
@@ -291,12 +292,17 @@ public class ChatroomActivity extends AppCompatActivity {
                        /* toolbar_last_seen.setReferenceTime(Long.parseLong(date));*/
                         toolbar_last_seen.setTypeface(custom_font);
 
-                        if (dataSnapshot.hasChild("isOnline")) {
-                             if (userOnline == true) {
+                        if (dataSnapshot.hasChild("isOnline") || dataSnapshot.hasChild("Typing")) {
+                             if (userOnline == true && user_typing == false) {
 
                                  toolbar_last_seen.setText("Online");
 
-                             } else {
+                                 toolbar_last_seen.setText("Typing...");
+
+                             } else if (userOnline == true && user_typing == true){
+
+                             }else {
+
                                  toolbar_last_seen.setReferenceTime(Long.parseLong(date));
                              }
                         } else {
@@ -304,23 +310,6 @@ public class ChatroomActivity extends AppCompatActivity {
                         }
 
 
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-                // CHECKING IF OTHER USER IS TYPING
-                mDatabaseTyping.child(mPostKey).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        String Show_typing = (String) dataSnapshot.child("typing").getValue();
-
-                        TextView typing = (TextView) findViewById(R.id.typing_watcher);
-                        typing.setText(Show_typing);
-                        typing.setTypeface(custom_font);
                     }
 
                     @Override
@@ -1155,17 +1144,16 @@ public class ChatroomActivity extends AppCompatActivity {
                     // ............
                     // ............
 
-                    //show typing
-                    mDatabaseTyping.child(mAuth.getCurrentUser().getUid()).child("typing").setValue("Typing...");
+                   /* //show typing
+                    mDatabaseUsers.child("Typing").child(mPostKey).child(mAuth.getCurrentUser().getUid()).setValue("Typing");
                     // IF THERE IS UNREAD MESSAGE, DELETE.
                     mDatabaseUnread.child(mPostKey).child(mAuth.getCurrentUser().getUid()).removeValue();
                     // remove date
-                    mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).removeValue();
+                    mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).removeValue();*/
 
                 }
             }
         };
-
 
         //checking if a user is typing
         EditText editText = (EditText) findViewById(R.id.emojicon_edit_text);
@@ -1203,20 +1191,11 @@ public class ChatroomActivity extends AppCompatActivity {
 
                                                                 /*Date date = new Date();
                                                                 final String stringDate = DateFormat.getDateTimeInstance().format(date);
-*/
-                                                    SimpleDateFormat sdf = new SimpleDateFormat("dd-M-yyyy hh:mm:ss");
-                                                    String dateInString = "22-01-2015 10:20:56";
-                                                    try {
-                                                        Date date = sdf.parse(dateInString);
-                                                        mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).child("last_seen").setValue(date);
-                                                    } catch (ParseException e) {
-                                                        e.printStackTrace();
-                                                    }
+*
 
                                                     //hide/ remove typing
-                                                    mDatabaseTyping.child(mAuth.getCurrentUser().getUid()).removeValue();
-                                                    // show last seen
-                                                              /*  mDatabaseLastSeen.child(mAuth.getCurrentUser().getUid()).child("last_seen").setValue(date);*/
+                                                    /*mDatabaseUsers.child("Typing").child(mPostKey).child(mAuth.getCurrentUser().getUid()).removeValue();*/
+
 
                                                     // SHOW AUDIO BUTTON WHILE USER IS TYPING
                                                     ImageView game = (ImageView) findViewById(R.id.ic_game);
@@ -1246,7 +1225,7 @@ public class ChatroomActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
             private Timer timer = new Timer();
-            private final long DELAY = 500; // milliseconds
+            private final long DELAY = 2000; // milliseconds
 
             @Override
             public void afterTextChanged(final Editable s) {
@@ -1254,20 +1233,8 @@ public class ChatroomActivity extends AppCompatActivity {
                 if(!isTyping) {
                     Log.d(TAG, "started typing");
                     // Send notification for start typing event
-                    mDatabaseUsersTyping.child(mAuth.getCurrentUser().getUid()).setValue("isTyping");
+                    mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("Typing").setValue(true);
 
-                    mDatabaseUsersTyping.child(mPostKey).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            RelativeTimeTextView  toolbar_last_seen = (RelativeTimeTextView)findViewById(R.id.toolbar_last_seen_date);
-                            toolbar_last_seen.setText("is Typing...");
-                        }
-
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
                     isTyping = true;
                 }
                 timer.cancel();
@@ -1279,7 +1246,7 @@ public class ChatroomActivity extends AppCompatActivity {
                                 isTyping = false;
                                 Log.d(TAG, "stopped typing");
                                 //send notification for stopped typing event
-                                mDatabaseUsersTyping.child(mAuth.getCurrentUser().getUid()).removeValue();
+                                mDatabaseUsers.child(mAuth.getCurrentUser().getUid()).child("Typing").setValue(false);
 
                             }
                         },
@@ -1291,14 +1258,7 @@ public class ChatroomActivity extends AppCompatActivity {
 
     }
 
-   /* private void initListView() {
 
-        chatList = (ListView) findViewById(R.id.chat_list);
-        chatAdapter = new ChatAdapter(
-
-        );
-        chatList.setAdapter(chatAdapter);
-    }*/
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
 

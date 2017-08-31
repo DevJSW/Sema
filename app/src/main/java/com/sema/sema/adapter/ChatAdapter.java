@@ -57,8 +57,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
             message2 = (TextView) itemView.findViewById(R.id.post_message2);
             date = (TextView) itemView.findViewById(R.id.post_date);
             date2 = (TextView) itemView.findViewById(R.id.post_date2);
-           /* name = (TextView) itemView.findViewById(R.id.post_name);*/
-           /* name2 = (TextView) itemView.findViewById(R.id.post_name2);*/
             avator = (ImageView) itemView.findViewById(R.id.post_image);
             avator2 = (ImageView) itemView.findViewById(R.id.post_image2);
             liny = (LinearLayout) itemView.findViewById(R.id.liny);
@@ -91,17 +89,17 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder
         holder.message2.setText(c.getMessage());
         holder.date.setText(c.getDate());
         holder.date2.setText(c.getDate());
-       /* holder.name.setText(c.getName());*/
-       /* holder.name2.setText(c.getName());*/
 
        if (from_user.equals(current_user_id)) {
 
            rely.setVisibility(View.VISIBLE);
            liny.setVisibility(View.GONE);
+
        } else {
 
            rely.setVisibility(View.GONE);
            liny.setVisibility(View.VISIBLE);
+
        }
 
        if (photo == null) {
